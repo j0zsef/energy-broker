@@ -1,0 +1,49 @@
+{
+  "name": "backend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/backend/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/backend",
+        "tsConfig": "libs/backend/tsconfig.lib.json",
+        "packageJson": "libs/backend/package.json",
+        "main": "libs/backend/src/index.ts",
+        "assets": ["libs/backend/*.md"]
+      }
+    },
+    "db:setup": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "docker compose up -d mysql && nx run backend:migrate"
+        ]
+      }
+    },
+    "migrate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma migrate dev --schema=libs/backend/prisma/schema.prisma"
+      }
+    },
+    "db:reset": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "docker compose down",
+          "docker compose up -d mysql && nx run backend:migrate && nx run backend:seed"
+        ]
+      }
+    },
+    "seed": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma db seed"
+      }
+    }
+  }
+}

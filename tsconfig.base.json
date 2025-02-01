@@ -1,0 +1,28 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": ".",
+    "declaration": false,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "jsx": "react-jsx",
+    "module": "esnext",
+    "moduleResolution": "node16",
+    "lib": ["es2020", "dom"],
+    "rootDir": ".",
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "strict": true,
+    "target": "es2022",
+    "paths": {
+      "@./backend": ["libs/backend/src/index.ts"]
+    }
+  },
+  "exclude": [
+    "**/node_modules",
+    "**/tmp"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "version": "6.0",
+  "nxVersion": "20.4.0",
+  "pathMappings": {},
+  "nxJsonPlugins": [],
+  "fileMap": {
+    "projectFileMap": {},
+    "nonProjectFiles": [
+      {
+        "file": ".editorconfig",
+        "hash": "5443105041930014821"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "12474917728722778441"
+      },
+      {
+        "file": ".npmrc",
+        "hash": "1880664178033616490"
+      },
+      {
+        "file": "README.md",
+        "hash": "16488183920618212465"
+      },
+      {
+        "file": "nx.json",
+        "hash": "14977852485590650733"
+      },
+      {
+        "file": "package.json",
+        "hash": "9717889754610948073"
+      },
+      {
+        "file": "pnpm-lock.yaml",
+        "hash": "12353690925109101802"
+      }
+    ]
+  }
+}
