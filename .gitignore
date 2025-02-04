@@ -191,3 +191,6 @@ Temporary Items
 .nx/workspace-data
 workspace-data
 tmp
+
+### Build
+dist

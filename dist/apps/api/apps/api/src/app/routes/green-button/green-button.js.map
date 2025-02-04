@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../../../../../../../apps/api/src/app/routes/green-button/green-button.ts"],
-  "sourcesContent": ["import {FastifyInstance} from \"fastify\";\n\nexport default async function (fastify: FastifyInstance) {\n  fastify.get('/', async function () {\n    return { message: 'Hello Green Button' };\n  });\n}\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA,eAAO,qBAAwB,SAA0B;AACvD,UAAQ,IAAI,KAAK,iBAAkB;AACjC,WAAO,EAAE,SAAS,qBAAqB;AAAA,EACzC,CAAC;AACH;",
-  "names": []
-}
