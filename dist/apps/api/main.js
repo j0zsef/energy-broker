@@ -1,22 +1,16 @@
-
-/**
- * IMPORTANT: Do not modify this file.
- * This file allows the app to run without bundling in workspace libraries.
- * Must be contained in the ".nx" folder inside the output path.
- */
-const Module = require('module');
-const path = require('path');
-const fs = require('fs');
+"use strict";
+const Module = require("module");
+const path = require("path");
+const fs = require("fs");
 const originalResolveFilename = Module._resolveFilename;
 const distPath = __dirname;
-const manifest = [{"module":"@./backend","exactMatch":"libs/backend/src/index.js","pattern":"libs/backend/src/index.ts"},{"module":"@./libs","exactMatch":"libs/src/index.js","pattern":"libs/src/index.ts"},{"module":"@./shared","exactMatch":"libs/shared/src/index.js","pattern":"libs/shared/src/index.ts"}];
-
+const manifest = [{ "module": "@./backend", "exactMatch": "libs/backend/src/index.js", "pattern": "libs/backend/src/index.ts" }, { "module": "@./libs", "exactMatch": "libs/src/index.js", "pattern": "libs/src/index.ts" }, { "module": "@./shared", "exactMatch": "libs/shared/src/index.js", "pattern": "libs/shared/src/index.ts" }];
 Module._resolveFilename = function(request, parent) {
   let found;
   for (const entry of manifest) {
     if (request === entry.module && entry.exactMatch) {
-      const entry = manifest.find((x) => request === x.module || request.startsWith(x.module + "/"));
-      const candidate = path.join(distPath, entry.exactMatch);
+      const entry2 = manifest.find((x) => request === x.module || request.startsWith(x.module + "/"));
+      const candidate = path.join(distPath, entry2.exactMatch);
       if (isFile(candidate)) {
         found = candidate;
         break;
@@ -24,14 +18,12 @@ Module._resolveFilename = function(request, parent) {
     } else {
       const re = new RegExp(entry.module.replace(/\*$/, "(?<rest>.*)"));
       const match = request.match(re);
-
       if (match?.groups) {
         const candidate = path.join(distPath, entry.pattern.replace("*", ""), match.groups.rest);
         if (isFile(candidate)) {
           found = candidate;
         }
       }
-
     }
   }
   if (found) {
@@ -41,7 +33,6 @@ Module._resolveFilename = function(request, parent) {
     return originalResolveFilename.apply(this, arguments);
   }
 };
-
 function isFile(s) {
   try {
     require.resolve(s);
@@ -50,6 +41,5 @@ function isFile(s) {
     return false;
   }
 }
-
-// Call the user-defined main.
-module.exports = require('./apps/api/src/main.js');
+module.exports = require("./apps/api/src/main.js");
+//# sourceMappingURL=main.js.map

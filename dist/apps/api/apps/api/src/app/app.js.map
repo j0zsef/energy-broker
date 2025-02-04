@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../../../../../apps/api/src/app/app.ts"],
+  "sourcesContent": ["import * as path from 'path';\nimport { FastifyInstance } from 'fastify';\nimport AutoLoad from '@fastify/autoload';\n\n/* eslint-disable-next-line */\nexport interface AppOptions {}\n\nexport async function app(fastify: FastifyInstance, opts: AppOptions) {\n  fastify.register(AutoLoad, {\n    dir: path.join(__dirname, 'plugins'),\n    options: { ...opts },\n  });\n\n  fastify.register(AutoLoad, {\n    dir: path.join(__dirname, 'routes'),\n    maxDepth: 10,\n    options: { ...opts },\n  });\n}\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,WAAsB;AAEtB,sBAAqB;AAKrB,eAAsB,IAAI,SAA0B,MAAkB;AACpE,UAAQ,SAAS,gBAAAA,SAAU;AAAA,IACzB,KAAK,KAAK,KAAK,WAAW,SAAS;AAAA,IACnC,SAAS,EAAE,GAAG,KAAK;AAAA,EACrB,CAAC;AAED,UAAQ,SAAS,gBAAAA,SAAU;AAAA,IACzB,KAAK,KAAK,KAAK,WAAW,QAAQ;AAAA,IAClC,UAAU;AAAA,IACV,SAAS,EAAE,GAAG,KAAK;AAAA,EACrB,CAAC;AACH;",
+  "names": ["AutoLoad"]
+}

@@ -2,7 +2,7 @@ import stylistic from '@stylistic/eslint-plugin'
 import tsEslint from '@typescript-eslint/eslint-plugin'
 import tsEslintParser from '@typescript-eslint/parser'
 
-export default [
+const esBaseConfig = [
   {
     ignores: ['**/dist/**', '**/node_modules/**', '**/tmp/**', './nx/**'],
     files: [
@@ -32,3 +32,5 @@ export default [
     },
   },
 ]
+
+export default esBaseConfig
