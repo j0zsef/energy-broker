@@ -13,3 +13,19 @@ Spin up front-end and api:
 ```bash
 pnpm serve
 ```
+
+## App Structure
+
+```
+/apps
+├── frontend/         # React frontend
+├── api/              # Fastify backend
+
+/libs
+├── backend/          # Backend utilities (DB, auth, etc.)
+├── services/         # Domain-specific services (external API clients, etc.)
+│   ├── green-button-client/
+│   ├── carbon-credit-service/
+│   ├── recommendations-service/
+├── shared/           # Common utilities & types (e.g., DTOs, schemas)
+```

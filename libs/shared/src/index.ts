@@ -1,1 +1,1 @@
-export * from './lib/shared';
+export * from './types/green-button';
