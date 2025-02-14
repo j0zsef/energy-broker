@@ -10,17 +10,36 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
+        "platform": "node",
         "outputPath": "dist/apps/api",
+        "format": ["cjs"],
+        "bundle": false,
         "main": "apps/api/src/main.ts",
         "tsConfig": "apps/api/tsconfig.json",
         "assets": ["apps/api/src/assets"],
         "generatePackageJson": true,
-        "esbuildConfig": "apps/api/esbuild.config.js",
-        "format": ["cjs"]
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          },
+          "loader": {
+            ".md": "file"
+          }
+        }
       },
       "configurations": {
+        "development": {},
         "production": {
-          "esbuildConfig": "apps/api/esbuild.config.js"
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            },
+            "loader": {
+              ".md": "file"
+            }
+          }
         }
       }
     },
@@ -45,7 +64,6 @@
       "options": {
         "passWithNoTests": true
       }
-    },
-    "type-check": {}
+    }
   }
 }

@@ -4,8 +4,6 @@ import AutoLoad from "@fastify/autoload";
 import { serializerCompiler, validatorCompiler } from "fastify-type-provider-zod";
 import * as path from "path";
 
-const __dirname = __filename ? path.dirname(__filename) : process.cwd();
-
 /* eslint-disable-next-line */
 export interface AppOptions {}
 
@@ -29,12 +27,12 @@ const envOptions = {
 
 export async function app(fastify: FastifyInstance, opts: AppOptions) {
   fastify.register(AutoLoad, {
-    dir: path.join(__dirname, "src/app/plugins"),
+    dir: path.join(__dirname, "plugins"),
     options: { ...opts },
   });
 
   fastify.register(AutoLoad, {
-    dir: path.join(__dirname, "src/app/routes"),
+    dir: path.join(__dirname, "routes"),
     maxDepth: 10,
     options: { ...opts },
   });
@@ -42,7 +40,4 @@ export async function app(fastify: FastifyInstance, opts: AppOptions) {
   fastify.setValidatorCompiler(validatorCompiler);
   fastify.setSerializerCompiler(serializerCompiler);
   fastify.register(fastifyEnv, envOptions);
-
-  console.log("Loading routes from:", path.join(__dirname, "src/app/routes"));
-  fastify.printRoutes();
 }
