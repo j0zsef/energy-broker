@@ -26,5 +26,5 @@
     },
     "pretty": true
   },
-  "exclude": ["**/node_modules", "**/tmp", "**/eslint.config.ts", "eslint.config.ts", "**/*.md"]
+  "exclude": ["**/node_modules", "**/tmp", "**/dist"]
 }

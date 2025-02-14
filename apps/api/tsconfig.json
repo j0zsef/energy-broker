@@ -6,8 +6,5 @@
     ]
   },
   "extends": "../../tsconfig.base.json",
-  "include": ["**/*"],
-  "references": [
-    { "path": "../../libs/services/green-button-client" }
-  ]
+  "include": ["**/*"]
 }

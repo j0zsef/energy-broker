@@ -9,6 +9,7 @@
       "executor": "@nx/esbuild:esbuild",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
+      "dependsOn": ["type-check"],
       "options": {
         "platform": "node",
         "outputPath": "dist/apps/api",
@@ -64,6 +65,7 @@
       "options": {
         "passWithNoTests": true
       }
-    }
+    },
+    "type-check": {}
   }
 }

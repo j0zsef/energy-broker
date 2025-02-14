@@ -1,6 +1,6 @@
-import { AxiosInstance } from "axios";
-import { XMLParser } from "fast-xml-parser";
-import { GreenButtonService } from "../green-button-service";
+import { AxiosInstance } from 'axios';
+import { XMLParser } from 'fast-xml-parser';
+import { GreenButtonService } from '../green-button-service';
 import { ElectricalDataSummary, ElectricalDataSummaryRequest, ElectricalDataRequest, ElectricalDataUsagePoint } from '@shared';
 
 export class GenericGreenButtonProvider implements GreenButtonService {
@@ -19,7 +19,7 @@ export class GenericGreenButtonProvider implements GreenButtonService {
     const response = await this.http.get(url, {
       headers: {
         Authorization: `Bearer ${token}`,
-        Accept: "application/xml",
+        Accept: 'application/xml',
       },
       params: {
         min: request.min,
@@ -40,7 +40,7 @@ export class GenericGreenButtonProvider implements GreenButtonService {
     const response = await this.http.get(url, {
       headers: {
         Authorization: `Bearer ${token}`,
-        Accept: "application/xml",
+        Accept: 'application/xml',
       },
       params: {
         min: request.min,

@@ -1,6 +1,6 @@
-import { GreenButtonService } from "./green-button-service";
-import { GenericGreenButtonProvider } from "./providers/generic-green-button-provider";
-import axios from "axios";
+import { GreenButtonService } from './green-button-service';
+import { GenericGreenButtonProvider } from './providers/generic-green-button-provider';
+import axios from 'axios';
 
 export class GreenButtonFactory {
   static create(provider: string, baseUrl: string): GreenButtonService {
