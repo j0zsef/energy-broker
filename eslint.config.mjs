@@ -1,37 +1,73 @@
-import stylistic from "@stylistic/eslint-plugin";
-import tsEslint from "@typescript-eslint/eslint-plugin";
-import tsEslintParser from "@typescript-eslint/parser";
+import globals from 'globals';
 import js from '@eslint/js';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
 import nxPlugin from '@nx/eslint-plugin';
+import react from 'eslint-plugin-react';
+import stylistic from '@stylistic/eslint-plugin';
+import tsEslint from '@typescript-eslint/eslint-plugin';
+import tsEslintParser from '@typescript-eslint/parser';
+
 
 export default [
   js.configs.recommended,
   {
-    ignores: ['**/dist/**', '**/node_modules/**', '**/tmp/**', './nx/**', '**/*.json'],
+    ignores: ['**/dist/**', '**/node_modules/**', '**/tmp/**', './nx/**'],
   },
   {
-    files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
+    files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
+      globals: {
+        ...globals.node,
+      },
       parser: tsEslintParser,
       parserOptions: {
         ecmaVersion: 'latest',
-        sourceType: 'module',
         project: './tsconfig.base.json',
+        sourceType: 'module',
       },
     },
     plugins: {
       '@typescript-eslint': tsEslint,
+    },
+    rules: {
+      ...tsEslint.configs.recommended.rules,
+    },
+  },
+  {
+    ...jsxA11y.flatConfigs.recommended,
+    files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
+    languageOptions: {
+      ...react.configs.flat.recommended.languageOptions,
+      ...jsxA11y.flatConfigs.recommended.languageOptions,
+      globals: {
+        ...globals.browser,
+      },
+    },
+    plugins: {
+      react: react,
+    },
+    rules: {
+      ...react.configs.recommended.rules,
+      'react/react-in-jsx-scope': 'off',
+    },
+  },
+  {
+    plugins: {
       '@stylistic': stylistic,
       '@nx': nxPlugin,
     },
     rules: {
-      ...js.configs.recommended.rules,
-      ...tsEslint.configs.recommended.rules,
       ...stylistic.configs['recommended-flat'].rules,
-      'no-console': 'warn',
-      'no-debugger': 'warn',
-      "semi": ["error", "always"],
-      "@stylistic/semi": "off",
+      '@stylistic/semi': ['error', 'always'],
+      'no-undef': 'off',
+      'sort-keys': ['error', 'asc', { caseSensitive: true, natural: false, minKeys: 2 }],
+      'sort-imports': ['error', {
+        allowSeparatedGroups: false,
+        ignoreCase: false,
+        ignoreDeclarationSort: false,
+        ignoreMemberSort: false,
+        memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
+      }],
     },
   },
 ];

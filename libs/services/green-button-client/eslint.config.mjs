@@ -1,5 +1,5 @@
 import eslintConfig from '../../../eslint.config.mjs';
-import tsEslintParser from "@typescript-eslint/parser";
+import tsEslintParser from '@typescript-eslint/parser';
 
 export default [
   ...eslintConfig,
@@ -9,9 +9,9 @@ export default [
       parser: tsEslintParser,
       parserOptions: {
         ecmaVersion: 'latest',
-        sourceType: 'module',
         project: './tsconfig.json',
+        sourceType: 'module',
       },
     },
-  }
-]
+  },
+];

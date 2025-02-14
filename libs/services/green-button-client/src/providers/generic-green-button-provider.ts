@@ -1,7 +1,12 @@
+import {
+  ElectricalDataRequest,
+  ElectricalDataSummary,
+  ElectricalDataSummaryRequest,
+  ElectricalDataUsagePoint,
+} from '@shared';
 import { AxiosInstance } from 'axios';
-import { XMLParser } from 'fast-xml-parser';
 import { GreenButtonService } from '../green-button-service';
-import { ElectricalDataSummary, ElectricalDataSummaryRequest, ElectricalDataRequest, ElectricalDataUsagePoint } from '@shared';
+import { XMLParser } from 'fast-xml-parser';
 
 export class GenericGreenButtonProvider implements GreenButtonService {
   private http: AxiosInstance;
@@ -18,12 +23,12 @@ export class GenericGreenButtonProvider implements GreenButtonService {
 
     const response = await this.http.get(url, {
       headers: {
-        Authorization: `Bearer ${token}`,
         Accept: 'application/xml',
+        Authorization: `Bearer ${token}`,
       },
       params: {
-        min: request.min,
         max: request.max,
+        min: request.min,
       },
     });
 
@@ -39,12 +44,12 @@ export class GenericGreenButtonProvider implements GreenButtonService {
 
     const response = await this.http.get(url, {
       headers: {
-        Authorization: `Bearer ${token}`,
         Accept: 'application/xml',
+        Authorization: `Bearer ${token}`,
       },
       params: {
-        min: request.min,
         max: request.max,
+        min: request.min,
       },
     });
 
@@ -65,11 +70,11 @@ export class GenericGreenButtonProvider implements GreenButtonService {
       const endTime = usagePoint?.content?.ElectricPowerUsageSummary?.interval?.end;
 
       return {
-        id,
-        title,
-        summary,
-        startTime: new Date(parseInt(startTime) * 1000).toISOString(),
         endTime: new Date(parseInt(endTime) * 1000).toISOString(),
+        id,
+        startTime: new Date(parseInt(startTime) * 1000).toISOString(),
+        summary,
+        title,
       };
     });
   }
@@ -81,8 +86,8 @@ export class GenericGreenButtonProvider implements GreenButtonService {
     const usage = intervalBlock?.IntervalReading?.value || 0;
 
     return {
-      startTime: new Date(parseInt(startTime) * 1000).toISOString(),
       endTime: new Date(parseInt(endTime) * 1000).toISOString(),
+      startTime: new Date(parseInt(startTime) * 1000).toISOString(),
       usage: parseFloat(usage),
     };
   }

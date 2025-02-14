@@ -1,8 +1,8 @@
+import { Envs } from '../../../../app';
 import { FastifyInstance } from 'fastify';
+import { GreenButtonFactory } from '@green-button-client';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import z from 'zod';
-import { GreenButtonFactory } from '@green-button-client';
-import { Envs } from '../../../../app';
 
 export default async function (fastify: FastifyInstance) {
   const opts = {
@@ -11,8 +11,8 @@ export default async function (fastify: FastifyInstance) {
         meterId: z.string(),
       }),
       querystring: z.object({
-        min: z.string().date().optional(),
         max: z.string().date().optional(),
+        min: z.string().date().optional(),
       }),
     },
   };
@@ -20,9 +20,9 @@ export default async function (fastify: FastifyInstance) {
   fastify.withTypeProvider<ZodTypeProvider>().get('/:meterId', opts, async function (request) {
     // const user = request.user; // Retrieved from Auth0 JWT
     const summaryRequest = {
-      min: request.query.min,
       max: request.query.max,
       meterId: request.params.meterId,
+      min: request.query.min,
     };
 
     // should be able to figure this out from the auth process

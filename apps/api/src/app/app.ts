@@ -1,28 +1,28 @@
+import * as path from 'path';
+import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
+import AutoLoad from '@fastify/autoload';
 import { FastifyInstance } from 'fastify';
 import { fastifyEnv } from '@fastify/env';
-import AutoLoad from '@fastify/autoload';
-import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
-import * as path from 'path';
 
 /* eslint-disable-next-line */
 export interface AppOptions {}
 
 export type Envs = {
   GREEN_BUTTON_TOKEN: string
-}
+};
 
 const envSchema = {
-  type: 'object',
-  required: ['GREEN_BUTTON_TOKEN'], // List required env variables
   properties: {
     GREEN_BUTTON_TOKEN: { type: 'string' },
   },
+  required: ['GREEN_BUTTON_TOKEN'],
+  type: 'object',
 };
 
 const envOptions = {
-  confKey: 'config', // Access via fastify.config
+  confKey: 'config',
+  dotenv: true,
   schema: envSchema,
-  dotenv: true, // Load from .env file
 };
 
 export async function app(fastify: FastifyInstance, opts: AppOptions) {

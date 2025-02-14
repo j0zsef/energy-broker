@@ -1,15 +1,15 @@
-import { FastifyInstance } from 'fastify';
-import z from 'zod';
-import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { Envs } from '../../../../app';
+import { FastifyInstance } from 'fastify';
 import { GreenButtonFactory } from '@green-button-client';
+import { ZodTypeProvider } from 'fastify-type-provider-zod';
+import z from 'zod';
 
 export default async function (fastify: FastifyInstance) {
   const opts = {
     schema: {
       querystring: z.object({
-        min: z.string().date().optional(),
         max: z.string().date().optional(),
+        min: z.string().date().optional(),
       }),
     },
   };
@@ -17,8 +17,8 @@ export default async function (fastify: FastifyInstance) {
   fastify.withTypeProvider<ZodTypeProvider>().get('/', opts, async function (request) {
     // const user = request.user; // Retrieved from Auth0 JWT
     const usagePointRequest = {
-      min: request.query.min,
       max: request.query.max,
+      min: request.query.min,
     };
 
     // should be able to figure this out from the auth process
