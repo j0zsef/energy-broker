@@ -27,7 +27,6 @@
         "devTargetName": "dev",
         "previewTargetName": "preview",
         "serveStaticTargetName": "serve-static",
-        "typecheckTargetName": "typecheck",
         "buildDepsTargetName": "build-deps",
         "watchDepsTargetName": "watch-deps"
       }
@@ -64,10 +63,14 @@
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
     },
-    "@nx/js:tsc": {
-      "cache": true,
-      "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
+    "type-check": {
+      "dependsOn": ["^type-check"],
+      "executor": "nx:run-commands",
+      "inputs": ["default"],
+      "options": {
+        "commands": ["tsc -p tsconfig.json"],
+        "cwd": "{projectRoot}"
+      }
     }
   },
   "generators": {

@@ -1,6 +1,6 @@
 {
-  "name": "@./energy-broker/source",
-  "version": "0.0.0",
+  "name": "@energy-broker",
+  "version": "0.0.1",
   "license": "MIT",
   "scripts": {
     "build": "nx run-many --target=build --all",

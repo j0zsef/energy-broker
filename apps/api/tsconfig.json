@@ -1,11 +1,13 @@
 {
+  "compilerOptions": {
+    "types": [
+      "jest",
+      "node"
+    ]
+  },
   "extends": "../../tsconfig.base.json",
+  "include": ["**/*"],
   "references": [
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.spec.json"
-    }
-  ],
+    { "path": "../../libs/services/green-button-client" },
+  ]
 }

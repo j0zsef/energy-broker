@@ -1,28 +1,30 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
-    "declaration": false,
-    "emitDecoratorMetadata": true,
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
     "esModuleInterop": true,
-    "experimentalDecorators": true,
     "importHelpers": true,
     "jsx": "react-jsx",
-    "module": "node16",
-    "moduleResolution": "node16",
     "lib": ["es2020", "dom"],
+    "module": "esnext",
+    "moduleResolution": "node",
     "rootDir": ".",
+    "outDir": "dist/out-tsc",
     "sourceMap": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "strict": true,
     "target": "es2022",
     "paths": {
-      "@./backend": ["libs/backend/src/index.ts"],
-      "@./green-button-client": ["libs/services/green-button-client/src/index.ts"],
-      "@./libs": ["libs/src/index.ts"],
-      "@./shared": ["libs/shared/src/index.ts"]
-    }
+      "@backend": ["libs/backend/src/index.ts"],
+      "@green-button-client": ["libs/services/green-button-client/src/index.ts"],
+      "@shared": ["libs/shared/src/index.ts"]
+    },
+    "pretty": true
   },
-  "exclude": ["**/node_modules", "**/tmp"]
+  "exclude": ["**/node_modules", "**/tmp", "**/eslint.config.ts", "eslint.config.ts", "**/*.md"]
 }

@@ -5,17 +5,7 @@
   "projectType": "library",
   "tags": [],
   "targets": {
-    "build": {
-      "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/libs/backend",
-        "tsConfig": "libs/backend/tsconfig.lib.json",
-        "packageJson": "libs/backend/package.json",
-        "main": "libs/backend/src/index.ts",
-        "assets": ["libs/backend/*.md"]
-      }
-    },
+    "type-check": {},
     "db:setup": {
       "executor": "nx:run-commands",
       "options": {

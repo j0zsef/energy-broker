@@ -1,15 +1,12 @@
 import { FastifyInstance } from "fastify";
-import { ZodTypeProvider } from "fastify-type-provider-zod";
 import z from "zod";
-import { GreenButtonFactory } from "@green-button-client";
+import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { Envs } from "../../../../app";
+import { GreenButtonFactory } from "@green-button-client";
 
 export default async function (fastify: FastifyInstance) {
   const opts = {
     schema: {
-      params: z.object({
-        meterId: z.string(),
-      }),
       querystring: z.object({
         min: z.string().date().optional(),
         max: z.string().date().optional(),
@@ -17,12 +14,11 @@ export default async function (fastify: FastifyInstance) {
     },
   }
 
-  fastify.withTypeProvider<ZodTypeProvider>().get('/:meterId', opts, async function (request) {
+  fastify.withTypeProvider<ZodTypeProvider>().get('/', opts, async function (request) {
     //const user = request.user; // Retrieved from Auth0 JWT
-    const summaryRequest = {
+    const usagePointRequest = {
       min: request.query.min,
       max: request.query.max,
-      meterId: request.params.meterId,
     }
 
     // should be able to figure this out from the auth process
@@ -34,7 +30,7 @@ export default async function (fastify: FastifyInstance) {
     const token = fastify.getEnvs<Envs>().GREEN_BUTTON_TOKEN;
 
     const greenButtonService = GreenButtonFactory.create(provider, baseUrl);
-    const summary = await greenButtonService.fetchSummary(token, summaryRequest);
+    const summary = await greenButtonService.fetchUsagePoints(token, usagePointRequest);
 
     return { summary };
   });
