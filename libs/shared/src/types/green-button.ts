@@ -1,14 +1,15 @@
-export interface ElectricalDataSummary {
+export interface ElectricalData {
+  id: string
   startTime: string // ISO timestamp
   endTime: string
+}
+
+export interface ElectricalDataSummary extends ElectricalData {
   usage: number // kWh
   peakDemand?: number // kW
 }
 
-export interface ElectricalDataUsagePoint {
-  id: string
-  startTime: string // ISO timestamp
-  endTime: string
+export interface ElectricalDataUsagePoint extends ElectricalData {
   title: string
   summary: string
 }
@@ -20,4 +21,16 @@ export interface ElectricalDataRequest {
 
 export interface ElectricalDataSummaryRequest extends ElectricalDataRequest {
   meterId: string
+}
+
+export interface AtomFeedUsagePoint {
+  feed?: {
+    entry?: ElectricalDataUsagePoint[]
+  }
+}
+
+export interface AtomFeedSummary {
+  feed?: {
+    entry?: ElectricalDataSummary
+  }
 }

@@ -30,8 +30,8 @@ export default async function (fastify: FastifyInstance) {
     const token = fastify.getEnvs<Envs>().GREEN_BUTTON_TOKEN;
 
     const greenButtonService = GreenButtonFactory.create(provider, baseUrl);
-    const summary = await greenButtonService.fetchUsagePoints(token, usagePointRequest);
+    const usagePoints = await greenButtonService.fetchUsagePoints(token, usagePointRequest);
 
-    return { summary };
+    return { usagePoints };
   });
 }

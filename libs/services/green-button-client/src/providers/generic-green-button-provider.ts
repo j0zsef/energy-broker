@@ -1,4 +1,6 @@
 import {
+  AtomFeedSummary,
+  AtomFeedUsagePoint,
   ElectricalDataRequest,
   ElectricalDataSummary,
   ElectricalDataSummaryRequest,
@@ -33,7 +35,7 @@ export class GenericGreenButtonProvider implements GreenButtonService {
     });
 
     const parser = new XMLParser({ ignoreAttributes: false });
-    const parsedData = parser.parse(response.data);
+    const parsedData = parser.parse(response.data) as AtomFeedUsagePoint;
 
     return this.parseUsagePoints(parsedData);
   }
@@ -54,20 +56,20 @@ export class GenericGreenButtonProvider implements GreenButtonService {
     });
 
     const parser = new XMLParser({ ignoreAttributes: false });
-    const parsedData = parser.parse(response.data);
+    const parsedData = parser.parse(response.data) as AtomFeedSummary;
 
     return this.parseSummary(parsedData);
   }
 
-  private parseUsagePoints(parsedXml: any): ElectricalDataUsagePoint[] {
-    const usagePoints = parsedXml?.feed?.entry || [];
+  private parseUsagePoints(atomFeed: AtomFeedUsagePoint): ElectricalDataUsagePoint[] {
+    const usagePoints = atomFeed?.feed?.entry || [];
 
-    return usagePoints.map((usagePoint: any) => {
+    return usagePoints.map((usagePoint: ElectricalDataUsagePoint) => {
       const id = usagePoint?.id;
       const title = usagePoint?.title;
       const summary = usagePoint?.summary;
-      const startTime = usagePoint?.content?.ElectricPowerUsageSummary?.interval?.start;
-      const endTime = usagePoint?.content?.ElectricPowerUsageSummary?.interval?.end;
+      const startTime = usagePoint?.startTime;
+      const endTime = usagePoint?.endTime;
 
       return {
         endTime: new Date(parseInt(endTime) * 1000).toISOString(),
@@ -79,16 +81,18 @@ export class GenericGreenButtonProvider implements GreenButtonService {
     });
   }
 
-  private parseSummary(parsedXml: any): ElectricalDataSummary {
-    const intervalBlock = parsedXml?.feed?.entry?.content?.IntervalBlock;
-    const startTime = intervalBlock?.interval?.start;
-    const endTime = intervalBlock?.interval?.end;
-    const usage = intervalBlock?.IntervalReading?.value || 0;
+  private parseSummary(atomFeed: AtomFeedSummary): ElectricalDataSummary {
+    const summary = atomFeed?.feed?.entry;
+    const id = summary?.id || '';
+    const startTime = summary?.startTime || '';
+    const endTime = summary?.endTime || '';
+    const usage = summary?.usage || 0;
 
     return {
       endTime: new Date(parseInt(endTime) * 1000).toISOString(),
+      id,
       startTime: new Date(parseInt(startTime) * 1000).toISOString(),
-      usage: parseFloat(usage),
+      usage: usage,
     };
   }
 }
