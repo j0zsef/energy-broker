@@ -1,6 +1,5 @@
 import {
-  AtomFeedSummary,
-  AtomFeedUsagePoint,
+  AtomFeed,
   ElectricalDataRequest,
   ElectricalDataSummary,
   ElectricalDataSummaryRequest,
@@ -25,7 +24,6 @@ export class GenericGreenButtonProvider implements GreenButtonService {
 
     const response = await this.http.get(url, {
       headers: {
-        Accept: 'application/xml',
         Authorization: `Bearer ${token}`,
       },
       params: {
@@ -35,18 +33,17 @@ export class GenericGreenButtonProvider implements GreenButtonService {
     });
 
     const parser = new XMLParser({ ignoreAttributes: false });
-    const parsedData = parser.parse(response.data) as AtomFeedUsagePoint;
+    const parsedData = parser.parse(response.data) as AtomFeed;
 
     return this.parseUsagePoints(parsedData);
   }
 
-  async fetchSummary(token: string, request: ElectricalDataSummaryRequest): Promise<ElectricalDataSummary> {
+  async fetchSummary(token: string, request: ElectricalDataSummaryRequest): Promise<ElectricalDataSummary[]> {
     // https://sandbox.greenbuttonalliance.org:8443/DataCustodian/espi/1_1/resource/Subscription/1/UsagePoint/1/ElectricPowerUsageSummary
     const url = `${this.baseUrl}/espi/1_1/resource/Subscription/1/UsagePoint/${request.meterId}/ElectricPowerUsageSummary`;
 
     const response = await this.http.get(url, {
       headers: {
-        Accept: 'application/xml',
         Authorization: `Bearer ${token}`,
       },
       params: {
@@ -55,44 +52,21 @@ export class GenericGreenButtonProvider implements GreenButtonService {
       },
     });
 
-    const parser = new XMLParser({ ignoreAttributes: false });
-    const parsedData = parser.parse(response.data) as AtomFeedSummary;
+    const parser = new XMLParser({ ignoreAttributes: false, removeNSPrefix: true });
+    const parsedData = parser.parse(response.data) as AtomFeed;
 
     return this.parseSummary(parsedData);
   }
 
-  private parseUsagePoints(atomFeed: AtomFeedUsagePoint): ElectricalDataUsagePoint[] {
-    const usagePoints = atomFeed?.feed?.entry || [];
+  private parseUsagePoints(atomFeed: AtomFeed): ElectricalDataUsagePoint[] {
+    const usagePoints = atomFeed?.feed?.entry as ElectricalDataUsagePoint[];
 
-    return usagePoints.map((usagePoint: ElectricalDataUsagePoint) => {
-      const id = usagePoint?.id;
-      const title = usagePoint?.title;
-      const summary = usagePoint?.summary;
-      const startTime = usagePoint?.startTime;
-      const endTime = usagePoint?.endTime;
-
-      return {
-        endTime: new Date(parseInt(endTime) * 1000).toISOString(),
-        id,
-        startTime: new Date(parseInt(startTime) * 1000).toISOString(),
-        summary,
-        title,
-      };
-    });
+    return usagePoints;
   }
 
-  private parseSummary(atomFeed: AtomFeedSummary): ElectricalDataSummary {
-    const summary = atomFeed?.feed?.entry;
-    const id = summary?.id || '';
-    const startTime = summary?.startTime || '';
-    const endTime = summary?.endTime || '';
-    const usage = summary?.usage || 0;
+  private parseSummary(atomFeed: AtomFeed): ElectricalDataSummary[] {
+    const summary = atomFeed?.feed?.entry as ElectricalDataSummary[];
 
-    return {
-      endTime: new Date(parseInt(endTime) * 1000).toISOString(),
-      id,
-      startTime: new Date(parseInt(startTime) * 1000).toISOString(),
-      usage: usage,
-    };
+    return summary;
   }
 }

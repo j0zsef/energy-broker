@@ -25,7 +25,7 @@ export default async function (fastify: FastifyInstance) {
     const provider = 'generic';
     // we should be getting the base URL from the auth process: resourceURI. something like:
     // https://utilityapi.com/DataCustodian/espi/1_1/resource/Subscription/1111
-    const baseUrl = 'https://sandbox.greenbuttonalliance.org:8443/DataCustodian/';
+    const baseUrl = 'https://sandbox.greenbuttonalliance.org:8443/DataCustodian';
     // we should be getting the token from registering with the provider
     const token = fastify.getEnvs<Envs>().GREEN_BUTTON_TOKEN;
 
