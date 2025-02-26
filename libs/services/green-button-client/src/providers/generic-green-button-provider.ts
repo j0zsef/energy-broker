@@ -32,7 +32,7 @@ export class GenericGreenButtonProvider implements GreenButtonService {
       },
     });
 
-    const parser = new XMLParser({ ignoreAttributes: false });
+    const parser = new XMLParser({ attributeNamePrefix: '@_', ignoreAttributes: false, removeNSPrefix: true });
     const parsedData = parser.parse(response.data) as AtomFeed;
 
     return this.parseUsagePoints(parsedData);
@@ -61,7 +61,12 @@ export class GenericGreenButtonProvider implements GreenButtonService {
   private parseUsagePoints(atomFeed: AtomFeed): ElectricalDataUsagePoint[] {
     const usagePoints = atomFeed?.feed?.entry as ElectricalDataUsagePoint[];
 
-    return usagePoints;
+    const parsedUsagePoints = usagePoints.map<ElectricalDataUsagePoint>((usagePoint) => {
+      usagePoint.id = usagePoint.link['@_rel'].split('/').pop();
+      return usagePoint;
+    });
+
+    return parsedUsagePoints;
   }
 
   private parseSummary(atomFeed: AtomFeed): ElectricalDataSummary[] {

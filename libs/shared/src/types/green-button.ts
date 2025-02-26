@@ -19,6 +19,9 @@ export interface ElectricalDataUsagePoint {
       }
     }
   }
+  link: {
+    '@_rel': string
+  }
 }
 
 export interface AtomFeed {
