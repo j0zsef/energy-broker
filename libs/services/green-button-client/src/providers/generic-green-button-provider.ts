@@ -62,7 +62,8 @@ export class GenericGreenButtonProvider implements GreenButtonService {
     const usagePoints = atomFeed?.feed?.entry as ElectricalDataUsagePoint[];
 
     const parsedUsagePoints = usagePoints.map<ElectricalDataUsagePoint>((usagePoint) => {
-      usagePoint.id = usagePoint.link['@_rel'].split('/').pop();
+      const usagePointSelfLink = usagePoint?.link?.find(link => link['@_rel'] === 'self');
+      usagePoint.meterId = usagePointSelfLink ? usagePointSelfLink['@_href'].split('/').pop() : undefined;
       return usagePoint;
     });
 

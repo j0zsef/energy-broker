@@ -6,8 +6,29 @@ export interface ElectricalDataSummary {
         duration?: number
         start?: number
       }
+      billLastPeriod?: number
+      billToDate?: number
+      currentBillingPeriodOverAllConsumption?: {
+        powerOfTenMultiplier?: number
+        uom?: number
+        value?: number
+      }
+      overallConsumptionLastPeriod?: {
+        powerOfTenMultiplier?: number
+        uom?: number
+        value?: number
+      }
     }
   }
+  link?: [
+    {
+      '@_href': string
+      '@_rel': string
+    },
+  ]
+  published?: string
+  title?: string
+  updated?: string
 }
 
 export interface ElectricalDataUsagePoint {
@@ -19,9 +40,16 @@ export interface ElectricalDataUsagePoint {
       }
     }
   }
-  link: {
-    '@_rel': string
-  }
+  link?: [
+    {
+      '@_href': string
+      '@_rel': string
+    },
+  ]
+  meterId?: string
+  published?: string
+  title?: string
+  updated?: string
 }
 
 export interface AtomFeed {
