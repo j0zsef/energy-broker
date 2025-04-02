@@ -1,4 +1,5 @@
 /// <reference types='vitest' />
+import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
 import { defineConfig } from 'vite';
 import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
@@ -15,7 +16,15 @@ export default defineConfig({
   },
 
   cacheDir: '../../node_modules/.vite/apps/frontend',
-  plugins: [react(), nxViteTsPaths(), nxCopyAssetsPlugin(['*.md'])],
+  plugins: [
+    TanStackRouterVite({
+      autoCodeSplitting: true,
+      target: 'react',
+    }),
+    react(),
+    nxViteTsPaths(),
+    nxCopyAssetsPlugin(['*.md']),
+  ],
 
   preview: {
     host: 'localhost',

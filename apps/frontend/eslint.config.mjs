@@ -5,6 +5,7 @@ export default [
   ...eslintConfig,
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
+    ignores: ['**.gen.ts'],
     languageOptions: {
       parser: tsEslintParser,
       parserOptions: {
