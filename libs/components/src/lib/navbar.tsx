@@ -7,7 +7,7 @@ import { NavbarBrand } from 'react-bootstrap';
 
 export function Navbar() {
   return (
-    <BootstrapNavBar className="flex-column" expand={false}>
+    <BootstrapNavBar expand={false}>
       <Container>
         <NavbarBrand as={Link} to="/">Energy Broker</NavbarBrand>
         <hr className="navbar-divider" />
@@ -15,13 +15,13 @@ export function Navbar() {
           <ListGroupItem as={Link} to="/" className="navbar-item">
             Overview
           </ListGroupItem>
-          <ListGroupItem as={Link} to="/" className="navbar-item">
+          <ListGroupItem as={Link} to="/energy-sources" className="navbar-item">
             Energy Sources
           </ListGroupItem>
-          <ListGroupItem as={Link} to="/" className="navbar-item">
+          <ListGroupItem as={Link} to="/carbon-credits" className="navbar-item">
             Carbon Credits
           </ListGroupItem>
-          <ListGroupItem as={Link} to="/" className="navbar-item">
+          <ListGroupItem as={Link} to="/energy-providers" className="navbar-item">
             Energy Providers
           </ListGroupItem>
         </ListGroup>

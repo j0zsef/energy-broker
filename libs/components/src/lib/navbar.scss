@@ -1,6 +1,23 @@
-.navbar-divider {
-  width: 100%;
-  border: 0;
-  border-top: 0.25rem solid #000000;
-  margin: 0.5rem 0;
+.root {
+  .navbar {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+
+    .list-group {
+      width: 100%;
+      gap: 0.5rem;
+    }
+
+    .list-group-item:not(.active) {
+      background-color: #f1f1f1;
+    }
+  }
+
+  .navbar-divider {
+    width: 100%;
+    border: 0;
+    border-top: 0.25rem solid #000000;
+    margin: 0.5rem 0;
+  }
 }
