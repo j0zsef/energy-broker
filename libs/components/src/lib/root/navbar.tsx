@@ -10,7 +10,7 @@ export function Navbar() {
     <BootstrapNavBar expand={false}>
       <Container>
         <NavbarBrand as={Link} to="/">Energy Broker</NavbarBrand>
-        <hr className="navbar-divider" />
+        <hr className="divider" />
         <ListGroup>
           <ListGroupItem as={Link} to="/" className="navbar-item">
             Overview
