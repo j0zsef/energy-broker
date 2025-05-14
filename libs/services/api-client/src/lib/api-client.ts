@@ -1,7 +1,7 @@
 import { QueryClient } from '@tanstack/react-query';
-import { nodeConfig } from '@shared';
+import { viteConfig } from '@shared/vite-config';
 
-const baseUrl = `http://${nodeConfig.host}:${nodeConfig.port}`;
+const baseUrl = `http://${viteConfig.apiHost}:${viteConfig.apiPort}`;
 
 export const apiClient = async <T>(endpoint: string, options?: RequestInit): Promise<T> => {
   const response = await fetch(`${baseUrl}`, {
