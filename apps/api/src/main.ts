@@ -1,8 +1,9 @@
 import Fastify from 'fastify';
 import { app } from './app/app';
+import { nodeConfig } from '@shared';
 
-const host = process.env.HOST ?? 'localhost';
-const port = process.env.PORT ? Number(process.env.PORT) : 3000;
+const host = nodeConfig.host;
+const port = nodeConfig.port;
 
 // Instantiate Fastify with some config
 const server = Fastify({

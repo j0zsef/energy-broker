@@ -1,8 +1,7 @@
 import './navbar.scss';
-
+import { Navbar as BootstrapNavBar, ListGroup, ListGroupItem } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import { Link } from '@tanstack/react-router';
-import { Navbar as BootstrapNavBar, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { NavbarBrand } from 'react-bootstrap';
 
 export function Navbar() {

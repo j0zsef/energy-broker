@@ -21,6 +21,7 @@
     "target": "es2022",
     "paths": {
       "@backend": ["libs/backend/src/index.ts"],
+      "@energy-broker/api-client": ["libs/services/api-client/src/index.ts"],
       "@energy-broker/components": ["libs/components/src/index.ts"],
       "@green-button-client": [
         "libs/services/green-button-client/src/index.ts"

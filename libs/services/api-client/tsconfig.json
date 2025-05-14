@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "types": [
+      "jest",
+      "node",
+      "vite/client"
+    ]
+  },
+  "extends": "../../../tsconfig.base.json",
+  "include": ["**/*"]
+}

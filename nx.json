@@ -71,6 +71,11 @@
         "commands": ["tsc -p tsconfig.json"],
         "cwd": "{projectRoot}"
       }
+    },
+    "@nx/js:tsc": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
     }
   },
   "generators": {
