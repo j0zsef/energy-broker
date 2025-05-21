@@ -35,3 +35,27 @@ export default async function (fastify: FastifyInstance) {
     return { usagePoints };
   });
 }
+
+/*
+TODO: AUTH
+const authHeader = request.headers.authorization;
+    if (!authHeader) {
+      return reply.status(401).send({ error: 'Authorization header missing' });
+    }
+
+    const token = authHeader.split(' ')[1];
+    try {
+      const decoded = jwt.verify(token, process.env.AUTH0_PUBLIC_KEY, {
+        algorithms: ['RS256'],
+      });
+
+      const { baseUrl, provider, accessToken } = decoded as {
+        baseUrl: string;
+        provider: string;
+        accessToken: string;
+      };
+    } catch (err) {
+      return reply.status(401).send({ error: 'Invalid token' });
+    }
+
+ */

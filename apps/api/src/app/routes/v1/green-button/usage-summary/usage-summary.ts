@@ -39,3 +39,38 @@ export default async function (fastify: FastifyInstance) {
     return { summary };
   });
 }
+
+/*
+TODO: AUTH
+
+const authHeader = request.headers.authorization;
+    if (!authHeader) {
+      return reply.status(401).send({ error: 'Authorization header missing' });
+    }
+
+    const token = authHeader.split(' ')[1];
+    try {
+      const decoded = jwt.verify(token, process.env.AUTH0_PUBLIC_KEY, {
+        algorithms: ['RS256'],
+      });
+
+      const { baseUrl, provider, accessToken } = decoded as {
+        baseUrl: string;
+        provider: string;
+        accessToken: string;
+      };
+
+      // Use baseUrl, provider, and accessToken to interact with Green Button
+      const greenButtonService = GreenButtonFactory.create(provider, baseUrl);
+      const summary = await greenButtonService.fetchSummary(accessToken, {
+        max: request.query.max,
+        min: request.query.min,
+        meterId: request.params.meterId,
+      });
+
+      return { summary };
+    } catch (err) {
+      return reply.status(401).send({ error: 'Invalid or expired token' });
+    }
+  });
+ */
