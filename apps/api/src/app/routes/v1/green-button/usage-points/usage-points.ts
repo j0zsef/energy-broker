@@ -1,3 +1,4 @@
+import { ElectricalDataUsagePointRequest } from '@shared';
 import { Envs } from '../../../../app';
 import { FastifyInstance } from 'fastify';
 import { GreenButtonFactory } from '@green-button-client';
@@ -16,7 +17,7 @@ export default async function (fastify: FastifyInstance) {
 
   fastify.withTypeProvider<ZodTypeProvider>().get('/', opts, async function (request) {
     // const user = request.user; // Retrieved from Auth0 JWT
-    const usagePointRequest = {
+    const usagePointRequest: ElectricalDataUsagePointRequest = {
       max: request.query.max,
       min: request.query.min,
     };

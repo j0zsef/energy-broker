@@ -1,5 +1,9 @@
+import { EnergyOverview } from './energy-overview';
+
 export function Overview() {
-  // get overview data from api with Tanstack Query
   // Energy Overview component
-  // Enery Breakdown component
+  // Energy Breakdown component
+  return (
+    <EnergyOverview />
+  );
 }

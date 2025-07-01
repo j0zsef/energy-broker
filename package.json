@@ -13,6 +13,7 @@
   "private": true,
   "dependencies": {
     "@fastify/autoload": "~6.0.3",
+    "@fastify/cors": "^11.0.1",
     "@fastify/env": "^5.0.2",
     "@fastify/sensible": "~6.0.2",
     "@tanstack/react-query": "^5.76.1",

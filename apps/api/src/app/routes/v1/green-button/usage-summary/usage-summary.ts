@@ -1,3 +1,4 @@
+import { ElectricalDataSummaryRequest } from '@shared';
 import { Envs } from '../../../../app';
 import { FastifyInstance } from 'fastify';
 import { GreenButtonFactory } from '@green-button-client';
@@ -19,7 +20,7 @@ export default async function (fastify: FastifyInstance) {
 
   fastify.withTypeProvider<ZodTypeProvider>().get('/:meterId', opts, async function (request) {
     // const user = request.user; // Retrieved from Auth0 JWT
-    const summaryRequest = {
+    const summaryRequest: ElectricalDataSummaryRequest = {
       max: request.query.max,
       meterId: request.params.meterId,
       min: request.query.min,

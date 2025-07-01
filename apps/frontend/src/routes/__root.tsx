@@ -22,4 +22,10 @@ export const Route = createRootRoute({
       </QueryClientProvider>
     </>
   ),
+  errorComponent: ({ error }) => (
+    <div>
+      Error:
+      {error.message}
+    </div>
+  ),
 });

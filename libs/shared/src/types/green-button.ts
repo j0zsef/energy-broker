@@ -1,3 +1,9 @@
+export interface ElectricalDataSummaryRequest {
+  max?: string
+  meterId: string
+  min?: string
+}
+
 export interface ElectricalDataSummary {
   id?: string
   content?: {
@@ -29,6 +35,11 @@ export interface ElectricalDataSummary {
   published?: string
   title?: string
   updated?: string
+}
+
+export interface ElectricalDataUsagePointRequest {
+  max?: string
+  min?: string
 }
 
 export interface ElectricalDataUsagePoint {

@@ -2,6 +2,7 @@ import * as path from 'path';
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 import AutoLoad from '@fastify/autoload';
 import { FastifyInstance } from 'fastify';
+import fastifyCors from '@fastify/cors';
 import { fastifyEnv } from '@fastify/env';
 
 /* eslint-disable-next-line */
@@ -35,6 +36,10 @@ export async function app(fastify: FastifyInstance, opts: AppOptions) {
     dir: path.join(__dirname, 'routes'),
     maxDepth: 10,
     options: { ...opts },
+  });
+
+  fastify.register(fastifyCors, {
+    origin: 'http://localhost:4200',
   });
 
   fastify.setValidatorCompiler(validatorCompiler);
