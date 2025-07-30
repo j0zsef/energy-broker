@@ -14,7 +14,7 @@ export function Navbar() {
           <ListGroupItem as={Link} to="/" className="navbar-item">
             Overview
           </ListGroupItem>
-          <ListGroupItem as={Link} to="/energy-sources" className="navbar-item">
+          <ListGroupItem as={Link} to="/sources" className="navbar-item">
             Energy Sources
           </ListGroupItem>
           <ListGroupItem as={Link} to="/carbon-credits" className="navbar-item">

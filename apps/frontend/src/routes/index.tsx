@@ -9,7 +9,6 @@ export const Route = createFileRoute('/')({
 export function Index() {
   return (
     <div className="index">
-      <h1>Energy Broker App</h1>
       <Overview />
     </div>
   );

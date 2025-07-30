@@ -12,12 +12,26 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as SourcesIndexImport } from './routes/sources/index'
+import { Route as SourcesAddImport } from './routes/sources/add'
 
 // Create/Update Routes
 
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SourcesIndexRoute = SourcesIndexImport.update({
+  id: '/sources/',
+  path: '/sources/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SourcesAddRoute = SourcesAddImport.update({
+  id: '/sources/add',
+  path: '/sources/add',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -32,6 +46,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/sources/add': {
+      id: '/sources/add'
+      path: '/sources/add'
+      fullPath: '/sources/add'
+      preLoaderRoute: typeof SourcesAddImport
+      parentRoute: typeof rootRoute
+    }
+    '/sources/': {
+      id: '/sources/'
+      path: '/sources'
+      fullPath: '/sources'
+      preLoaderRoute: typeof SourcesIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -39,32 +67,42 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/sources/add': typeof SourcesAddRoute
+  '/sources': typeof SourcesIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/sources/add': typeof SourcesAddRoute
+  '/sources': typeof SourcesIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/sources/add': typeof SourcesAddRoute
+  '/sources/': typeof SourcesIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/sources/add' | '/sources'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/sources/add' | '/sources'
+  id: '__root__' | '/' | '/sources/add' | '/sources/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SourcesAddRoute: typeof SourcesAddRoute
+  SourcesIndexRoute: typeof SourcesIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SourcesAddRoute: SourcesAddRoute,
+  SourcesIndexRoute: SourcesIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -77,11 +115,19 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/",
+        "/sources/add",
+        "/sources/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/sources/add": {
+      "filePath": "sources/add.tsx"
+    },
+    "/sources/": {
+      "filePath": "sources/index.tsx"
     }
   }
 }

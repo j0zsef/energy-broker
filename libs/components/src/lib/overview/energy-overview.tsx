@@ -1,6 +1,9 @@
 import { useElectricalMeters, useElectricalSummary } from '@energy-broker/api-client';
+import { Link } from '@tanstack/react-router';
 import { useQueries } from '@tanstack/react-query';
 
+// EnergyOverview component to display electrical meter summaries for now,
+// this component will be expanded later to include more energy sources
 export function EnergyOverview() {
   // const min = '2022-09-27T18:00:00Z';
   // const max = '2025-07-01T19:00:00Z';
@@ -11,7 +14,12 @@ export function EnergyOverview() {
   }
 
   if (!electricalMeters.length) {
-    return <div>No electrical meters found.</div>;
+    return (
+      <>
+        <div>No electrical meters found.</div>
+        <Link to="/sources/add">+ Add an energy Source</Link>
+      </>
+    );
   }
 
   const summaryQueries = useQueries({
@@ -27,7 +35,6 @@ export function EnergyOverview() {
 
   return (
     <div>
-      <h2>Energy Overview</h2>
       {allSummaries.map((summary, idx) => (
         <div key={idx}>{JSON.stringify(summary)}</div>
       ))}
