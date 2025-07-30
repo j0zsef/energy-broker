@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as SourcesIndexImport } from './routes/sources/index'
 import { Route as SourcesAddImport } from './routes/sources/add'
+import { Route as SourcesEnergySourceImport } from './routes/sources/$energy-source'
 
 // Create/Update Routes
 
@@ -35,6 +36,12 @@ const SourcesAddRoute = SourcesAddImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const SourcesEnergySourceRoute = SourcesEnergySourceImport.update({
+  id: '/sources/$energy-source',
+  path: '/sources/$energy-source',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -44,6 +51,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/sources/$energy-source': {
+      id: '/sources/$energy-source'
+      path: '/sources/$energy-source'
+      fullPath: '/sources/$energy-source'
+      preLoaderRoute: typeof SourcesEnergySourceImport
       parentRoute: typeof rootRoute
     }
     '/sources/add': {
@@ -67,12 +81,14 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/sources/$energy-source': typeof SourcesEnergySourceRoute
   '/sources/add': typeof SourcesAddRoute
   '/sources': typeof SourcesIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/sources/$energy-source': typeof SourcesEnergySourceRoute
   '/sources/add': typeof SourcesAddRoute
   '/sources': typeof SourcesIndexRoute
 }
@@ -80,27 +96,35 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/sources/$energy-source': typeof SourcesEnergySourceRoute
   '/sources/add': typeof SourcesAddRoute
   '/sources/': typeof SourcesIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/sources/add' | '/sources'
+  fullPaths: '/' | '/sources/$energy-source' | '/sources/add' | '/sources'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/sources/add' | '/sources'
-  id: '__root__' | '/' | '/sources/add' | '/sources/'
+  to: '/' | '/sources/$energy-source' | '/sources/add' | '/sources'
+  id:
+    | '__root__'
+    | '/'
+    | '/sources/$energy-source'
+    | '/sources/add'
+    | '/sources/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SourcesEnergySourceRoute: typeof SourcesEnergySourceRoute
   SourcesAddRoute: typeof SourcesAddRoute
   SourcesIndexRoute: typeof SourcesIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SourcesEnergySourceRoute: SourcesEnergySourceRoute,
   SourcesAddRoute: SourcesAddRoute,
   SourcesIndexRoute: SourcesIndexRoute,
 }
@@ -116,12 +140,16 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/sources/$energy-source",
         "/sources/add",
         "/sources/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/sources/$energy-source": {
+      "filePath": "sources/$energy-source.tsx"
     },
     "/sources/add": {
       "filePath": "sources/add.tsx"
