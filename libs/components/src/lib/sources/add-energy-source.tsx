@@ -94,9 +94,9 @@ export const AddEnergySource = () => {
                   <option value="solar">Solar</option>
                 </Form.Select>
                 {field.state.meta.errors.length > 0 && (
-                  <div className="invalid-feedback">
+                  <Form.Control.Feedback>
                     {field.state.meta.errors[0]}
-                  </div>
+                  </Form.Control.Feedback>
                 )}
               </Form.Group>
             )}
@@ -143,9 +143,9 @@ export const AddEnergySource = () => {
                     maxLength={5}
                   />
                   {field.state.meta.errors.length > 0 && (
-                    <div className="invalid-feedback">
+                    <Form.Control.Feedback>
                       {field.state.meta.errors[0]}
-                    </div>
+                    </Form.Control.Feedback>
                   )}
                   <div className="form-text">
                     We will find available providers in your area
@@ -184,9 +184,9 @@ export const AddEnergySource = () => {
                     ))}
                   </Form.Select>
                   {field.state.meta.errors.length > 0 && (
-                    <div className="invalid-feedback">
+                    <Form.Control.Feedback>
                       {field.state.meta.errors[0]}
-                    </div>
+                    </Form.Control.Feedback>
                   )}
                   <div className="form-text">
                     Do not see your provider?
