@@ -3,29 +3,53 @@ import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
 import React, { useState } from 'react';
 import { useForm } from '@tanstack/react-form';
 
+type Provider = {
+  id: string
+  name: string
+  fullName: string
+};
+
+type ZipProviders = {
+  [zip: string]: Provider[]
+};
+
+type MockProviders = {
+  electrical: ZipProviders
+  gas: ZipProviders
+};
+
 export const AddEnergySource = () => {
-  const [providers, setProviders] = useState([]);
+  let initialProviders: Provider[] = [];
+  const [providers, setProviders] = useState(initialProviders);
   const [loadingProviders, setLoadingProviders] = useState(false);
 
   // Mock provider data - replace with your API call
-  const mockProviders = {
+  const mockProviders: MockProviders = {
     electrical: {
       10001: [
-        { id: 'coned', name: 'ConEd', fullName: 'Consolidated Edison' },
-        { id: 'pseg', name: 'PSEG', fullName: 'Public Service Enterprise Group' },
+        { fullName: 'Consolidated Edison', id: 'coned', name: 'ConEd' },
+        { fullName: 'Public Service Enterprise Group', id: 'pseg', name: 'PSEG' },
+      ],
+      60657: [
+        { fullName: 'Commerical Edison', id: 'comed', name: 'ComEd' },
+        { fullName: 'Ameren Illinois', id: 'ameren', name: 'Ameren' },
       ],
       90210: [
-        { id: 'sce', name: 'SCE', fullName: 'Southern California Edison' },
-        { id: 'ladwp', name: 'LADWP', fullName: 'Los Angeles Department of Water and Power' },
+        { fullName: 'Southern California Edison', id: 'sce', name: 'SCE' },
+        { fullName: 'Los Angeles Department of Water and Power', id: 'ladwp', name: 'LADWP' },
       ],
     },
     gas: {
       10001: [
-        { id: 'coned-gas', name: 'ConEd Gas', fullName: 'Consolidated Edison - Gas' },
-        { id: 'national-grid', name: 'National Grid', fullName: 'National Grid USA' },
+        { fullName: 'Consolidated Edison - Gas', id: 'coned-gas', name: 'ConEd Gas' },
+        { fullName: 'National Grid USA', id: 'national-grid', name: 'National Grid' },
+      ],
+      60657: [
+        { fullName: 'Peoples Gas', id: 'peoples-gas', name: 'Peoples Gas' },
+        { fullName: 'North Shore Gas', id: 'north-shore-gas', name: 'North Shore Gas' },
       ],
       90210: [
-        { id: 'socal-gas', name: 'SoCalGas', fullName: 'Southern California Gas Company' },
+        { fullName: 'Southern California Gas Company', id: 'socal-gas', name: 'SoCalGas' },
       ],
     },
   };
@@ -33,8 +57,8 @@ export const AddEnergySource = () => {
   const form = useForm({
     defaultValues: {
       energyType: '',
-      zipCode: '',
       provider: '',
+      zipCode: '',
     },
     onSubmit: async ({ value }) => {
       console.log('Form submitted:', value);
@@ -43,14 +67,14 @@ export const AddEnergySource = () => {
     },
   });
 
-  const fetchProviders = async (energyType, zipCode) => {
+  const fetchProviders = async (energyType: string, zipCode: string) => {
     if (!energyType || !zipCode || zipCode.length !== 5) return;
 
     setLoadingProviders(true);
 
     // Simulate API call
     setTimeout(() => {
-      const typeProviders = mockProviders[energyType];
+      const typeProviders = mockProviders[energyType as keyof typeof mockProviders];
       const zipProviders = typeProviders?.[zipCode] || [];
       setProviders(zipProviders);
       setLoadingProviders(false);
@@ -58,10 +82,10 @@ export const AddEnergySource = () => {
   };
 
   return (
-    <Row className="mb-3">
+    <Row>
       <Col className="col-md-6">
         <h2>Add Energy Sources</h2>
-        <Form>
+        <Form className="d-flex flex-column gap-3">
           {/* Energy Type Dropdown */}
           <form.Field
             name="energyType"
@@ -70,7 +94,7 @@ export const AddEnergySource = () => {
             }}
           >
             {field => (
-              <Form.Group className="mb-3">
+              <Form.Group>
                 <Form.Label htmlFor="energyType" className="form-label">
                   Energy Type
                   {' '}
@@ -115,7 +139,7 @@ export const AddEnergySource = () => {
               }}
             >
               {field => (
-                <Form.Group className="mb-3">
+                <Form.Group>
                   <Form.Label htmlFor="zipCode" className="form-label">
                     Zip Code
                     {' '}
@@ -164,7 +188,7 @@ export const AddEnergySource = () => {
               }}
             >
               {field => (
-                <Form.Group className="mb-3">
+                <Form.Group>
                   <Form.Label htmlFor="provider" className="form-label">
                     Provider
                     {' '}
@@ -200,7 +224,7 @@ export const AddEnergySource = () => {
 
           {/* Loading State */}
           {loadingProviders && (
-            <div className="mb-3">
+            <div>
               <div className="d-flex align-items-center">
                 <div className="spinner-border spinner-border-sm me-2" role="status">
                   <span className="visually-hidden">Loading...</span>
@@ -213,31 +237,26 @@ export const AddEnergySource = () => {
           {/* No Providers Found */}
           {!loadingProviders && providers.length === 0 && form.state.values.zipCode.length === 5 && form.state.values.energyType && (
             <Alert>
-              <strong>No providers found</strong>
-              {' '}
-              for
-              {form.state.values.energyType}
-              {' '}
-              in
-              {form.state.values.zipCode}
-              .
-              <br />
-              <a href="#" className="alert-link">Contact us</a>
-              {' '}
-              to add support for your area.
+              <span>
+                <strong>No providers found</strong>
+                {` for ${form.state.values.energyType} in ${form.state.values.zipCode}.`}
+                <br />
+                <a href="#" className="alert-link">Contact us </a>
+                to add support for your area.
+              </span>
             </Alert>
           )}
 
           {/* Submit Button */}
           <div className="d-grid gap-2">
             <Button
-              type="button"
-              className="btn btn-primary"
               disabled={!form.state.canSubmit || !form.state.values.provider}
               onClick={(e) => {
                 e.preventDefault();
                 form.handleSubmit();
               }}
+              type="submit"
+              variant="primary"
             >
               {form.state.isSubmitting
                 ? (
@@ -252,7 +271,7 @@ export const AddEnergySource = () => {
                     'Connect to Provider'
                   )}
             </Button>
-            <Button type="button" className="btn btn-outline-secondary">
+            <Button variant="secondary">
               Cancel
             </Button>
           </div>
