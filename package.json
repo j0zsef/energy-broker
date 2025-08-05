@@ -5,6 +5,7 @@
   "scripts": {
     "build": "nx run-many --target=build --all",
     "serve": "nx run-many --target=serve --all",
+    "start-dev": "pnpm db-setup && pnpm serve",
     "test": "nx run-many --target=test --all",
     "lint": "nx run-many --target=lint --all",
     "db-setup": "nx run backend:db:setup",
@@ -16,6 +17,7 @@
     "@fastify/cors": "^11.0.1",
     "@fastify/env": "^5.0.2",
     "@fastify/sensible": "~6.0.2",
+    "@prisma/client": "^6.13.0",
     "@tanstack/react-form": "^1.15.1",
     "@tanstack/react-query": "^5.76.1",
     "@tanstack/react-router": "^1.114.32",

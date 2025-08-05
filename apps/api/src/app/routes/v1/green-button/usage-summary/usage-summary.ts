@@ -55,11 +55,15 @@ const authHeader = request.headers.authorization;
         algorithms: ['RS256'],
       });
 
-      const { baseUrl, provider, accessToken } = decoded as {
-        baseUrl: string;
-        provider: string;
-        accessToken: string;
-      };
+      // Fetch third-party credentials from your DB using decoded.sub
+  const user = await db.users.findOne({ auth0Id: decoded.sub });
+  if (!user || !user.baseUrl || !user.accessToken || !user.provider) {
+    return reply.status(403).send({ error: 'No third-party credentials found' });
+  }
+
+  const baseUrl = user.baseUrl;
+  const accessToken = user.accessToken;
+  const provider = user.provider;
 
       // Use baseUrl, provider, and accessToken to interact with Green Button
       const greenButtonService = GreenButtonFactory.create(provider, baseUrl);

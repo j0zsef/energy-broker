@@ -5,6 +5,7 @@
       "node"
     ]
   },
+  "exclude": ["**/prisma", "**/src/generated" ],
   "extends": "../../tsconfig.base.json",
   "include": ["**/*"]
 }

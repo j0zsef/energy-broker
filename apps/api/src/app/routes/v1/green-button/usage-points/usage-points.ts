@@ -40,23 +40,29 @@ export default async function (fastify: FastifyInstance) {
 /*
 TODO: AUTH
 const authHeader = request.headers.authorization;
-    if (!authHeader) {
-      return reply.status(401).send({ error: 'Authorization header missing' });
-    }
+if (!authHeader) {
+  return reply.status(401).send({ error: 'Authorization header missing' });
+}
 
-    const token = authHeader.split(' ')[1];
-    try {
-      const decoded = jwt.verify(token, process.env.AUTH0_PUBLIC_KEY, {
-        algorithms: ['RS256'],
-      });
+const token = authHeader.split(' ')[1];
+try {
+  const decoded = jwt.verify(token, process.env.AUTH0_PUBLIC_KEY, {
+    algorithms: ['RS256'],
+  }) as { sub: string };
 
-      const { baseUrl, provider, accessToken } = decoded as {
-        baseUrl: string;
-        provider: string;
-        accessToken: string;
-      };
-    } catch (err) {
-      return reply.status(401).send({ error: 'Invalid token' });
-    }
+  // Fetch third-party credentials from your DB using decoded.sub
+  const user = await db.users.findOne({ auth0Id: decoded.sub });
+  if (!user || !user.baseUrl || !user.accessToken || !user.provider) {
+    return reply.status(403).send({ error: 'No third-party credentials found' });
+  }
+
+  const baseUrl = user.baseUrl;
+  const accessToken = user.accessToken;
+  const provider = user.provider;
+
+  // ...proceed with third-party API call
+} catch (err) {
+  return reply.status(401).send({ error: 'Invalid token' });
+}
 
  */

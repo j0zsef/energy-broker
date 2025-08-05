@@ -18,3 +18,16 @@ model User {
   name  String
   email String @unique
 }
+
+model OAuthProviderConfig {
+  id           Int      @id @default(autoincrement())
+  clientId     String
+  clientSecret String
+  redirectUri  String
+  scopes       String   // Store as comma-separated or JSON string
+  authUrl      String
+  tokenUrl     String
+  providerName String @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}

@@ -65,6 +65,11 @@ export const AddEnergySource = () => {
       console.log('Form submitted:', value);
       // Here you would trigger OAuth flow
       alert(`Starting OAuth flow for ${value.provider} (${value.energyType})`);
+
+      /*
+      - Call your Fastify API endpoint (e.g., /api/oauth/start) with the selected provider and user info.
+      - In your React app, redirect the user to that URL to start the OAuth flow.
+       */
     },
   });
 
