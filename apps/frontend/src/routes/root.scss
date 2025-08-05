@@ -23,3 +23,9 @@
   border-top: 0.25rem solid #000000;
   margin: 0.5rem 0;
 }
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}

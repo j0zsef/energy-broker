@@ -33,6 +33,7 @@ export const AddEnergySource = () => {
       60657: [
         { fullName: 'Commerical Edison', id: 'comed', name: 'ComEd' },
         { fullName: 'Ameren Illinois', id: 'ameren', name: 'Ameren' },
+        { fullName: 'Demo Utility', id: 'demo-util', name: 'Demo Utility' },
       ],
       90210: [
         { fullName: 'Southern California Edison', id: 'sce', name: 'SCE' },
@@ -118,8 +119,8 @@ export const AddEnergySource = () => {
                   <option value="solar">Solar</option>
                 </Form.Select>
                 {field.state.meta.errors.length > 0 && (
-                  <Form.Control.Feedback>
-                    {field.state.meta.errors[0]}
+                  <Form.Control.Feedback type="invalid">
+                    {field.state.meta.errors.join(', ')}
                   </Form.Control.Feedback>
                 )}
               </Form.Group>
@@ -167,8 +168,8 @@ export const AddEnergySource = () => {
                     maxLength={5}
                   />
                   {field.state.meta.errors.length > 0 && (
-                    <Form.Control.Feedback>
-                      {field.state.meta.errors[0]}
+                    <Form.Control.Feedback type="invalid">
+                      {field.state.meta.errors.join(', ')}
                     </Form.Control.Feedback>
                   )}
                   <div className="form-text">
@@ -208,8 +209,8 @@ export const AddEnergySource = () => {
                     ))}
                   </Form.Select>
                   {field.state.meta.errors.length > 0 && (
-                    <Form.Control.Feedback>
-                      {field.state.meta.errors[0]}
+                    <Form.Control.Feedback type="invalid">
+                      {field.state.meta.errors.join(', ')}
                     </Form.Control.Feedback>
                   )}
                   <div className="form-text">
@@ -248,33 +249,39 @@ export const AddEnergySource = () => {
           )}
 
           {/* Submit Button */}
-          <div className="d-grid gap-2">
-            <Button
-              disabled={!form.state.canSubmit || !form.state.values.provider}
-              onClick={(e) => {
-                e.preventDefault();
-                form.handleSubmit();
-              }}
-              type="submit"
-              variant="primary"
-            >
-              {form.state.isSubmitting
-                ? (
-                    <>
-                      <span className="spinner-border spinner-border-sm me-2" role="status">
-                        <span className="visually-hidden">Loading...</span>
-                      </span>
-                      Connecting...
-                    </>
-                  )
-                : (
-                    'Connect to Provider'
-                  )}
-            </Button>
-            <Button variant="secondary">
-              Cancel
-            </Button>
-          </div>
+          <form.Subscribe
+            selector={state => [state.canSubmit, state.isSubmitting, state.values.provider]}
+          >
+            {([canSubmit, isSubmitting, provider]) => (
+              <div className="d-grid gap-2">
+                <Button
+                  disabled={!canSubmit || !provider}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    form.handleSubmit();
+                  }}
+                  type="submit"
+                  variant="primary"
+                >
+                  {isSubmitting
+                    ? (
+                        <>
+                          <span className="spinner-border spinner-border-sm me-2" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                          </span>
+                          Connecting...
+                        </>
+                      )
+                    : (
+                        'Connect to Provider'
+                      )}
+                </Button>
+                <Button variant="secondary">
+                  Cancel
+                </Button>
+              </div>
+            )}
+          </form.Subscribe>
         </Form>
       </Col>
     </Row>

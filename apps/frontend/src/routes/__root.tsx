@@ -13,7 +13,7 @@ export const Route = createRootRoute({
       <QueryClientProvider client={queryClient}>
         <div className="root">
           <Navbar />
-          <Container className="d-flex flex-column">
+          <Container className="main-content">
             <Header />
             <Outlet />
           </Container>
