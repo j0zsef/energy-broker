@@ -14,9 +14,8 @@ export default async function (fastify: FastifyInstance) {
 
   fastify.withTypeProvider<ZodTypeProvider>().post('/:provider', opts, async function (request, reply) {
     /*
-    - The Fastify endpoint looks up the OAuth config (client ID, secret, redirect URI, etc.) in your DB.
+    TODO
       - The endpoint generates the OAuth authorization URL (with state, scopes, etc.) and any required tokens.
-      - The endpoint responds with the redirect URL.
      */
 
     const provider = request.params.provider;

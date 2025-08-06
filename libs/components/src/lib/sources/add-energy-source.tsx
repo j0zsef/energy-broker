@@ -2,6 +2,7 @@ import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
 
 import React, { useState } from 'react';
 import { useForm } from '@tanstack/react-form';
+import { useOAuthProvider } from '@energy-broker/api-client';
 
 type Provider = {
   id: string
@@ -55,6 +56,8 @@ export const AddEnergySource = () => {
     },
   };
 
+  const oAuthMutation = useOAuthProvider();
+
   const form = useForm({
     defaultValues: {
       energyType: '',
@@ -63,13 +66,14 @@ export const AddEnergySource = () => {
     },
     onSubmit: async ({ value }) => {
       console.log('Form submitted:', value);
-      // Here you would trigger OAuth flow
-      alert(`Starting OAuth flow for ${value.provider} (${value.energyType})`);
 
-      /*
-      - Call your Fastify API endpoint (e.g., /api/oauth/start) with the selected provider and user info.
-      - In your React app, redirect the user to that URL to start the OAuth flow.
-       */
+      try {
+        const { redirectUri } = await oAuthMutation.mutateAsync({ provider: value.provider });
+        window.location.href = redirectUri;
+      }
+      catch (error) {
+        console.error('OAuth error:', error);
+      }
     },
   });
 

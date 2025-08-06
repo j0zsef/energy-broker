@@ -10,3 +10,7 @@ export interface OAuthProviderConfig {
 export interface OAuthProviderResponse {
   redirectUri: string
 }
+
+export interface OAuthProviderRequest {
+  provider: string
+}
