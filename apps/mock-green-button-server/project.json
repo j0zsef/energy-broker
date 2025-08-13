@@ -1,0 +1,50 @@
+{
+  "name": "mock-green-button-server",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/mock-green-button-server/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/apps/mock-green-button-server",
+        "format": ["esm"],
+        "bundle": false,
+        "main": "apps/mock-green-button-server/src/main.ts",
+        "tsConfig": "apps/mock-green-button-server/tsconfig.json",
+        "assets": ["apps/mock-green-button-server/src/assets"],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          },
+          "entryNames": "[name]",
+          "outbase": "apps/mock-green-button-server/src"
+        }
+      },
+      "configurations": {
+        "development": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "mock-green-button-server:build",
+        "runBuildTargetDependencies": false,
+        "port": 9230
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "mock-green-button-server:build:development"
+        }
+      }
+    }
+  },
+  "tags": []
+}

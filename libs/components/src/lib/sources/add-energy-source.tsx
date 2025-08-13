@@ -19,6 +19,13 @@ type MockProviders = {
   gas: ZipProviders
 };
 
+const buildAuthUri = (baseUri: string, clientId: string, redirectUri: string) => {
+  const url = new URL(baseUri);
+  url.searchParams.set('client_id', clientId);
+  url.searchParams.set('redirect_uri', redirectUri);
+  return url.toString();
+};
+
 export const AddEnergySource = () => {
   let initialProviders: Provider[] = [];
   const [providers, setProviders] = useState(initialProviders);
@@ -65,11 +72,9 @@ export const AddEnergySource = () => {
       zipCode: '',
     },
     onSubmit: async ({ value }) => {
-      console.log('Form submitted:', value);
-
       try {
-        const { redirectUri } = await oAuthMutation.mutateAsync({ provider: value.provider });
-        window.location.href = redirectUri;
+        const { authUrl, clientId, redirectUri } = await oAuthMutation.mutateAsync({ provider: value.provider });
+        window.location.href = buildAuthUri(authUrl, clientId, redirectUri);
       }
       catch (error) {
         console.error('OAuth error:', error);

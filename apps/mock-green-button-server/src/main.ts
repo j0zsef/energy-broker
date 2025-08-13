@@ -1,0 +1,61 @@
+import { OAuth2Server } from 'oauth2-mock-server';
+import express from 'express';
+
+import fetch from 'node-fetch';
+
+const app = express();
+const oauthServer = new OAuth2Server();
+const PORT = 3001; // OAuth2 mock
+const USAGE_PORT = 3002; // Your usage endpoint
+
+(async () => {
+  // Start the OAuth2 mock server
+  await oauthServer.issuer.keys.generate('RS256');
+  await oauthServer.start(PORT);
+  console.log(`OAuth2 mock server running at ${oauthServer.issuer.url}`);
+
+  app.get('/usage', async (req, res) => {
+    const authHeader = req.headers['authorization'];
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).send('Missing token');
+    }
+
+    const token = authHeader.replace('Bearer ', '');
+
+    type IntrospectResponse = {
+      active: boolean
+      scope?: string
+      client_id?: string
+      username?: string
+      exp?: number
+    };
+
+    // Introspect token against mock OAuth server
+    const introspectResp = await fetch(`${oauthServer.issuer.url}/introspect`, {
+      body: `token=${token}&client_id=demo-client&client_secret=demo-secret`,
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      method: 'POST',
+
+    });
+    const introspectData = await introspectResp.json() as IntrospectResponse;
+
+    if (!introspectData.active) {
+      return res.status(401).send('Invalid token');
+    }
+
+    // ✅ Token is valid, return fake usage data
+    res.json({
+      customerId: '12345',
+      serviceAddress: '123 Main St',
+      usageIntervals: [
+        { kWh: 1.23, start: '2025-08-01T00:00:00Z' },
+        { kWh: 0.98, start: '2025-08-01T01:00:00Z' },
+        { kWh: 1.10, start: '2025-08-01T02:00:00Z' },
+      ],
+    });
+  });
+
+  app.listen(USAGE_PORT, () => {
+    console.log(`Mock usage API running at http://localhost:${USAGE_PORT}/usage`);
+  });
+})();

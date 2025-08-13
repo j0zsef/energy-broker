@@ -26,7 +26,9 @@ export default async function (fastify: FastifyInstance) {
     if (!config) return reply.status(404).send({ error: 'Not found' });
 
     return {
-      redirectUrl: config.redirectUri,
+      authUrl: config.authUrl,
+      clientId: config.clientId,
+      redirectUri: config.redirectUri,
     };
   });
 }

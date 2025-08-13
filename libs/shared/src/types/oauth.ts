@@ -8,6 +8,8 @@ export interface OAuthProviderConfig {
 }
 
 export interface OAuthProviderResponse {
+  authUrl: string
+  clientId: string
   redirectUri: string
 }
 

@@ -28,7 +28,7 @@
       ],
       "@shared": ["libs/shared/src/index.ts"],
       "@shared/node-config": ["libs/shared/src/config/node-config.ts"],
-      "@shared/vite-config": ["libs/shared/src/config/vite-config.ts"],
+      "@shared/vite-config": ["libs/shared/src/config/vite-config.ts"]
     },
     "pretty": true
   },
