@@ -5,13 +5,13 @@ import fetch from 'node-fetch';
 
 const app = express();
 const oauthServer = new OAuth2Server();
-const PORT = 3001; // OAuth2 mock
-const USAGE_PORT = 3002; // Your usage endpoint
+const OAUTH_PORT = 3001; // OAuth2 mock
+const MOCK_GREEN_BUTTON_PORT = 3002; // Your usage endpoint
 
 (async () => {
   // Start the OAuth2 mock server
   await oauthServer.issuer.keys.generate('RS256');
-  await oauthServer.start(PORT);
+  await oauthServer.start(OAUTH_PORT);
   console.log(`OAuth2 mock server running at ${oauthServer.issuer.url}`);
 
   app.get('/usage', async (req, res) => {
@@ -55,7 +55,7 @@ const USAGE_PORT = 3002; // Your usage endpoint
     });
   });
 
-  app.listen(USAGE_PORT, () => {
-    console.log(`Mock usage API running at http://localhost:${USAGE_PORT}/usage`);
+  app.listen(MOCK_GREEN_BUTTON_PORT, () => {
+    console.log(`Mock Green Button API running at http://localhost:${MOCK_GREEN_BUTTON_PORT}`);
   });
 })();

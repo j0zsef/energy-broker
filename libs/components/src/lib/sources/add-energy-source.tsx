@@ -41,7 +41,7 @@ export const AddEnergySource = () => {
       60657: [
         { fullName: 'Commerical Edison', id: 'comed', name: 'ComEd' },
         { fullName: 'Ameren Illinois', id: 'ameren', name: 'Ameren' },
-        { fullName: 'Demo Utility', id: 'demo-util', name: 'Demo Utility' },
+        { fullName: 'Mock Utility', id: 'mock-util', name: 'Mock Utility' },
       ],
       90210: [
         { fullName: 'Southern California Edison', id: 'sce', name: 'SCE' },
@@ -74,6 +74,7 @@ export const AddEnergySource = () => {
     onSubmit: async ({ value }) => {
       try {
         const { authUrl, clientId, redirectUri } = await oAuthMutation.mutateAsync({ provider: value.provider });
+
         window.location.href = buildAuthUri(authUrl, clientId, redirectUri);
       }
       catch (error) {
