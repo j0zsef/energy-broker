@@ -8,5 +8,8 @@
   },
   "devDependencies": {
     "prisma": "6.3.0"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   }
 }
