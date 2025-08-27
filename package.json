@@ -8,7 +8,7 @@
     "start-dev": "pnpm db-setup && pnpm serve",
     "test": "nx run-many --target=test --all",
     "lint": "nx run-many --target=lint --all",
-    "db-setup": "nx run backend:db:setup",
+    "db-setup": "nx run backend:db:setup && nx run backend:db:seed",
     "db-reset": "nx run backend:db:reset"
   },
   "private": true,

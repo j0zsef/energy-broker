@@ -3,7 +3,8 @@
     "types": [
       "jest",
       "node"
-    ]
+    ],
+    "module": "commonjs",
   },
   "exclude": ["**/prisma", "**/src/generated" ],
   "extends": "../../tsconfig.base.json",

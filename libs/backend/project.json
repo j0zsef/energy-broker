@@ -10,7 +10,7 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "docker compose up -d mysql && nx run backend:migrate"
+          "docker compose up -d mysql && nx run backend:migrate && nx run backend:db:seed"
         ]
       }
     },
@@ -25,14 +25,15 @@
       "options": {
         "commands": [
           "docker compose down",
-          "docker compose up -d mysql && nx run backend:migrate && nx run backend:seed"
+          "docker compose up -d mysql && nx run backend:migrate && nx run backend:db:seed"
         ]
       }
     },
-    "seed": {
+    "db:seed": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "npx prisma db seed"
+        "command": "npx prisma db seed",
+        "cwd": "libs/backend"
       }
     }
   }

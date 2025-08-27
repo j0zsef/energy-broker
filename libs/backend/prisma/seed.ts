@@ -8,7 +8,8 @@ async function main() {
         authUrl: 'http://localhost:3001/authorize',
         providerName: "mock-util",
         tokenUrl: 'http://localhost:3001/token',
-        redirectUri: "http://localhost:4200/sources"
+        redirectUri: "http://localhost:4200/sources",
+        scopes: '',
       }
   })
   console.log({ mockUtil })

@@ -21,8 +21,6 @@ model User {
 
 model OAuthProviderConfig {
   id           Int      @id @default(autoincrement())
-  clientId     String
-  clientSecret String
   redirectUri  String
   scopes       String   // Store as comma-separated or JSON string
   authUrl      String
