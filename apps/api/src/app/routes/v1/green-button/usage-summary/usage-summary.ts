@@ -45,37 +45,23 @@ export default async function (fastify: FastifyInstance) {
 TODO: AUTH
 
 const authHeader = request.headers.authorization;
-    if (!authHeader) {
-      return reply.status(401).send({ error: 'Authorization header missing' });
-    }
+const gbToken = request.headers['x-gb-token'];
+const gbResourceUri = request.headers['x-gb-resource-uri'];
+const provider = request.headers['x-gb-provider'] || 'generic';
 
-    const token = authHeader.split(' ')[1];
-    try {
-      const decoded = jwt.verify(token, process.env.AUTH0_PUBLIC_KEY, {
-        algorithms: ['RS256'],
-      });
+if (!authHeader || !gbToken || !gbResourceUri) {
+  return reply.status(401).send({ error: 'Missing authentication data' });
+}
 
-      // Fetch third-party credentials from your DB using decoded.sub
-  const user = await db.users.findOne({ auth0Id: decoded.sub });
-  if (!user || !user.baseUrl || !user.accessToken || !user.provider) {
-    return reply.status(403).send({ error: 'No third-party credentials found' });
-  }
+const token = authHeader.split(' ')[1];
+try {
+  const decoded = jwt.verify(token, process.env.AUTH0_PUBLIC_KEY, {
+    algorithms: ['RS256'],
+  }) as { sub: string };
 
-  const baseUrl = user.baseUrl;
-  const accessToken = user.accessToken;
-  const provider = user.provider;
+  // ...proceed with third-party API call using gbToken, gbResourceUri, provider
+} catch (err) {
+  return reply.status(401).send({ error: 'Invalid token' });
+}
 
-      // Use baseUrl, provider, and accessToken to interact with Green Button
-      const greenButtonService = GreenButtonFactory.create(provider, baseUrl);
-      const summary = await greenButtonService.fetchSummary(accessToken, {
-        max: request.query.max,
-        min: request.query.min,
-        meterId: request.params.meterId,
-      });
-
-      return { summary };
-    } catch (err) {
-      return reply.status(401).send({ error: 'Invalid or expired token' });
-    }
-  });
  */

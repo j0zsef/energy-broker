@@ -1,6 +1,7 @@
 import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
 
 import React, { useState } from 'react';
+import { useAuthStore } from '@stores';
 import { useForm } from '@tanstack/react-form';
 import { useOAuthProvider } from '@energy-broker/api-client';
 
@@ -73,7 +74,11 @@ export const AddEnergySource = () => {
     },
     onSubmit: async ({ value }) => {
       try {
-        const { authUrl, clientId, redirectUri } = await oAuthMutation.mutateAsync({ provider: value.provider });
+        const { authUrl, clientId, redirectUri, tokenUrl } = await oAuthMutation.mutateAsync({ provider: value.provider });
+
+        useAuthStore.getState().setAuthTokenUrl(tokenUrl);
+        useAuthStore.getState().setAuthTokenUrl(tokenUrl);
+        useAuthStore.getState().setProvider(value.provider);
 
         window.location.href = buildAuthUri(authUrl, clientId, redirectUri);
       }

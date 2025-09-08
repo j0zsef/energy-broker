@@ -1,4 +1,5 @@
 import { prismaClient } from "../src";
+import {OAuthProviderConfig} from "../../shared/src";
 
 async function main() {
   const mockUtil = await prismaClient.oAuthProviderConfig.upsert({
@@ -6,11 +7,12 @@ async function main() {
       update: {},
       create: {
         authUrl: 'http://localhost:3001/authorize',
+        clientId: 'mock-util',
         providerName: "mock-util",
         tokenUrl: 'http://localhost:3001/token',
         redirectUri: "http://localhost:4200/sources",
         scopes: '',
-      }
+      } as OAuthProviderConfig,
   })
   console.log({ mockUtil })
 }

@@ -29,6 +29,7 @@ export default async function (fastify: FastifyInstance) {
       authUrl: config.authUrl,
       clientId: config.clientId,
       redirectUri: config.redirectUri,
+      tokenUrl: config.tokenUrl,
     };
   });
 }

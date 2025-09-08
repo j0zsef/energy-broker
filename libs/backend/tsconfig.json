@@ -4,9 +4,9 @@
       "jest",
       "node"
     ],
-    "module": "commonjs",
+    "module": "commonjs"
   },
-  "exclude": ["**/prisma", "**/src/generated" ],
+  "exclude": ["**/prisma", "**/src/generated", "**/node_modules" ],
   "extends": "../../tsconfig.base.json",
   "include": ["**/*"]
 }

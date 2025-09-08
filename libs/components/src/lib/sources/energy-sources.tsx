@@ -1,6 +1,7 @@
 import { Col, Row } from 'react-bootstrap';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
+import { useAuthStore } from '@stores';
 
 interface EnergySource {
   name?: string
@@ -12,38 +13,40 @@ export function EnergySources() {
   const navigate = useNavigate();
 
   // Fetch energy sources (replace with your API)
-  useEffect(() => {
-    fetch('/api/energy-sources')
-      .then(res => res.json())
-      .then((data: EnergySource[]) => setEnergySources(data))
-      .catch(() => setEnergySources([]));
-  }, []);
+  // useEffect(() => {
+  //   fetch('/api/energy-sources')
+  //     .then(res => res.json())
+  //     .then((data: EnergySource[]) => setEnergySources(data))
+  //     .catch(() => setEnergySources([]));
+  // }, []);
 
   // Handle OAuth redirect
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const code = params.get('code');
-    if (code) {
-      fetch('http://localhost:3001/token', {
+    const tokenUrl = useAuthStore.getState().tokenUrl;
+
+    // TODO: get resourceURI from auth request and set in store
+
+    if (code && tokenUrl) {
+      // Exchange code for access token
+      fetch(tokenUrl, {
         body: JSON.stringify({ code }),
         headers: { 'Content-Type': 'application/json' },
         method: 'POST',
       })
         .then(res => res.json())
         .then(async ({ access_token }) => {
-          const dataRes = await fetch('/api/provider-data', {
-            headers: { Authorization: `Bearer ${access_token}` },
-          });
-          const providerData: EnergySource = await dataRes.json();
+          useAuthStore.getState().setAuthToken(access_token);
 
-          await fetch('/api/energy-sources', {
-            body: JSON.stringify({ ...providerData }),
-            headers: { 'Content-Type': 'application/json' },
-            method: 'POST',
-          });
+          setEnergySources((previous) => {
+            const poop = {
+              name: 'Connected Source',
+            } as EnergySource;
+            previous.push(poop);
 
-          setEnergySources(prev => [...prev, providerData]);
-          navigate({ to: '/sources' });
+            return previous;
+          });
         })
         .catch(() => {});
     }
