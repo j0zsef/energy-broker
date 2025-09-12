@@ -1,24 +1,9 @@
 import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
+import { useEnergyProviders, useOAuthProviderConfig } from '@energy-broker/api-client';
+import React, { useEffect } from 'react';
 
-import React, { useState } from 'react';
 import { useAuthStore } from '@stores';
 import { useForm } from '@tanstack/react-form';
-import { useOAuthProvider } from '@energy-broker/api-client';
-
-type Provider = {
-  id: string
-  name: string
-  fullName: string
-};
-
-type ZipProviders = {
-  [zip: string]: Provider[]
-};
-
-type MockProviders = {
-  electrical: ZipProviders
-  gas: ZipProviders
-};
 
 const buildAuthUri = (baseUri: string, clientId: string, redirectUri: string) => {
   const url = new URL(baseUri);
@@ -28,43 +13,8 @@ const buildAuthUri = (baseUri: string, clientId: string, redirectUri: string) =>
 };
 
 export const AddEnergySource = () => {
-  let initialProviders: Provider[] = [];
-  const [providers, setProviders] = useState(initialProviders);
-  const [loadingProviders, setLoadingProviders] = useState(false);
-
-  // Mock provider data - replace with your API call
-  const mockProviders: MockProviders = {
-    electrical: {
-      10001: [
-        { fullName: 'Consolidated Edison', id: 'coned', name: 'ConEd' },
-        { fullName: 'Public Service Enterprise Group', id: 'pseg', name: 'PSEG' },
-      ],
-      60657: [
-        { fullName: 'Commerical Edison', id: 'comed', name: 'ComEd' },
-        { fullName: 'Ameren Illinois', id: 'ameren', name: 'Ameren' },
-        { fullName: 'Mock Utility', id: 'mock-util', name: 'Mock Utility' },
-      ],
-      90210: [
-        { fullName: 'Southern California Edison', id: 'sce', name: 'SCE' },
-        { fullName: 'Los Angeles Department of Water and Power', id: 'ladwp', name: 'LADWP' },
-      ],
-    },
-    gas: {
-      10001: [
-        { fullName: 'Consolidated Edison - Gas', id: 'coned-gas', name: 'ConEd Gas' },
-        { fullName: 'National Grid USA', id: 'national-grid', name: 'National Grid' },
-      ],
-      60657: [
-        { fullName: 'Peoples Gas', id: 'peoples-gas', name: 'Peoples Gas' },
-        { fullName: 'North Shore Gas', id: 'north-shore-gas', name: 'North Shore Gas' },
-      ],
-      90210: [
-        { fullName: 'Southern California Gas Company', id: 'socal-gas', name: 'SoCalGas' },
-      ],
-    },
-  };
-
-  const oAuthMutation = useOAuthProvider();
+  const { data: energyProviders, isLoading: loadingProviders, error: providersError } = useEnergyProviders();
+  const [pendingRedirect, setPendingRedirect] = React.useState(false);
 
   const form = useForm({
     defaultValues: {
@@ -72,35 +22,38 @@ export const AddEnergySource = () => {
       provider: '',
       zipCode: '',
     },
-    onSubmit: async ({ value }) => {
-      try {
-        const { authUrl, clientId, redirectUri, tokenUrl } = await oAuthMutation.mutateAsync({ provider: value.provider });
-
-        useAuthStore.getState().setAuthTokenUrl(tokenUrl);
-        useAuthStore.getState().setAuthTokenUrl(tokenUrl);
-        useAuthStore.getState().setProvider(value.provider);
-
-        window.location.href = buildAuthUri(authUrl, clientId, redirectUri);
-      }
-      catch (error) {
-        console.error('OAuth error:', error);
-      }
+    onSubmit: async () => {
+      setPendingRedirect(true);
     },
   });
 
-  const fetchProviders = async (energyType: string, zipCode: string) => {
-    if (!energyType || !zipCode || zipCode.length !== 5) return;
+  // Derive filtered providers from query and form state
+  const filteredProviders = React.useMemo(() => {
+    if (!energyProviders || !form.state.values.energyType || form.state.values.zipCode.length !== 5) return [];
+    return energyProviders.filter(
+      p => p.type === form.state.values.energyType && p.zips.includes(form.state.values.zipCode),
+    );
+  }, [energyProviders, form.state.values.energyType, form.state.values.zipCode]);
 
-    setLoadingProviders(true);
+  // Find the selected provider object
+  const selectedProvider = React.useMemo(() => {
+    return filteredProviders.find(p => p.id === Number(form.state.values.provider));
+  }, [filteredProviders, form.state.values.provider]);
 
-    // Simulate API call
-    setTimeout(() => {
-      const typeProviders = mockProviders[energyType as keyof typeof mockProviders];
-      const zipProviders = typeProviders?.[zipCode] || [];
-      setProviders(zipProviders);
-      setLoadingProviders(false);
-    }, 500);
-  };
+  // Get the oAuthProviderConfigId from the selected provider
+  const oAuthProviderConfigId = selectedProvider?.oAuthProviderConfigId;
+  const { data: oauthConfig, isLoading: loadingConfig, error: configError } = useOAuthProviderConfig(oAuthProviderConfigId ?? 0);
+
+  // Redirect when config is loaded and pendingRedirect is true
+  useEffect(() => {
+    if (pendingRedirect && oauthConfig) {
+      useAuthStore.getState().setAuthTokenUrl(oauthConfig.tokenUrl);
+      useAuthStore.getState().setProvider(form.state.values.provider);
+      window.location.href = buildAuthUri(oauthConfig.authUrl, oauthConfig.clientId, oauthConfig.redirectUri);
+    }
+  }, [pendingRedirect, oauthConfig, form.state.values.provider]);
+
+  // ...existing JSX, update submit button disabled logic...
 
   return (
     <Row>
@@ -127,10 +80,8 @@ export const AddEnergySource = () => {
                   value={field.state.value}
                   onChange={(e) => {
                     field.handleChange(e.target.value);
-                    // Reset dependent fields
                     form.setFieldValue('zipCode', '');
                     form.setFieldValue('provider', '');
-                    setProviders([]);
                   }}
                 >
                   <option value="">Select energy type...</option>
@@ -175,14 +126,8 @@ export const AddEnergySource = () => {
                     onChange={(e) => {
                       const value = e.target.value.replace(/\D/g, '').slice(0, 5);
                       field.handleChange(value);
-
-                      // Fetch providers when we have valid zip
                       if (value.length === 5) {
-                        fetchProviders(form.state.values.energyType, value);
-                        form.setFieldValue('provider', ''); // Reset provider selection
-                      }
-                      else {
-                        setProviders([]);
+                        form.setFieldValue('provider', '');
                       }
                     }}
                     maxLength={5}
@@ -201,7 +146,7 @@ export const AddEnergySource = () => {
           )}
 
           {/* Provider Selection - Shows when providers are loaded */}
-          {providers.length > 0 && (
+          {filteredProviders.length > 0 && (
             <form.Field
               name="provider"
               validators={{
@@ -222,7 +167,7 @@ export const AddEnergySource = () => {
                     onChange={e => field.handleChange(e.target.value)}
                   >
                     <option value="">Select your provider...</option>
-                    {providers.map(provider => (
+                    {filteredProviders.map(provider => (
                       <option key={provider.id} value={provider.id}>
                         {provider.fullName}
                       </option>
@@ -245,18 +190,16 @@ export const AddEnergySource = () => {
 
           {/* Loading State */}
           {loadingProviders && (
-            <div>
-              <div className="d-flex align-items-center">
-                <div className="spinner-border spinner-border-sm me-2" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-                <span className="text-muted">Finding providers in your area...</span>
+            <div className="d-flex align-items-center">
+              <div className="spinner-border spinner-border-sm me-2" role="status">
+                <span className="visually-hidden">Loading...</span>
               </div>
+              <span className="text-muted">Finding providers in your area...</span>
             </div>
           )}
 
           {/* No Providers Found */}
-          {!loadingProviders && providers.length === 0 && form.state.values.zipCode.length === 5 && form.state.values.energyType && (
+          {!loadingProviders && filteredProviders.length === 0 && form.state.values.zipCode.length === 5 && form.state.values.energyType && (
             <Alert>
               <span>
                 <strong>No providers found</strong>
@@ -275,7 +218,7 @@ export const AddEnergySource = () => {
             {([canSubmit, isSubmitting, provider]) => (
               <div className="d-grid gap-2">
                 <Button
-                  disabled={!canSubmit || !provider}
+                  disabled={!canSubmit || !provider || pendingRedirect}
                   onClick={(e) => {
                     e.preventDefault();
                     form.handleSubmit();
@@ -296,9 +239,7 @@ export const AddEnergySource = () => {
                         'Connect to Provider'
                       )}
                 </Button>
-                <Button variant="secondary">
-                  Cancel
-                </Button>
+                <Button variant="secondary">Cancel</Button>
               </div>
             )}
           </form.Subscribe>

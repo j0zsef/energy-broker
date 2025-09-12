@@ -1,0 +1,29 @@
+import { FastifyInstance } from 'fastify';
+import { prismaClient } from '@backend';
+
+export default async function energyProvidersRoutes(fastify: FastifyInstance) {
+  fastify.get('/energy-providers', async (request, reply) => {
+    try {
+      const providers = await prismaClient.energyProvider.findMany({
+        include: {
+          energyProviderLocations: true,
+        },
+      });
+
+      const result = providers.map(provider => ({
+        fullName: provider.fullName,
+        id: provider.id,
+        name: provider.name,
+        oAuthProviderConfigId: provider.oAuthProviderConfigId,
+        type: provider.type,
+        zips: provider.energyProviderLocations.map(loc => loc.zip),
+      }));
+
+      return reply.send(result);
+    }
+    catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ error: 'Failed to fetch energy providers' });
+    }
+  });
+}

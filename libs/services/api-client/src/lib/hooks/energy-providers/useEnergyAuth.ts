@@ -1,3 +1,6 @@
+/*
+will be something like this:
+
 import { useMutation } from '@tanstack/react-query';
 import { OAuthProviderResponse, OAuthProviderRequest } from '@shared';
 import { apiClient } from '../../api-client';
@@ -10,3 +13,6 @@ export function useOAuthProvider() {
       }),
   });
 }
+
+
+ */

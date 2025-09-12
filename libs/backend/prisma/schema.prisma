@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,19 +11,58 @@ datasource db {
 }
 
 model User {
-  id    Int    @id @default(autoincrement())
-  email String @unique
-  name  String
+  id                   Int      @id @default(autoincrement())
+  email                String   @unique
+  name                 String
+  energyProviderAuths  EnergyProviderAuth[]
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
 }
 
 model OAuthProviderConfig {
-  id           Int      @id @default(autoincrement())
-  authUrl      String
-  clientId     String
-  providerName String @unique
-  redirectUri  String
-  scopes       String   // Store as comma-separated or JSON string
-  tokenUrl     String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id                   Int      @id @default(autoincrement())
+  authUrl              String
+  clientId             String
+  redirectUri          String
+  scopes               String   // Store as comma-separated or JSON string
+  tokenUrl             String
+  energyProvider       EnergyProvider?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+model EnergyProvider {
+  id                        Int                      @id @default(autoincrement())
+  fullName                  String
+  name                      String                  @unique
+  type                      String
+  energyProviderLocations   EnergyProviderLocation[]
+  oAuthProviderConfig       OAuthProviderConfig      @relation(fields: [oAuthProviderConfigId], references: [id])
+  oAuthProviderConfigId     Int                     @unique
+  energyProviderAuths       EnergyProviderAuth[]
+  createdAt                 DateTime                @default(now())
+  updatedAt                 DateTime                @updatedAt
+}
+
+model EnergyProviderLocation {
+  id                   Int      @id @default(autoincrement())
+  zip                  String   @unique
+  energyProvider       EnergyProvider @relation(fields: [energyProviderId], references: [id])
+  energyProviderId     Int
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+model EnergyProviderAuth {
+  id                   Int      @id @default(autoincrement())
+  authToken            String
+  expiresAt            DateTime
+  refreshToken         String
+  resourceUri          String
+  energyProvider       EnergyProvider @relation(fields: [energyProviderId], references: [id])
+  energyProviderId     Int
+  user                 User     @relation(fields: [userId], references: [id])
+  userId               Int
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
 }

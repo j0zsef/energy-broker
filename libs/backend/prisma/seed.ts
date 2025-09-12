@@ -1,20 +1,44 @@
 import { prismaClient } from "../src";
-import {OAuthProviderConfig} from "../../shared/src";
+import { EnergyProvider, EnergyProviderLocation, OAuthProviderConfig } from "../../shared/src";
 
 async function main() {
-  const mockUtil = await prismaClient.oAuthProviderConfig.upsert({
-      where: { providerName: 'mock-util' },
+  const mockUtilOAuth = await prismaClient.oAuthProviderConfig.upsert({
+    where: { id: 1 },
+    update: {},
+    create: {
+      authUrl: 'http://localhost:3001/authorize',
+      clientId: 'mock-util',
+      redirectUri: "http://localhost:4200/sources",
+      scopes: '',
+      tokenUrl: 'http://localhost:3001/token',
+    } as OAuthProviderConfig,
+  })
+  console.log({ mockUtilOAuth })
+
+  const mockUtilProvider = await prismaClient.energyProvider.upsert({
+      where: { name: 'Mock Utility' },
       update: {},
       create: {
-        authUrl: 'http://localhost:3001/authorize',
-        clientId: 'mock-util',
-        providerName: "mock-util",
-        tokenUrl: 'http://localhost:3001/token',
-        redirectUri: "http://localhost:4200/sources",
-        scopes: '',
-      } as OAuthProviderConfig,
+        fullName: 'Mock Utility',
+        name: 'Mock Utility',
+        oAuthProviderConfigId: mockUtilOAuth.id,
+        type: 'electrical',
+      } as EnergyProvider,
   })
-  console.log({ mockUtil })
+
+  console.log({ mockUtilProvider })
+
+  const mockUtilLocation = await prismaClient.energyProviderLocation.upsert({
+    where: { zip: '60657' },
+    update: {},
+    create: {
+      energyProviderId: mockUtilProvider.id,
+      zip: '60657',
+    } as EnergyProviderLocation,
+  })
+
+  console.log({ mockUtilLocation })
+
 }
 main()
   .then(async () => {

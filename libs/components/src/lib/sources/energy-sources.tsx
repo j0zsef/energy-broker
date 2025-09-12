@@ -26,7 +26,7 @@ export function EnergySources() {
     const code = params.get('code');
     const tokenUrl = useAuthStore.getState().tokenUrl;
 
-    // TODO: get resourceURI from auth request and set in store
+    // TODO: get resourceURI from auth request and DB
 
     if (code && tokenUrl) {
       // Exchange code for access token
@@ -37,6 +37,8 @@ export function EnergySources() {
       })
         .then(res => res.json())
         .then(async ({ access_token }) => {
+          // TODO: save in EnergyProviderAuth table
+
           useAuthStore.getState().setAuthToken(access_token);
 
           setEnergySources((previous) => {

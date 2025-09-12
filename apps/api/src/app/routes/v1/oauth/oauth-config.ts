@@ -4,27 +4,18 @@ import { prismaClient } from '@backend';
 import z from 'zod';
 
 export default async function (fastify: FastifyInstance) {
-  const opts = {
+  fastify.withTypeProvider<ZodTypeProvider>().get('/config/:id', {
     schema: {
       params: z.object({
-        provider: z.string(),
+        id: z.coerce.number(), // Use number if your ID is an integer
       }),
     },
-  };
-
-  fastify.withTypeProvider<ZodTypeProvider>().post('/:provider', opts, async function (request, reply) {
-    /*
-    TODO
-      - The endpoint generates the OAuth authorization URL (with state, scopes, etc.) and any required tokens.
-     */
-
-    const provider = request.params.provider;
-
+  }, async (request, reply) => {
+    const { id } = request.params;
     const config = await prismaClient.oAuthProviderConfig.findUnique({
-      where: { providerName: provider },
+      where: { id },
     });
     if (!config) return reply.status(404).send({ error: 'Not found' });
-
     return {
       authUrl: config.authUrl,
       clientId: config.clientId,

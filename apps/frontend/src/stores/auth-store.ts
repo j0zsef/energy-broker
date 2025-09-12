@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+// TODO: we can keep the store for now but might not need with the new schema
+
 type AuthState = {
   clearAuth: () => void
   provider: string | null

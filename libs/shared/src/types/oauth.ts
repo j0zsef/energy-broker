@@ -1,7 +1,6 @@
 export interface OAuthProviderConfig {
   authUrl: string
   clientId: string
-  providerName: string
   redirectUri: string
   scopes: string
   tokenUrl: string
