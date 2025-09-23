@@ -5,7 +5,7 @@ import { OAuthProviderConfig } from '@shared';
 export function useOAuthProviderConfig(oAuthProviderConfigId: number) {
   return useQuery({
     queryKey: ['oauthProviderConfig', oAuthProviderConfigId],
-    queryFn: () => apiClient<OAuthProviderConfig>(`api/oauth/config/${oAuthProviderConfigId}`),
+    queryFn: () => apiClient<OAuthProviderConfig>(`v1/oauth/config/${oAuthProviderConfigId}`),
     enabled: !!oAuthProviderConfigId,
   });
 }

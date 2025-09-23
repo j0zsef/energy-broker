@@ -1,6 +1,6 @@
 import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
+import { useEffect, useMemo, useState } from 'react';
 import { useEnergyProviders, useOAuthProviderConfig } from '@energy-broker/api-client';
-import React, { useEffect } from 'react';
 
 import { useAuthStore } from '@stores';
 import { useForm } from '@tanstack/react-form';
@@ -14,7 +14,7 @@ const buildAuthUri = (baseUri: string, clientId: string, redirectUri: string) =>
 
 export const AddEnergySource = () => {
   const { data: energyProviders, isLoading: loadingProviders, error: providersError } = useEnergyProviders();
-  const [pendingRedirect, setPendingRedirect] = React.useState(false);
+  const [pendingRedirect, setPendingRedirect] = useState(false);
 
   const form = useForm({
     defaultValues: {
@@ -28,32 +28,35 @@ export const AddEnergySource = () => {
   });
 
   // Derive filtered providers from query and form state
-  const filteredProviders = React.useMemo(() => {
+  const filteredProviders = useMemo(() => {
     if (!energyProviders || !form.state.values.energyType || form.state.values.zipCode.length !== 5) return [];
     return energyProviders.filter(
       p => p.type === form.state.values.energyType && p.zips.includes(form.state.values.zipCode),
     );
   }, [energyProviders, form.state.values.energyType, form.state.values.zipCode]);
 
-  // Find the selected provider object
-  const selectedProvider = React.useMemo(() => {
-    return filteredProviders.find(p => p.id === Number(form.state.values.provider));
+  // Derive selectedProvider inline
+  const selectedProvider = useMemo(() => {
+    if (filteredProviders.length && form.state.values.provider) {
+      return filteredProviders.find(p => p.id === Number(form.state.values.provider));
+    }
+    return null;
   }, [filteredProviders, form.state.values.provider]);
 
-  // Get the oAuthProviderConfigId from the selected provider
-  const oAuthProviderConfigId = selectedProvider?.oAuthProviderConfigId;
-  const { data: oauthConfig, isLoading: loadingConfig, error: configError } = useOAuthProviderConfig(oAuthProviderConfigId ?? 0);
+  // Fetch OAuth config for selected provider
+  // Should not fetch if the provider is not selected
+  const { data: oauthConfig, isLoading: loadingConfig, error: configError } = useOAuthProviderConfig(
+    selectedProvider?.oAuthProviderConfigId ?? 0,
+  );
 
   // Redirect when config is loaded and pendingRedirect is true
   useEffect(() => {
-    if (pendingRedirect && oauthConfig) {
+    if (pendingRedirect && oauthConfig && selectedProvider) {
       useAuthStore.getState().setAuthTokenUrl(oauthConfig.tokenUrl);
-      useAuthStore.getState().setProvider(form.state.values.provider);
+      useAuthStore.getState().setProvider(selectedProvider.name);
       window.location.href = buildAuthUri(oauthConfig.authUrl, oauthConfig.clientId, oauthConfig.redirectUri);
     }
-  }, [pendingRedirect, oauthConfig, form.state.values.provider]);
-
-  // ...existing JSX, update submit button disabled logic...
+  }, [pendingRedirect, oauthConfig, selectedProvider]);
 
   return (
     <Row>
@@ -146,7 +149,7 @@ export const AddEnergySource = () => {
           )}
 
           {/* Provider Selection - Shows when providers are loaded */}
-          {filteredProviders.length > 0 && (
+          {filteredProviders.length > 0 && !providersError && (
             <form.Field
               name="provider"
               validators={{
@@ -218,7 +221,7 @@ export const AddEnergySource = () => {
             {([canSubmit, isSubmitting, provider]) => (
               <div className="d-grid gap-2">
                 <Button
-                  disabled={!canSubmit || !provider || pendingRedirect}
+                  disabled={!canSubmit || !provider || pendingRedirect || loadingConfig || !!configError}
                   onClick={(e) => {
                     e.preventDefault();
                     form.handleSubmit();
@@ -226,7 +229,7 @@ export const AddEnergySource = () => {
                   type="submit"
                   variant="primary"
                 >
-                  {isSubmitting
+                  {(isSubmitting || loadingConfig)
                     ? (
                         <>
                           <span className="spinner-border spinner-border-sm me-2" role="status">
