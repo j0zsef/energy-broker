@@ -1,9 +1,11 @@
 import { FastifyInstance } from 'fastify';
 import { prismaClient } from '@backend';
 
-export default async function energyProvidersRoutes(fastify: FastifyInstance) {
-  fastify.get('/energy-providers', async (request, reply) => {
+export default async function (fastify: FastifyInstance) {
+  fastify.get('/', async function (request, reply) {
     try {
+      console.log('Fetching energy providers...');
+
       const providers = await prismaClient.energyProvider.findMany({
         include: {
           energyProviderLocations: true,

@@ -6,14 +6,3 @@ export interface OAuthProviderConfig {
   scopes: string
   tokenUrl: string
 }
-
-export interface OAuthProviderResponse {
-  authUrl: string
-  clientId: string
-  tokenUrl: string
-  redirectUri: string
-}
-
-export interface OAuthProviderRequest {
-  provider: string
-}

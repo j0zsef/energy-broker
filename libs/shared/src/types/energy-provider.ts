@@ -1,9 +1,10 @@
+// TODO: need to make a entity for EnergyType
 export interface EnergyProvider {
   fullName: string
   id: number
   name: string
   oAuthProviderConfigId: number
-  type: 'electrical' | 'gas' | 'water'
+  type: 'electrical' | 'gas' | 'solar' | 'water'
 }
 
 export interface EnergyProviderLocation {

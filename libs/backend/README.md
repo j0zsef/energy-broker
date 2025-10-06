@@ -1,11 +1,7 @@
 # backend
 
-This library was generated with [Nx](https://nx.dev).
+Prisma ORM
 
-## Building
+TODO: Need to fix db:setup when there is a pending migration. it asks for a name and hangs after the naming of the migration.
 
-Run `nx build backend` to build the library.
-
-## Running unit tests
-
-Run `nx test backend` to execute the unit tests via [Jest](https://jestjs.io).
+TODO: Need to fix db:reset. it does not wait for the docker to be ready after restarting it.

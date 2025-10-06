@@ -24,9 +24,9 @@ export function EnergySources() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const code = params.get('code');
-    const tokenUrl = useAuthStore.getState().tokenUrl;
+    const tokenUrl = useAuthStore.getState().authTokenUrl;
 
-    // TODO: get resourceURI from auth request and DB
+    // TODO: get resourceURI from auth request
 
     if (code && tokenUrl) {
       // Exchange code for access token
@@ -39,7 +39,7 @@ export function EnergySources() {
         .then(async ({ access_token }) => {
           // TODO: save in EnergyProviderAuth table
 
-          useAuthStore.getState().setAuthToken(access_token);
+          console.log(access_token);
 
           setEnergySources((previous) => {
             const poop = {

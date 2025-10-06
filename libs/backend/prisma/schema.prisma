@@ -35,9 +35,9 @@ model EnergyProvider {
   id                        Int                      @id @default(autoincrement())
   fullName                  String
   name                      String                  @unique
-  type                      String
+  type                      String                  @default("electrical")
   energyProviderLocations   EnergyProviderLocation[]
-  oAuthProviderConfig       OAuthProviderConfig      @relation(fields: [oAuthProviderConfigId], references: [id])
+  oAuthProviderConfig       OAuthProviderConfig     @relation(fields: [oAuthProviderConfigId], references: [id])
   oAuthProviderConfigId     Int                     @unique
   energyProviderAuths       EnergyProviderAuth[]
   createdAt                 DateTime                @default(now())

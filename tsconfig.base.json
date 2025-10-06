@@ -9,7 +9,10 @@
     "esModuleInterop": true,
     "importHelpers": true,
     "jsx": "react-jsx",
-    "lib": ["es2020", "dom"],
+    "lib": [
+      "es2020",
+      "dom"
+    ],
     "module": "esnext",
     "moduleResolution": "node",
     "rootDir": ".",
@@ -20,18 +23,37 @@
     "strict": true,
     "target": "es2022",
     "paths": {
-      "@backend": ["libs/backend/src/index.ts"],
-      "@energy-broker/api-client": ["libs/services/api-client/src/index.ts"],
-      "@energy-broker/components": ["libs/components/src/index.ts"],
+      "@backend": [
+        "libs/backend/src/index.ts"
+      ],
+      "@energy-broker/api-client": [
+        "libs/services/api-client/src/index.ts"
+      ],
+      "@energy-broker/components": [
+        "libs/components/src/index.ts"
+      ],
       "@green-button-client": [
         "libs/services/green-button-client/src/index.ts"
       ],
-      "@shared": ["libs/shared/src/index.ts"],
-      "@shared/node-config": ["libs/shared/src/config/node-config.ts"],
-      "@shared/vite-config": ["libs/shared/src/config/vite-config.ts"],
-      "@stores": ["apps/frontend/src/stores/index.ts"],
+      "@shared": [
+        "libs/shared/src/index.ts"
+      ],
+      "@shared/node-config": [
+        "libs/shared/src/config/node-config.ts"
+      ],
+      "@shared/vite-config": [
+        "libs/shared/src/config/vite-config.ts"
+      ],
+      "@stores": [
+        "apps/frontend/src/stores/index.ts"
+      ]
     },
     "pretty": true
   },
-  "exclude": ["**/node_modules", "**/tmp", "**/dist", "**/*.yaml" ]
+  "exclude": [
+    "**/node_modules",
+    "**/tmp",
+    "**/dist",
+    "**/*.yaml"
+  ]
 }

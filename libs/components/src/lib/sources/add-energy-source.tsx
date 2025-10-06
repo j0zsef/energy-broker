@@ -1,9 +1,8 @@
 import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
 import { useEffect, useMemo, useState } from 'react';
 import { useEnergyProviders, useOAuthProviderConfig } from '@energy-broker/api-client';
-
+import { useForm, useStore } from '@tanstack/react-form';
 import { useAuthStore } from '@stores';
-import { useForm } from '@tanstack/react-form';
 
 const buildAuthUri = (baseUri: string, clientId: string, redirectUri: string) => {
   const url = new URL(baseUri);
@@ -27,21 +26,25 @@ export const AddEnergySource = () => {
     },
   });
 
+  const energyType = useStore(form.store, state => state.values.energyType);
+  const provider = useStore(form.store, state => state.values.provider);
+  const zipCode = useStore(form.store, state => state.values.zipCode);
+
   // Derive filtered providers from query and form state
   const filteredProviders = useMemo(() => {
-    if (!energyProviders || !form.state.values.energyType || form.state.values.zipCode.length !== 5) return [];
+    if (!energyProviders || !energyType || zipCode.length !== 5) return [];
     return energyProviders.filter(
-      p => p.type === form.state.values.energyType && p.zips.includes(form.state.values.zipCode),
+      p => p.type === energyType && p.zips.includes(zipCode),
     );
-  }, [energyProviders, form.state.values.energyType, form.state.values.zipCode]);
+  }, [energyProviders, energyType, zipCode]);
 
   // Derive selectedProvider inline
   const selectedProvider = useMemo(() => {
-    if (filteredProviders.length && form.state.values.provider) {
-      return filteredProviders.find(p => p.id === Number(form.state.values.provider));
+    if (filteredProviders.length && provider) {
+      return filteredProviders.find(p => p.id === Number(provider));
     }
     return null;
-  }, [filteredProviders, form.state.values.provider]);
+  }, [filteredProviders, provider]);
 
   // Fetch OAuth config for selected provider
   // Should not fetch if the provider is not selected
@@ -53,7 +56,7 @@ export const AddEnergySource = () => {
   useEffect(() => {
     if (pendingRedirect && oauthConfig && selectedProvider) {
       useAuthStore.getState().setAuthTokenUrl(oauthConfig.tokenUrl);
-      useAuthStore.getState().setProvider(selectedProvider.name);
+      useAuthStore.getState().setProviderId(selectedProvider.id);
       window.location.href = buildAuthUri(oauthConfig.authUrl, oauthConfig.clientId, oauthConfig.redirectUri);
     }
   }, [pendingRedirect, oauthConfig, selectedProvider]);
@@ -63,48 +66,80 @@ export const AddEnergySource = () => {
       <Col className="col-md-6">
         <h2>Add Energy Sources</h2>
         <Form className="d-flex flex-column gap-3">
+          {/* Loading State */}
+          {loadingProviders && (
+            <div className="d-flex align-items-center">
+              <div className="spinner-border spinner-border-sm me-2" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+              <span className="text-muted">Loading providers...</span>
+            </div>
+          )}
+          {providersError && (
+            <Alert variant="danger" className="d-flex align-items-center">
+              <span className="me-2 bi bi-exclamation-triangle-fill" aria-hidden="true"></span>
+              <span>
+                <strong>Failed to load providers.</strong>
+                <br />
+                {providersError.message || 'Please try again later.'}
+              </span>
+            </Alert>
+          )}
           {/* Energy Type Dropdown */}
-          <form.Field
-            name="energyType"
-            validators={{
-              onChange: ({ value }) => !value ? 'Please select an energy type' : undefined,
-            }}
-          >
-            {field => (
-              <Form.Group>
-                <Form.Label htmlFor="energyType" className="form-label">
-                  Energy Type
-                  {' '}
-                  <span className="text-danger">*</span>
-                </Form.Label>
-                <Form.Select
-                  id="energyType"
-                  className={`form-select ${field.state.meta.errors.length ? 'is-invalid' : ''}`}
-                  value={field.state.value}
-                  onChange={(e) => {
-                    field.handleChange(e.target.value);
-                    form.setFieldValue('zipCode', '');
-                    form.setFieldValue('provider', '');
-                  }}
-                >
-                  <option value="">Select energy type...</option>
-                  <option value="electrical">Electrical</option>
-                  <option value="gas">Natural Gas</option>
-                  <option value="solar">Solar</option>
-                </Form.Select>
-                {field.state.meta.errors.length > 0 && (
-                  <Form.Control.Feedback type="invalid">
-                    {field.state.meta.errors.join(', ')}
-                  </Form.Control.Feedback>
-                )}
-              </Form.Group>
-            )}
-          </form.Field>
+          { !loadingProviders && (
+            <form.Field
+              name="energyType"
+              validators={{
+                onChange: ({ value }) => !value ? 'Please select an energy type' : undefined,
+              }}
+              listeners={{
+                onChange: () => {
+                  form.setFieldValue('zipCode', '');
+                  form.setFieldValue('provider', '');
+                },
+              }}
+            >
+              {field => (
+                <Form.Group>
+                  <Form.Label htmlFor="energyType" className="form-label">
+                    Energy Type
+                    {' '}
+                    <span className="text-danger">*</span>
+                  </Form.Label>
+                  { /* TODO: need to make an entity for Energy Types */ }
+                  <Form.Select
+                    id="energyType"
+                    className={`form-select ${field.state.meta.errors.length ? 'is-invalid' : ''}`}
+                    onChange={e => field.handleChange(e.target.value)}
+                    value={field.state.value}
+                  >
+                    <option value="">Select energy type...</option>
+                    <option value="electrical">Electrical</option>
+                    <option value="gas">Natural Gas</option>
+                    <option value="solar">Solar</option>
+                    <option value="water">Water</option>
+                  </Form.Select>
+                  {field.state.meta.errors.length > 0 && (
+                    <Form.Control.Feedback type="invalid">
+                      {field.state.meta.errors.join(', ')}
+                    </Form.Control.Feedback>
+                  )}
+                </Form.Group>
+              )}
+            </form.Field>
+          )}
 
           {/* Zip Code Input - Shows when energy type is selected */}
-          {form.state.values.energyType && (
+          {energyType && (
             <form.Field
               name="zipCode"
+              listeners={{
+                onChange: ({ value }) => {
+                  if (value.length === 5) {
+                    form.setFieldValue('provider', '');
+                  }
+                },
+              }}
               validators={{
                 onChange: ({ value }) => {
                   if (!value) return 'Please enter your zip code';
@@ -129,9 +164,6 @@ export const AddEnergySource = () => {
                     onChange={(e) => {
                       const value = e.target.value.replace(/\D/g, '').slice(0, 5);
                       field.handleChange(value);
-                      if (value.length === 5) {
-                        form.setFieldValue('provider', '');
-                      }
                     }}
                     maxLength={5}
                   />
@@ -149,7 +181,7 @@ export const AddEnergySource = () => {
           )}
 
           {/* Provider Selection - Shows when providers are loaded */}
-          {filteredProviders.length > 0 && !providersError && (
+          {filteredProviders.length > 0 && (
             <form.Field
               name="provider"
               validators={{
@@ -191,22 +223,12 @@ export const AddEnergySource = () => {
             </form.Field>
           )}
 
-          {/* Loading State */}
-          {loadingProviders && (
-            <div className="d-flex align-items-center">
-              <div className="spinner-border spinner-border-sm me-2" role="status">
-                <span className="visually-hidden">Loading...</span>
-              </div>
-              <span className="text-muted">Finding providers in your area...</span>
-            </div>
-          )}
-
           {/* No Providers Found */}
-          {!loadingProviders && filteredProviders.length === 0 && form.state.values.zipCode.length === 5 && form.state.values.energyType && (
+          {filteredProviders.length === 0 && zipCode.length === 5 && energyType && (
             <Alert>
               <span>
                 <strong>No providers found</strong>
-                {` for ${form.state.values.energyType} in ${form.state.values.zipCode}.`}
+                {` for ${energyType} in ${zipCode}.`}
                 <br />
                 <a href="#" className="alert-link">Contact us </a>
                 to add support for your area.

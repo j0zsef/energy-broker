@@ -6,7 +6,7 @@
     ],
     "module": "commonjs"
   },
-  "exclude": ["**/prisma", "**/src/generated", "**/node_modules" ],
+  "exclude": ["**/prisma", "**/src/generated", "**/node_modules", "**/*.yaml" ],
   "extends": "../../tsconfig.base.json",
   "include": ["**/*"]
 }
