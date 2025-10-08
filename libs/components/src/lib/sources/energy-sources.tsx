@@ -1,61 +1,20 @@
+import './energy-sources.scss';
 import { Col, Row } from 'react-bootstrap';
-import { Link, useNavigate } from '@tanstack/react-router';
-import { useEffect, useState } from 'react';
-import { useAuthStore } from '@stores';
+import { Link } from '@tanstack/react-router';
+import { useState } from 'react';
 
 interface EnergySource {
   name?: string
   // Add other properties as needed
 }
 
-export function EnergySources() {
-  const [energySources, setEnergySources] = useState<EnergySource[]>([]);
-  const navigate = useNavigate();
+export const EnergySources = () => {
+  // Fetch EnergyProviderAuths
 
-  // Fetch energy sources (replace with your API)
-  // useEffect(() => {
-  //   fetch('/api/energy-sources')
-  //     .then(res => res.json())
-  //     .then((data: EnergySource[]) => setEnergySources(data))
-  //     .catch(() => setEnergySources([]));
-  // }, []);
-
-  // Handle OAuth redirect
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const code = params.get('code');
-    const tokenUrl = useAuthStore.getState().authTokenUrl;
-
-    // TODO: get resourceURI from auth request
-
-    if (code && tokenUrl) {
-      // Exchange code for access token
-      fetch(tokenUrl, {
-        body: JSON.stringify({ code }),
-        headers: { 'Content-Type': 'application/json' },
-        method: 'POST',
-      })
-        .then(res => res.json())
-        .then(async ({ access_token }) => {
-          // TODO: save in EnergyProviderAuth table
-
-          console.log(access_token);
-
-          setEnergySources((previous) => {
-            const poop = {
-              name: 'Connected Source',
-            } as EnergySource;
-            previous.push(poop);
-
-            return previous;
-          });
-        })
-        .catch(() => {});
-    }
-  }, [navigate]);
+  const [energySources] = useState<EnergySource[]>([]);
 
   return (
-    <>
+    <div className="energy-sources">
       <Row className="mb-3">
         <Col>
           <h2>Energy Sources</h2>
@@ -74,6 +33,6 @@ export function EnergySources() {
           </div>
         </Col>
       </Row>
-    </>
+    </div>
   );
-}
+};

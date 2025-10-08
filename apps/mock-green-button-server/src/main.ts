@@ -14,6 +14,31 @@ const MOCK_GREEN_BUTTON_PORT = 3002; // Your usage endpoint
   await oauthServer.start(OAUTH_PORT);
   console.log(`OAuth2 mock server running at ${oauthServer.issuer.url}`);
 
+  app.listen(MOCK_GREEN_BUTTON_PORT, () => {
+    console.log(`Mock Green Button API running at http://localhost:${MOCK_GREEN_BUTTON_PORT}`);
+  });
+
+  app.use(express.json());
+
+  app.post('/token', async (req, res) => {
+    // Forward the request to the mock server
+    const response = await fetch(`${oauthServer.issuer.url}/token`, {
+      body: JSON.stringify(req.body),
+      headers: { 'content-type': 'application/json' },
+      method: 'POST',
+    });
+    const data = await response.json() as Record<string, unknown>;
+
+    // Add custom fields
+    // TODO: update this to the mocked server :^)
+    res.json({
+      authorizationURI: 'https://utilityapi.com/DataCustodian/espi/1_1/resource/Authorization/1111',
+      customerResourceURI: 'https://utilityapi.com/DataCustodian/espi/1_1/resource/RetailCustomer/1111',
+      resourceURI: 'https://utilityapi.com/DataCustodian/espi/1_1/resource/Subscription/1111',
+      ...data,
+    });
+  });
+
   app.get('/usage', async (req, res) => {
     const authHeader = req.headers['authorization'];
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -53,9 +78,5 @@ const MOCK_GREEN_BUTTON_PORT = 3002; // Your usage endpoint
         { kWh: 1.10, start: '2025-08-01T02:00:00Z' },
       ],
     });
-  });
-
-  app.listen(MOCK_GREEN_BUTTON_PORT, () => {
-    console.log(`Mock Green Button API running at http://localhost:${MOCK_GREEN_BUTTON_PORT}`);
   });
 })();

@@ -3,3 +3,4 @@ export * from './lib/root/header';
 export * from './lib/overview/overview';
 export * from './lib/sources/energy-sources';
 export * from './lib/sources/add-energy-source';
+export * from './lib/sources/energy-source-callback';

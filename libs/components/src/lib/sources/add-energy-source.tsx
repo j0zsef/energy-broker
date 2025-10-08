@@ -2,6 +2,7 @@ import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
 import { useEffect, useMemo, useState } from 'react';
 import { useEnergyProviders, useOAuthProviderConfig } from '@energy-broker/api-client';
 import { useForm, useStore } from '@tanstack/react-form';
+import { Spinner } from '../shared/spinner';
 import { useAuthStore } from '@stores';
 
 const buildAuthUri = (baseUri: string, clientId: string, redirectUri: string) => {
@@ -56,6 +57,7 @@ export const AddEnergySource = () => {
   useEffect(() => {
     if (pendingRedirect && oauthConfig && selectedProvider) {
       useAuthStore.getState().setAuthTokenUrl(oauthConfig.tokenUrl);
+      useAuthStore.getState().setClientId(oauthConfig.clientId);
       useAuthStore.getState().setProviderId(selectedProvider.id);
       window.location.href = buildAuthUri(oauthConfig.authUrl, oauthConfig.clientId, oauthConfig.redirectUri);
     }
@@ -253,12 +255,7 @@ export const AddEnergySource = () => {
                 >
                   {(isSubmitting || loadingConfig)
                     ? (
-                        <>
-                          <span className="spinner-border spinner-border-sm me-2" role="status">
-                            <span className="visually-hidden">Loading...</span>
-                          </span>
-                          Connecting...
-                        </>
+                        <Spinner />
                       )
                     : (
                         'Connect to Provider'

@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as SourcesIndexImport } from './routes/sources/index'
+import { Route as SourcesCallbackImport } from './routes/sources/callback'
 import { Route as SourcesAddImport } from './routes/sources/add'
 import { Route as SourcesEnergySourceImport } from './routes/sources/$energy-source'
 
@@ -27,6 +28,12 @@ const IndexRoute = IndexImport.update({
 const SourcesIndexRoute = SourcesIndexImport.update({
   id: '/sources/',
   path: '/sources/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SourcesCallbackRoute = SourcesCallbackImport.update({
+  id: '/sources/callback',
+  path: '/sources/callback',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -67,6 +74,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SourcesAddImport
       parentRoute: typeof rootRoute
     }
+    '/sources/callback': {
+      id: '/sources/callback'
+      path: '/sources/callback'
+      fullPath: '/sources/callback'
+      preLoaderRoute: typeof SourcesCallbackImport
+      parentRoute: typeof rootRoute
+    }
     '/sources/': {
       id: '/sources/'
       path: '/sources'
@@ -83,6 +97,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/sources/$energy-source': typeof SourcesEnergySourceRoute
   '/sources/add': typeof SourcesAddRoute
+  '/sources/callback': typeof SourcesCallbackRoute
   '/sources': typeof SourcesIndexRoute
 }
 
@@ -90,6 +105,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/sources/$energy-source': typeof SourcesEnergySourceRoute
   '/sources/add': typeof SourcesAddRoute
+  '/sources/callback': typeof SourcesCallbackRoute
   '/sources': typeof SourcesIndexRoute
 }
 
@@ -98,19 +114,31 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/sources/$energy-source': typeof SourcesEnergySourceRoute
   '/sources/add': typeof SourcesAddRoute
+  '/sources/callback': typeof SourcesCallbackRoute
   '/sources/': typeof SourcesIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/sources/$energy-source' | '/sources/add' | '/sources'
+  fullPaths:
+    | '/'
+    | '/sources/$energy-source'
+    | '/sources/add'
+    | '/sources/callback'
+    | '/sources'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/sources/$energy-source' | '/sources/add' | '/sources'
+  to:
+    | '/'
+    | '/sources/$energy-source'
+    | '/sources/add'
+    | '/sources/callback'
+    | '/sources'
   id:
     | '__root__'
     | '/'
     | '/sources/$energy-source'
     | '/sources/add'
+    | '/sources/callback'
     | '/sources/'
   fileRoutesById: FileRoutesById
 }
@@ -119,6 +147,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SourcesEnergySourceRoute: typeof SourcesEnergySourceRoute
   SourcesAddRoute: typeof SourcesAddRoute
+  SourcesCallbackRoute: typeof SourcesCallbackRoute
   SourcesIndexRoute: typeof SourcesIndexRoute
 }
 
@@ -126,6 +155,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SourcesEnergySourceRoute: SourcesEnergySourceRoute,
   SourcesAddRoute: SourcesAddRoute,
+  SourcesCallbackRoute: SourcesCallbackRoute,
   SourcesIndexRoute: SourcesIndexRoute,
 }
 
@@ -142,6 +172,7 @@ export const routeTree = rootRoute
         "/",
         "/sources/$energy-source",
         "/sources/add",
+        "/sources/callback",
         "/sources/"
       ]
     },
@@ -153,6 +184,9 @@ export const routeTree = rootRoute
     },
     "/sources/add": {
       "filePath": "sources/add.tsx"
+    },
+    "/sources/callback": {
+      "filePath": "sources/callback.tsx"
     },
     "/sources/": {
       "filePath": "sources/index.tsx"

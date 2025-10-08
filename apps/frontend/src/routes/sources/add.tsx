@@ -7,8 +7,6 @@ export const Route = createFileRoute('/sources/add')({
 
 function RouteComponent() {
   return (
-    <div className="add-energy-source">
-      <AddEnergySource />
-    </div>
+    <AddEnergySource />
   );
 }
