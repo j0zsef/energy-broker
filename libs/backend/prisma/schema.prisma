@@ -22,7 +22,7 @@ model User {
 model OAuthProviderConfig {
   id                   Int      @id @default(autoincrement())
   authUrl              String
-  clientId             String
+  clientId             String   @unique
   redirectUri          String
   scopes               String   // Store as comma-separated or JSON string
   tokenUrl             String
@@ -46,7 +46,7 @@ model EnergyProvider {
 
 model EnergyProviderLocation {
   id                   Int      @id @default(autoincrement())
-  zip                  String   @unique
+  zip                  String
   energyProvider       EnergyProvider @relation(fields: [energyProviderId], references: [id])
   energyProviderId     Int
   createdAt            DateTime @default(now())
@@ -55,9 +55,9 @@ model EnergyProviderLocation {
 
 model EnergyProviderAuth {
   id                   Int      @id @default(autoincrement())
-  authToken            String
+  authToken            String   @db.Text
   expiresAt            DateTime
-  refreshToken         String
+  refreshToken         String   @db.Text
   resourceUri          String
   energyProvider       EnergyProvider @relation(fields: [energyProviderId], references: [id])
   energyProviderId     Int

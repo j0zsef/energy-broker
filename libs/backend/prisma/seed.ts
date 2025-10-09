@@ -3,14 +3,14 @@ import { EnergyProvider, EnergyProviderLocation, OAuthProviderConfig } from "../
 
 async function main() {
   const mockUtilOAuth = await prismaClient.oAuthProviderConfig.upsert({
-    where: { id: 1 },
+    where: { clientId: 'mock-util' },
     update: {},
     create: {
       authUrl: 'http://localhost:3001/authorize',
       clientId: 'mock-util',
       redirectUri: "http://localhost:4200/sources/callback",
       scopes: '',
-      tokenUrl: 'http://localhost:3001/token',
+      tokenUrl: 'http://localhost:3002/token',
     } as OAuthProviderConfig,
   })
   console.log({ mockUtilOAuth })
@@ -29,7 +29,7 @@ async function main() {
   console.log({ mockUtilProvider })
 
   const mockUtilLocation = await prismaClient.energyProviderLocation.upsert({
-    where: { zip: '60657' },
+    where: { id: 1 },
     update: {},
     create: {
       energyProviderId: mockUtilProvider.id,
@@ -39,6 +39,16 @@ async function main() {
 
   console.log({ mockUtilLocation })
 
+  const mockUser = await prismaClient.user.upsert({
+    where: { email: 'test@example.com' },
+    update: {},
+    create: {
+      email: 'test@example.com',
+      name: 'Test User',
+    },
+  })
+
+  console.log({ mockUser })
 }
 main()
   .then(async () => {

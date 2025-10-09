@@ -1,48 +1,73 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Spinner } from '../shared/spinner';
 import { useAuthStore } from '@stores';
+import { useEnergyAuth } from '@energy-broker/api-client';
 import { useNavigate } from '@tanstack/react-router';
 
 export const EnergySourceCallback = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
+  const hasProcessed = useRef(false);
+  const params = new URLSearchParams(window.location.search);
 
-  // Handle OAuth redirect
+  const code = params.get('code');
+  const oauthError = params.get('error');
+  const errorDescription = params.get('error_description');
+
+  // TODO: toast notification for errors & retry
+  if (oauthError) {
+    return (
+      <div>
+        OAuth Error:
+        {' '}
+        {oauthError}
+        <br />
+        {errorDescription && `Description: ${decodeURIComponent(errorDescription)}`}
+      </div>
+    );
+  }
+
+  const tokenUrl = useAuthStore.getState().authTokenUrl;
+  const redirectUri = window.location.href;
+  const { processAuth, isLoading, error } = useEnergyAuth(tokenUrl || '');
+
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const code = params.get('code');
-    const tokenUrl = useAuthStore.getState().authTokenUrl;
+    if (hasProcessed.current || !code) return;
+
     const clientId = useAuthStore.getState().clientId;
+    const providerId = useAuthStore.getState().providerId;
 
-    if (code && tokenUrl && clientId) {
-      // Exchange code for access token
-      fetch(tokenUrl, {
-        body: JSON.stringify({ code }),
-        headers: { 'Content-Type': 'application/json' },
-        method: 'POST',
-      })
-        .then(res => res.json())
-        .then(async ({ access_token }) => {
-          // TODO: save in EnergyProviderAuth table
+    if (tokenUrl && clientId && providerId) {
+      hasProcessed.current = true;
 
-          setLoading(false);
-          console.log(access_token);
+      useAuthStore.setState({
+        authTokenUrl: undefined,
+        clientId: undefined,
+        providerId: undefined,
+      });
 
-          // Redirect to energy sources list
-          await navigate({ to: '/sources' });
-        })
-        .catch(() => {
-          setLoading(false);
-        });
+      processAuth(code, clientId, providerId, redirectUri)
+        .then(() => navigate({ to: '/sources' }))
+        .catch(console.error);
     }
     else {
-      setLoading(false);
-      console.error('Unable to load energy source callback');
+      console.error('Missing auth configuration');
+      navigate({ to: '/sources' });
     }
-  }, [navigate]);
+  }, [code, tokenUrl]);
 
-  if (loading) {
-    return <Spinner />; // Replace with a spinner if desired
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  // TODO: toast notification for errors & retry
+  if (error) {
+    console.error('Auth failed:', error);
+    return (
+      <div>
+        Error:
+        {error.message}
+      </div>
+    );
   }
 
   return null;

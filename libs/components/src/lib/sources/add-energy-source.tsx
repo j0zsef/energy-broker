@@ -9,6 +9,7 @@ const buildAuthUri = (baseUri: string, clientId: string, redirectUri: string) =>
   const url = new URL(baseUri);
   url.searchParams.set('client_id', clientId);
   url.searchParams.set('redirect_uri', redirectUri);
+  url.searchParams.set('response_type', 'code');
   return url.toString();
 };
 
@@ -237,6 +238,8 @@ export const AddEnergySource = () => {
               </span>
             </Alert>
           )}
+
+          { /* TODO: add a consent checkbox to consent to 3rd party sharing of info and all that legalese */}
 
           {/* Submit Button */}
           <form.Subscribe

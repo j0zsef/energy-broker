@@ -9,7 +9,7 @@ interface EnergySource {
 }
 
 export const EnergySources = () => {
-  // Fetch EnergyProviderAuths
+  // TODO: Fetch EnergyProviderAuths
 
   const [energySources] = useState<EnergySource[]>([]);
 

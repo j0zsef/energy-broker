@@ -17,7 +17,8 @@
     "migrate": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "npx prisma migrate dev --schema=libs/backend/prisma/schema.prisma"
+        "cwd": "libs/backend",
+        "command": "npx prisma migrate dev --schema=prisma/schema.prisma"
       }
     },
     "db:reset": {

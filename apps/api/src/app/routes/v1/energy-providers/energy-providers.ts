@@ -19,11 +19,14 @@ export default async function (fastify: FastifyInstance) {
         zips: provider.energyProviderLocations.map(loc => loc.zip),
       }));
 
-      return reply.send(result);
+      return reply.status(200).send(result);
     }
     catch (error) {
       fastify.log.error(error);
-      return reply.status(500).send({ error: 'Failed to fetch energy providers' });
+      return reply.status(500).send({
+        error: 'Failed to fetch energy providers',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      });
     }
   });
 }

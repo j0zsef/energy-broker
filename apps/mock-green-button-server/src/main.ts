@@ -1,9 +1,10 @@
 import { OAuth2Server } from 'oauth2-mock-server';
+import cors from 'cors';
 import express from 'express';
-
 import fetch from 'node-fetch';
 
 const app = express();
+
 const oauthServer = new OAuth2Server();
 const OAUTH_PORT = 3001; // OAuth2 mock
 const MOCK_GREEN_BUTTON_PORT = 3002; // Your usage endpoint
@@ -20,6 +21,8 @@ const MOCK_GREEN_BUTTON_PORT = 3002; // Your usage endpoint
 
   app.use(express.json());
 
+  app.use(cors());
+
   app.post('/token', async (req, res) => {
     // Forward the request to the mock server
     const response = await fetch(`${oauthServer.issuer.url}/token`, {
@@ -30,16 +33,15 @@ const MOCK_GREEN_BUTTON_PORT = 3002; // Your usage endpoint
     const data = await response.json() as Record<string, unknown>;
 
     // Add custom fields
-    // TODO: update this to the mocked server :^)
     res.json({
-      authorizationURI: 'https://utilityapi.com/DataCustodian/espi/1_1/resource/Authorization/1111',
-      customerResourceURI: 'https://utilityapi.com/DataCustodian/espi/1_1/resource/RetailCustomer/1111',
-      resourceURI: 'https://utilityapi.com/DataCustodian/espi/1_1/resource/Subscription/1111',
+      authorizationURI: 'http://localhost:3001/authorize',
+      customerResourceURI: 'http://localhost:3002/customer',
+      resourceURI: 'http://localhost:3002/resource',
       ...data,
     });
   });
 
-  app.get('/usage', async (req, res) => {
+  app.get('/resource/usage', async (req, res) => {
     const authHeader = req.headers['authorization'];
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(401).send('Missing token');
