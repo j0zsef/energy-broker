@@ -1,4 +1,4 @@
-import './energy-sources.scss';
+import './energy-connections.scss';
 import { Col, Row } from 'react-bootstrap';
 import { Link } from '@tanstack/react-router';
 import { useState } from 'react';
@@ -8,17 +8,17 @@ interface EnergySource {
   // Add other properties as needed
 }
 
-export const EnergySources = () => {
-  // TODO: Fetch EnergyProviderAuths
+export const EnergyConnections = () => {
+  // TODO: Fetch EnergyProviderConnections
 
   const [energySources] = useState<EnergySource[]>([]);
 
   return (
-    <div className="energy-sources">
+    <div className="energy-connections">
       <Row className="mb-3">
         <Col>
-          <h2>Energy Sources</h2>
-          <Link to="/sources/add" className="ms-3">+ Add manually</Link>
+          <h2>Energy Connections</h2>
+          <Link to="/connections/add" className="ms-3">+ Add manually</Link>
         </Col>
       </Row>
       <Row>

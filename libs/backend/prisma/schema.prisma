@@ -11,58 +11,58 @@ datasource db {
 }
 
 model User {
-  id                   Int      @id @default(autoincrement())
-  email                String   @unique
-  name                 String
-  energyProviderAuths  EnergyProviderAuth[]
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  id                  Int                        @id @default(autoincrement())
+  email               String                     @unique
+  name                String
+  energyProviderAuths EnergyProviderConnection[]
+  createdAt           DateTime                   @default(now())
+  updatedAt           DateTime                   @updatedAt
 }
 
 model OAuthProviderConfig {
-  id                   Int      @id @default(autoincrement())
-  authUrl              String
-  clientId             String   @unique
-  redirectUri          String
-  scopes               String   // Store as comma-separated or JSON string
-  tokenUrl             String
-  energyProvider       EnergyProvider?
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  id             Int             @id @default(autoincrement())
+  authUrl        String
+  clientId       String          @unique
+  redirectUri    String
+  scopes         String // Store as comma-separated or JSON string
+  tokenUrl       String
+  energyProvider EnergyProvider?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
 }
 
 model EnergyProvider {
-  id                        Int                      @id @default(autoincrement())
-  fullName                  String
-  name                      String                  @unique
-  type                      String                  @default("electrical")
-  energyProviderLocations   EnergyProviderLocation[]
-  oAuthProviderConfig       OAuthProviderConfig     @relation(fields: [oAuthProviderConfigId], references: [id])
-  oAuthProviderConfigId     Int                     @unique
-  energyProviderAuths       EnergyProviderAuth[]
-  createdAt                 DateTime                @default(now())
-  updatedAt                 DateTime                @updatedAt
+  id                      Int                        @id @default(autoincrement())
+  fullName                String
+  name                    String                     @unique
+  type                    String                     @default("electrical")
+  energyProviderLocations EnergyProviderLocation[]
+  oAuthProviderConfig     OAuthProviderConfig        @relation(fields: [oAuthProviderConfigId], references: [id])
+  oAuthProviderConfigId   Int                        @unique
+  energyProviderConnections     EnergyProviderConnection[]
+  createdAt               DateTime                   @default(now())
+  updatedAt               DateTime                   @updatedAt
 }
 
 model EnergyProviderLocation {
-  id                   Int      @id @default(autoincrement())
-  zip                  String
-  energyProvider       EnergyProvider @relation(fields: [energyProviderId], references: [id])
-  energyProviderId     Int
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  id               Int            @id @default(autoincrement())
+  zip              String
+  energyProvider   EnergyProvider @relation(fields: [energyProviderId], references: [id])
+  energyProviderId Int
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
 }
 
-model EnergyProviderAuth {
-  id                   Int      @id @default(autoincrement())
-  authToken            String   @db.Text
-  expiresAt            DateTime
-  refreshToken         String   @db.Text
-  resourceUri          String
-  energyProvider       EnergyProvider @relation(fields: [energyProviderId], references: [id])
-  energyProviderId     Int
-  user                 User     @relation(fields: [userId], references: [id])
-  userId               Int
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+model EnergyProviderConnection {
+  id               Int            @id @default(autoincrement())
+  authToken        String         @db.Text
+  expiresAt        DateTime
+  refreshToken     String         @db.Text
+  resourceUri      String
+  energyProvider   EnergyProvider @relation(fields: [energyProviderId], references: [id])
+  energyProviderId Int
+  user             User           @relation(fields: [userId], references: [id])
+  userId           Int
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
 }

@@ -1,13 +1,13 @@
-import { EnergyProviderAuth } from '@shared';
+import { EnergyProviderConnection } from '@shared';
 import { FastifyInstance } from 'fastify';
 import { prismaClient } from '@backend';
 
 export default async function (fastify: FastifyInstance) {
-  fastify.post('/auth', async function (request, reply) {
+  fastify.post('/connection', async function (request, reply) {
     try {
-      const authData = request.body as EnergyProviderAuth;
+      const authData = request.body as EnergyProviderConnection;
 
-      await prismaClient.energyProviderAuth.create({
+      await prismaClient.energyProviderConnection.create({
         data: authData,
       });
 

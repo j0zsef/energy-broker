@@ -12,10 +12,10 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
-import { Route as SourcesIndexImport } from './routes/sources/index'
-import { Route as SourcesCallbackImport } from './routes/sources/callback'
-import { Route as SourcesAddImport } from './routes/sources/add'
-import { Route as SourcesEnergySourceImport } from './routes/sources/$energy-source'
+import { Route as ConnectionsIndexImport } from './routes/connections/index'
+import { Route as ConnectionsCallbackImport } from './routes/connections/callback'
+import { Route as ConnectionsAddImport } from './routes/connections/add'
+import { Route as ConnectionsEnergyConnectionImport } from './routes/connections/$energy-connection'
 
 // Create/Update Routes
 
@@ -25,29 +25,30 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const SourcesIndexRoute = SourcesIndexImport.update({
-  id: '/sources/',
-  path: '/sources/',
+const ConnectionsIndexRoute = ConnectionsIndexImport.update({
+  id: '/connections/',
+  path: '/connections/',
   getParentRoute: () => rootRoute,
 } as any)
 
-const SourcesCallbackRoute = SourcesCallbackImport.update({
-  id: '/sources/callback',
-  path: '/sources/callback',
+const ConnectionsCallbackRoute = ConnectionsCallbackImport.update({
+  id: '/connections/callback',
+  path: '/connections/callback',
   getParentRoute: () => rootRoute,
 } as any)
 
-const SourcesAddRoute = SourcesAddImport.update({
-  id: '/sources/add',
-  path: '/sources/add',
+const ConnectionsAddRoute = ConnectionsAddImport.update({
+  id: '/connections/add',
+  path: '/connections/add',
   getParentRoute: () => rootRoute,
 } as any)
 
-const SourcesEnergySourceRoute = SourcesEnergySourceImport.update({
-  id: '/sources/$energy-source',
-  path: '/sources/$energy-source',
-  getParentRoute: () => rootRoute,
-} as any)
+const ConnectionsEnergyConnectionRoute =
+  ConnectionsEnergyConnectionImport.update({
+    id: '/connections/$energy-connection',
+    path: '/connections/$energy-connection',
+    getParentRoute: () => rootRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -60,32 +61,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/sources/$energy-source': {
-      id: '/sources/$energy-source'
-      path: '/sources/$energy-source'
-      fullPath: '/sources/$energy-source'
-      preLoaderRoute: typeof SourcesEnergySourceImport
+    '/connections/$energy-connection': {
+      id: '/connections/$energy-connection'
+      path: '/connections/$energy-connection'
+      fullPath: '/connections/$energy-connection'
+      preLoaderRoute: typeof ConnectionsEnergyConnectionImport
       parentRoute: typeof rootRoute
     }
-    '/sources/add': {
-      id: '/sources/add'
-      path: '/sources/add'
-      fullPath: '/sources/add'
-      preLoaderRoute: typeof SourcesAddImport
+    '/connections/add': {
+      id: '/connections/add'
+      path: '/connections/add'
+      fullPath: '/connections/add'
+      preLoaderRoute: typeof ConnectionsAddImport
       parentRoute: typeof rootRoute
     }
-    '/sources/callback': {
-      id: '/sources/callback'
-      path: '/sources/callback'
-      fullPath: '/sources/callback'
-      preLoaderRoute: typeof SourcesCallbackImport
+    '/connections/callback': {
+      id: '/connections/callback'
+      path: '/connections/callback'
+      fullPath: '/connections/callback'
+      preLoaderRoute: typeof ConnectionsCallbackImport
       parentRoute: typeof rootRoute
     }
-    '/sources/': {
-      id: '/sources/'
-      path: '/sources'
-      fullPath: '/sources'
-      preLoaderRoute: typeof SourcesIndexImport
+    '/connections/': {
+      id: '/connections/'
+      path: '/connections'
+      fullPath: '/connections'
+      preLoaderRoute: typeof ConnectionsIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -95,68 +96,68 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/sources/$energy-source': typeof SourcesEnergySourceRoute
-  '/sources/add': typeof SourcesAddRoute
-  '/sources/callback': typeof SourcesCallbackRoute
-  '/sources': typeof SourcesIndexRoute
+  '/connections/$energy-connection': typeof ConnectionsEnergyConnectionRoute
+  '/connections/add': typeof ConnectionsAddRoute
+  '/connections/callback': typeof ConnectionsCallbackRoute
+  '/connections': typeof ConnectionsIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/sources/$energy-source': typeof SourcesEnergySourceRoute
-  '/sources/add': typeof SourcesAddRoute
-  '/sources/callback': typeof SourcesCallbackRoute
-  '/sources': typeof SourcesIndexRoute
+  '/connections/$energy-connection': typeof ConnectionsEnergyConnectionRoute
+  '/connections/add': typeof ConnectionsAddRoute
+  '/connections/callback': typeof ConnectionsCallbackRoute
+  '/connections': typeof ConnectionsIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/sources/$energy-source': typeof SourcesEnergySourceRoute
-  '/sources/add': typeof SourcesAddRoute
-  '/sources/callback': typeof SourcesCallbackRoute
-  '/sources/': typeof SourcesIndexRoute
+  '/connections/$energy-connection': typeof ConnectionsEnergyConnectionRoute
+  '/connections/add': typeof ConnectionsAddRoute
+  '/connections/callback': typeof ConnectionsCallbackRoute
+  '/connections/': typeof ConnectionsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/sources/$energy-source'
-    | '/sources/add'
-    | '/sources/callback'
-    | '/sources'
+    | '/connections/$energy-connection'
+    | '/connections/add'
+    | '/connections/callback'
+    | '/connections'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/sources/$energy-source'
-    | '/sources/add'
-    | '/sources/callback'
-    | '/sources'
+    | '/connections/$energy-connection'
+    | '/connections/add'
+    | '/connections/callback'
+    | '/connections'
   id:
     | '__root__'
     | '/'
-    | '/sources/$energy-source'
-    | '/sources/add'
-    | '/sources/callback'
-    | '/sources/'
+    | '/connections/$energy-connection'
+    | '/connections/add'
+    | '/connections/callback'
+    | '/connections/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  SourcesEnergySourceRoute: typeof SourcesEnergySourceRoute
-  SourcesAddRoute: typeof SourcesAddRoute
-  SourcesCallbackRoute: typeof SourcesCallbackRoute
-  SourcesIndexRoute: typeof SourcesIndexRoute
+  ConnectionsEnergyConnectionRoute: typeof ConnectionsEnergyConnectionRoute
+  ConnectionsAddRoute: typeof ConnectionsAddRoute
+  ConnectionsCallbackRoute: typeof ConnectionsCallbackRoute
+  ConnectionsIndexRoute: typeof ConnectionsIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  SourcesEnergySourceRoute: SourcesEnergySourceRoute,
-  SourcesAddRoute: SourcesAddRoute,
-  SourcesCallbackRoute: SourcesCallbackRoute,
-  SourcesIndexRoute: SourcesIndexRoute,
+  ConnectionsEnergyConnectionRoute: ConnectionsEnergyConnectionRoute,
+  ConnectionsAddRoute: ConnectionsAddRoute,
+  ConnectionsCallbackRoute: ConnectionsCallbackRoute,
+  ConnectionsIndexRoute: ConnectionsIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -170,26 +171,26 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/sources/$energy-source",
-        "/sources/add",
-        "/sources/callback",
-        "/sources/"
+        "/connections/$energy-connection",
+        "/connections/add",
+        "/connections/callback",
+        "/connections/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/sources/$energy-source": {
-      "filePath": "sources/$energy-source.tsx"
+    "/connections/$energy-connection": {
+      "filePath": "connections/$energy-connection.tsx"
     },
-    "/sources/add": {
-      "filePath": "sources/add.tsx"
+    "/connections/add": {
+      "filePath": "connections/add.tsx"
     },
-    "/sources/callback": {
-      "filePath": "sources/callback.tsx"
+    "/connections/callback": {
+      "filePath": "connections/callback.tsx"
     },
-    "/sources/": {
-      "filePath": "sources/index.tsx"
+    "/connections/": {
+      "filePath": "connections/index.tsx"
     }
   }
 }

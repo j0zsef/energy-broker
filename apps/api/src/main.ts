@@ -7,6 +7,7 @@ const port = nodeConfig.apiPort;
 
 const server = Fastify({
   logger: true,
+
 });
 
 server.register(app);

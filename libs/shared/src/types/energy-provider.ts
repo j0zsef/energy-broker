@@ -12,7 +12,7 @@ export interface EnergyProviderLocation {
   zip: string
 }
 
-export interface EnergyProviderAuth {
+export interface EnergyProviderConnection {
   authToken: string
   energyProviderId: number
   expiresAt: Date
@@ -21,7 +21,17 @@ export interface EnergyProviderAuth {
   userId: number
 }
 
+export interface OAuthProviderConfig {
+  authUrl: string
+  clientId: string
+  id: number
+  redirectUri: string
+  scopes: string
+  tokenUrl: string
+}
+
 export interface EnergyProvidersResponseItem extends EnergyProvider {
+  oAuthProviderConfig: OAuthProviderConfig
   zips: string[]
 }
 

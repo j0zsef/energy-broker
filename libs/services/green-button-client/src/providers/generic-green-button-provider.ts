@@ -1,9 +1,9 @@
 import {
   AtomFeed,
-  ElectricalDataRequest,
   ElectricalDataSummary,
-  ElectricalDataSummaryRequest,
   ElectricalDataUsagePoint,
+  GreenButtonSummaryRequest,
+  GreenButtonUsageRequest,
 } from '@shared';
 import { AxiosInstance } from 'axios';
 import { GreenButtonService } from '../green-button-service';
@@ -18,7 +18,7 @@ export class GenericGreenButtonProvider implements GreenButtonService {
     this.baseUrl = baseUrl;
   }
 
-  async fetchUsagePoints(token: string, request: ElectricalDataRequest): Promise<ElectricalDataUsagePoint[]> {
+  async fetchUsagePoints(token: string, request: GreenButtonUsageRequest): Promise<ElectricalDataUsagePoint[]> {
     // https://sandbox.greenbuttonalliance.org:8443/DataCustodian/espi/1_1/resource/Subscription/1/UsagePoint
     const url = `${this.baseUrl}/espi/1_1/resource/Subscription/1/UsagePoint`;
 
@@ -38,7 +38,7 @@ export class GenericGreenButtonProvider implements GreenButtonService {
     return this.parseUsagePoints(parsedData);
   }
 
-  async fetchSummary(token: string, request: ElectricalDataSummaryRequest): Promise<ElectricalDataSummary[]> {
+  async fetchSummary(token: string, request: GreenButtonSummaryRequest): Promise<ElectricalDataSummary[]> {
     // https://sandbox.greenbuttonalliance.org:8443/DataCustodian/espi/1_1/resource/Subscription/1/UsagePoint/1/ElectricPowerUsageSummary
     const url = `${this.baseUrl}/espi/1_1/resource/Subscription/1/UsagePoint/${request.meterId}/ElectricPowerUsageSummary`;
 

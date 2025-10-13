@@ -1,25 +1,25 @@
 
 
 import { useMutation } from '@tanstack/react-query';
-import { EnergyProviderAuth } from '@shared';
+import { EnergyProviderConnection } from '@shared';
 import { apiClient } from '../../api-client';
 import { useExchangeAuthCode } from '../oauth/useAuthCodeExchange';
 
-export const useSaveEnergyAuth = () => {
+export const useSaveEnergyConnection = () => {
   return useMutation({
-    mutationFn: (energyProviderAuth: EnergyProviderAuth) =>
-      apiClient(`v1/energy-providers/auth`, {
+    mutationFn: (energyProviderAuth: EnergyProviderConnection) =>
+      apiClient(`v1/energy-providers/connection`, {
         body: JSON.stringify(energyProviderAuth),
         method: 'POST',
       }),
   });
 }
 
-export const useEnergyAuth = (tokenUrl: string) => {
+export const useProcessEnergyConnection = (tokenUrl: string) => {
   const exchangeCode = useExchangeAuthCode(tokenUrl);
-  const saveAuth = useSaveEnergyAuth();
+  const saveConnection = useSaveEnergyConnection();
 
-  const processAuth = async (code: string, clientId: string, energyProviderId: number, redirectUri: string) => {
+  const processConnection = async (code: string, clientId: string, energyProviderId: number, redirectUri: string) => {
     const tokenResponse = await exchangeCode.mutateAsync({
       code,
       grant_type: 'authorization_code',
@@ -27,7 +27,7 @@ export const useEnergyAuth = (tokenUrl: string) => {
       client_id: clientId,
     });
 
-    await saveAuth.mutateAsync({
+    await saveConnection.mutateAsync({
       authToken: tokenResponse.access_token,
       energyProviderId,
       expiresAt: new Date(tokenResponse.expires_in),
@@ -38,8 +38,8 @@ export const useEnergyAuth = (tokenUrl: string) => {
   };
 
   return {
-    processAuth,
-    isLoading: exchangeCode.isPending || saveAuth.isPending,
-    error: exchangeCode.error || saveAuth.error,
+    processConnection,
+    isLoading: exchangeCode.isPending || saveConnection.isPending,
+    error: exchangeCode.error || saveConnection.error,
   };
 };

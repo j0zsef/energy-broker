@@ -45,4 +45,8 @@ export async function app(fastify: FastifyInstance, opts: AppOptions) {
   fastify.setValidatorCompiler(validatorCompiler);
   fastify.setSerializerCompiler(serializerCompiler);
   fastify.register(fastifyEnv, envOptions);
+
+  fastify.ready(() => {
+    console.log(fastify.printRoutes());
+  });
 }

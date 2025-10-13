@@ -1,9 +1,9 @@
 import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
 import { useEffect, useMemo, useState } from 'react';
-import { useEnergyProviders, useOAuthProviderConfig } from '@energy-broker/api-client';
 import { useForm, useStore } from '@tanstack/react-form';
 import { Spinner } from '../shared/spinner';
 import { useAuthStore } from '@stores';
+import { useEnergyProviders } from '@energy-broker/api-client';
 
 const buildAuthUri = (baseUri: string, clientId: string, redirectUri: string) => {
   const url = new URL(baseUri);
@@ -13,7 +13,7 @@ const buildAuthUri = (baseUri: string, clientId: string, redirectUri: string) =>
   return url.toString();
 };
 
-export const AddEnergySource = () => {
+export const AddEnergyProvider = () => {
   const { data: energyProviders, isLoading: loadingProviders, error: providersError } = useEnergyProviders();
   const [pendingRedirect, setPendingRedirect] = useState(false);
 
@@ -50,9 +50,7 @@ export const AddEnergySource = () => {
 
   // Fetch OAuth config for selected provider
   // Should not fetch if the provider is not selected
-  const { data: oauthConfig, isLoading: loadingConfig, error: configError } = useOAuthProviderConfig(
-    selectedProvider?.oAuthProviderConfigId ?? 0,
-  );
+  const oauthConfig = selectedProvider?.oAuthProviderConfig;
 
   // Redirect when config is loaded and pendingRedirect is true
   useEffect(() => {
@@ -248,7 +246,7 @@ export const AddEnergySource = () => {
             {([canSubmit, isSubmitting, provider]) => (
               <div className="d-grid gap-2">
                 <Button
-                  disabled={!canSubmit || !provider || pendingRedirect || loadingConfig || !!configError}
+                  disabled={!canSubmit || !provider || pendingRedirect}
                   onClick={(e) => {
                     e.preventDefault();
                     form.handleSubmit();
@@ -256,7 +254,7 @@ export const AddEnergySource = () => {
                   type="submit"
                   variant="primary"
                 >
-                  {(isSubmitting || loadingConfig)
+                  {(isSubmitting)
                     ? (
                         <Spinner />
                       )

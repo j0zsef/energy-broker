@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '../../api-client';
-import {ElectricalDataSummary, ElectricalDataSummaryRequest} from "@shared";
+import {ElectricalDataSummary, EnergySummaryRequest} from "@shared";
 
-export const useElectricalSummary = ({max, meterId, min}: ElectricalDataSummaryRequest) => {
+export const useEnergySummary = ({connectionId, max, meterId, min}: EnergySummaryRequest) => {
 
   /* TODO: AUTH
   const token = await getAuthToken(); // Retrieve the JWT from Auth0
@@ -16,7 +16,7 @@ apiClient<ElectricalDataSummary[]>('/v1/green-button/usage-summary', {
   if (max !== undefined) queryString.append('max', String(max));
   queryString.append('meterId', String(meterId));
 
-  const endpoint = `v1/green-button/usage-summary${queryString.toString() ? `?${queryString}` : ''}`;
+  const endpoint = `v1/connections/${connectionId}/summary/meters/:meterId${queryString.toString() ? `?${queryString}` : ''}`;
 
   return useQuery({
     queryKey: ['electricalSummary', { max, meterId, min }],

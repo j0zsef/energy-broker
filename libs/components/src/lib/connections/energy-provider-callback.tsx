@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react';
 import { Spinner } from '../shared/spinner';
 import { useAuthStore } from '@stores';
-import { useEnergyAuth } from '@energy-broker/api-client';
 import { useNavigate } from '@tanstack/react-router';
+import { useProcessEnergyConnection } from '@energy-broker/api-client';
 
-export const EnergySourceCallback = () => {
+export const EnergyProviderCallback = () => {
   const navigate = useNavigate();
   const hasProcessed = useRef(false);
   const params = new URLSearchParams(window.location.search);
@@ -28,7 +28,7 @@ export const EnergySourceCallback = () => {
 
   const tokenUrl = useAuthStore.getState().authTokenUrl;
   const redirectUri = window.location.href;
-  const { processAuth, isLoading, error } = useEnergyAuth(tokenUrl || '');
+  const { processConnection, isLoading, error } = useProcessEnergyConnection(tokenUrl || '');
 
   useEffect(() => {
     if (hasProcessed.current || !code) return;
@@ -39,19 +39,21 @@ export const EnergySourceCallback = () => {
     if (tokenUrl && clientId && providerId) {
       hasProcessed.current = true;
 
-      useAuthStore.setState({
-        authTokenUrl: undefined,
-        clientId: undefined,
-        providerId: undefined,
-      });
-
-      processAuth(code, clientId, providerId, redirectUri)
-        .then(() => navigate({ to: '/sources' }))
+      processConnection(code, clientId, providerId, redirectUri)
+        .then(() => {
+          useAuthStore.setState({
+            authTokenUrl: undefined,
+            clientId: undefined,
+            providerId: undefined,
+          });
+          navigate({ to: '/connections' });
+        },
+        )
         .catch(console.error);
     }
     else {
       console.error('Missing auth configuration');
-      navigate({ to: '/sources' });
+      navigate({ to: '/connections' });
     }
   }, [code, tokenUrl]);
 

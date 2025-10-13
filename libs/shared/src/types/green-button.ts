@@ -31,7 +31,13 @@ export interface ElectricalDataSummary {
   updated?: string
 }
 
-export interface ElectricalDataUsagePointRequest {
+export interface EnergyUsageRequest {
+  connectionId: number
+  max?: string
+  min?: string
+}
+
+export interface GreenButtonUsageRequest {
   max?: string
   min?: string
 }
@@ -63,11 +69,15 @@ export interface AtomFeed {
   }
 }
 
-export interface ElectricalDataRequest {
+export interface EnergySummaryRequest {
+  connectionId: number
+  meterId: string
   min?: string // ISO date
   max?: string // ISO date
 }
 
-export interface ElectricalDataSummaryRequest extends ElectricalDataRequest {
+export interface GreenButtonSummaryRequest {
   meterId: string
+  min?: string // ISO date
+  max?: string // ISO date
 }

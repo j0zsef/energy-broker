@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '../../api-client';
-import { ElectricalDataUsagePoint, ElectricalDataUsagePointRequest } from "@shared";
+import { ElectricalDataUsagePoint, EnergyUsageRequest } from "@shared";
 
-export const useElectricalMeters = ({ min, max }: ElectricalDataUsagePointRequest) => {
+export const useEnergyUsage = ({ connectionId, max, min }: EnergyUsageRequest) => {
 
 /* TODO: AUTH
 const token = await getAuthToken(); // Retrieve the JWT from Auth0
@@ -14,7 +14,7 @@ headers: { Authorization: `Bearer ${token}` },
   const queryString = new URLSearchParams();
   if (min !== undefined) queryString.append('min', String(min));
   if (max !== undefined) queryString.append('max', String(max));
-  const endpoint = `v1/green-button/usage-points${queryString.toString() ? `?${queryString}` : ''}`;
+  const endpoint = `v1/connections/${connectionId}/usage${queryString.toString() ? `?${queryString}` : ''}`;
 
   return useQuery({
     queryKey: ['electricalMeters', { min, max }],

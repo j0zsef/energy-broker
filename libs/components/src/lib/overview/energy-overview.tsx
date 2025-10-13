@@ -1,4 +1,4 @@
-import { useElectricalMeters, useElectricalSummary } from '@energy-broker/api-client';
+import { useEnergySummary, useEnergyUsage } from '@energy-broker/api-client';
 import { Link } from '@tanstack/react-router';
 import { useQueries } from '@tanstack/react-query';
 
@@ -7,7 +7,7 @@ import { useQueries } from '@tanstack/react-query';
 export function EnergyOverview() {
   // const min = '2022-09-27T18:00:00Z';
   // const max = '2025-07-01T19:00:00Z';
-  const { data: electricalMeters = [], isLoading } = useElectricalMeters({});
+  const { data: electricalMeters = [], isLoading } = useEnergyUsage({ connectionId: 0 });
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -17,7 +17,7 @@ export function EnergyOverview() {
     return (
       <>
         <div>No electrical meters found.</div>
-        <Link to="/sources/add">+ Add an energy Source</Link>
+        <Link to="/connections/add">+ Add an energy connection</Link>
       </>
     );
   }
@@ -25,7 +25,7 @@ export function EnergyOverview() {
   const summaryQueries = useQueries({
     queries: electricalMeters.map(meter => ({
       enabled: !!meter.meterId,
-      queryFn: () => useElectricalSummary({ meterId: meter.meterId as string }),
+      queryFn: () => useEnergySummary({ connectionId: 0, meterId: meter.meterId as string }),
       queryKey: ['electricalSummary', meter.meterId],
     })),
   });

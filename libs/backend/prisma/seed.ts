@@ -8,7 +8,7 @@ async function main() {
     create: {
       authUrl: 'http://localhost:3001/authorize',
       clientId: 'mock-util',
-      redirectUri: "http://localhost:4200/sources/callback",
+      redirectUri: "http://localhost:4200/connections/callback",
       scopes: '',
       tokenUrl: 'http://localhost:3002/token',
     } as OAuthProviderConfig,

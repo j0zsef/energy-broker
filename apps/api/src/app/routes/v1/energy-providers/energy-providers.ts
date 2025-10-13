@@ -7,6 +7,7 @@ export default async function (fastify: FastifyInstance) {
       const providers = await prismaClient.energyProvider.findMany({
         include: {
           energyProviderLocations: true,
+          oAuthProviderConfig: true,
         },
       });
 
@@ -14,6 +15,7 @@ export default async function (fastify: FastifyInstance) {
         fullName: provider.fullName,
         id: provider.id,
         name: provider.name,
+        oAuthProviderConfig: provider.oAuthProviderConfig,
         oAuthProviderConfigId: provider.oAuthProviderConfigId,
         type: provider.type,
         zips: provider.energyProviderLocations.map(loc => loc.zip),
