@@ -1,13 +1,13 @@
 import './navbar.scss';
 import { Navbar as BootstrapNavBar, ListGroup, ListGroupItem } from 'react-bootstrap';
-import Container from 'react-bootstrap/Container';
+import { Container } from '../shared/container';
 import { Link } from '@tanstack/react-router';
 import { NavbarBrand } from 'react-bootstrap';
 
-export function Navbar() {
+export const Navbar = () => {
   return (
     <BootstrapNavBar expand={false}>
-      <Container>
+      <Container border={true}>
         <NavbarBrand as={Link} to="/">Energy Broker</NavbarBrand>
         <hr className="divider" />
         <ListGroup>
@@ -27,6 +27,6 @@ export function Navbar() {
       </Container>
     </BootstrapNavBar>
   );
-}
+};
 
 export default Navbar;

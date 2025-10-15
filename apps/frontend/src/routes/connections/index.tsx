@@ -6,7 +6,5 @@ export const Route = createFileRoute('/connections/')({
 });
 
 export function Index() {
-  return (
-    <EnergyConnections />
-  );
+  return <EnergyConnections />;
 }

@@ -1,7 +1,7 @@
 import './header.scss';
 import { Dropdown } from 'react-bootstrap';
 
-export function Header() {
+export const Header = () => {
   return (
     <header className="header">
       <Dropdown>
@@ -18,4 +18,4 @@ export function Header() {
       <hr className="divider" />
     </header>
   );
-}
+};

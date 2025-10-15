@@ -1,5 +1,5 @@
 import './energy-connections.scss';
-import { Col, Row } from 'react-bootstrap';
+import { Button, Table } from 'react-bootstrap';
 import { Link } from '@tanstack/react-router';
 import { useState } from 'react';
 
@@ -15,24 +15,41 @@ export const EnergyConnections = () => {
 
   return (
     <div className="energy-connections">
-      <Row className="mb-3">
-        <Col>
-          <h2>Energy Connections</h2>
-          <Link to="/connections/add" className="ms-3">+ Add manually</Link>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <div>
-            <p>List of energy sources:</p>
-            <ul>
-              {energySources.map((src, idx) => (
-                <li key={idx}>{src.name || 'Unnamed Source'}</li>
-              ))}
-            </ul>
-          </div>
-        </Col>
-      </Row>
+      <div className="d-flex justify-content-between">
+        <h2>Energy Connections</h2>
+        <Link to="/connections/add">
+          <Button>Add connection</Button>
+        </Link>
+      </div>
+
+      <Table hover={true} responsive={true}>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Date Added</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          { energySources.length === 0
+            ? (
+                <tr>
+                  <td colSpan={4} className="text-center">No energy connections found.</td>
+                </tr>
+              )
+            : (
+                energySources.map((source, index) => (
+                  <tr key={index}>
+                    <td>{source.name || 'N/A'}</td>
+                    <td>{/* Type */}</td>
+                    <td>{/* Date Added */}</td>
+                    <td>{/* Delete action */}</td>
+                  </tr>
+                ))
+              )}
+        </tbody>
+      </Table>
     </div>
   );
 };

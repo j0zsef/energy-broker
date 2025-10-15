@@ -2,7 +2,7 @@ import './root.scss';
 
 import { Header, Navbar } from '@energy-broker/components';
 import { Outlet, createRootRoute } from '@tanstack/react-router';
-import { Container } from 'react-bootstrap';
+import { Container } from '@energy-broker/components';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { queryClient } from '@energy-broker/api-client';
@@ -13,7 +13,7 @@ export const Route = createRootRoute({
       <QueryClientProvider client={queryClient}>
         <div className="root">
           <Navbar />
-          <Container className="main-content">
+          <Container border={true}>
             <Header />
             <Outlet />
           </Container>

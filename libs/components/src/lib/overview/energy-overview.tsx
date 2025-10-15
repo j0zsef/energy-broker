@@ -1,6 +1,7 @@
 import { useEnergySummary, useEnergyUsage } from '@energy-broker/api-client';
 import { Link } from '@tanstack/react-router';
 import { useQueries } from '@tanstack/react-query';
+import { Button } from 'react-bootstrap';
 
 // EnergyOverview component to display electrical meter summaries for now,
 // this component will be expanded later to include more energy sources
@@ -17,7 +18,9 @@ export function EnergyOverview() {
     return (
       <>
         <div>No electrical meters found.</div>
-        <Link to="/connections/add">+ Add an energy connection</Link>
+        <Link to="/connections/add">
+          <Button>Add energy connection</Button>
+        </Link>
       </>
     );
   }

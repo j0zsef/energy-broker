@@ -1,4 +1,3 @@
-import { Col, Row } from 'react-bootstrap';
 import { EnergyOverview } from './energy-overview';
 
 export function Overview() {
@@ -6,18 +5,11 @@ export function Overview() {
   // Energy Breakdown component
   return (
     <>
-      <Row className="mb-3">
-        <Col>
-          <h2>Energy Overview</h2>
-          <EnergyOverview />
-        </Col>
-      </Row>
+      <h2>Energy Overview</h2>
+      <EnergyOverview />
       <hr className="divider" />
-      <Row>
-        <Col>
-          {/* <EnergyBreakdown /> */}
-        </Col>
-      </Row>
+      <h2>Energy Breakdown</h2>
+      {/* <EnergyBreakdown /> */}
     </>
   );
 }
