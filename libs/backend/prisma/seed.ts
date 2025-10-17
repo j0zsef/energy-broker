@@ -38,17 +38,6 @@ async function main() {
   })
 
   console.log({ mockUtilLocation })
-
-  const mockUser = await prismaClient.user.upsert({
-    where: { email: 'test@example.com' },
-    update: {},
-    create: {
-      email: 'test@example.com',
-      name: 'Test User',
-    },
-  })
-
-  console.log({ mockUser })
 }
 main()
   .then(async () => {

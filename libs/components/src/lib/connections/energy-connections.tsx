@@ -9,7 +9,7 @@ interface EnergySource {
 }
 
 export const EnergyConnections = () => {
-  // TODO: Fetch EnergyProviderConnections
+  // TODO: Fetch EnergyProviderConnections by user
 
   const [energySources] = useState<EnergySource[]>([]);
 
@@ -41,6 +41,7 @@ export const EnergyConnections = () => {
             : (
                 energySources.map((source, index) => (
                   <tr key={index}>
+                    { /* link to dynamic energy connection route */ }
                     <td>{source.name || 'N/A'}</td>
                     <td>{/* Type */}</td>
                     <td>{/* Date Added */}</td>

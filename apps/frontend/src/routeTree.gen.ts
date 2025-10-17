@@ -11,6 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
 import { Route as ConnectionsIndexImport } from './routes/connections/index'
 import { Route as ConnectionsCallbackImport } from './routes/connections/callback'
@@ -18,6 +19,11 @@ import { Route as ConnectionsAddImport } from './routes/connections/add'
 import { Route as ConnectionsEnergyConnectionImport } from './routes/connections/$energy-connection'
 
 // Create/Update Routes
+
+const AuthenticatedRoute = AuthenticatedImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -61,6 +67,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedImport
+      parentRoute: typeof rootRoute
+    }
     '/connections/$energy-connection': {
       id: '/connections/$energy-connection'
       path: '/connections/$energy-connection'
@@ -96,6 +109,7 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '': typeof AuthenticatedRoute
   '/connections/$energy-connection': typeof ConnectionsEnergyConnectionRoute
   '/connections/add': typeof ConnectionsAddRoute
   '/connections/callback': typeof ConnectionsCallbackRoute
@@ -104,6 +118,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '': typeof AuthenticatedRoute
   '/connections/$energy-connection': typeof ConnectionsEnergyConnectionRoute
   '/connections/add': typeof ConnectionsAddRoute
   '/connections/callback': typeof ConnectionsCallbackRoute
@@ -113,6 +128,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRoute
   '/connections/$energy-connection': typeof ConnectionsEnergyConnectionRoute
   '/connections/add': typeof ConnectionsAddRoute
   '/connections/callback': typeof ConnectionsCallbackRoute
@@ -123,6 +139,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | ''
     | '/connections/$energy-connection'
     | '/connections/add'
     | '/connections/callback'
@@ -130,6 +147,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | ''
     | '/connections/$energy-connection'
     | '/connections/add'
     | '/connections/callback'
@@ -137,6 +155,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/connections/$energy-connection'
     | '/connections/add'
     | '/connections/callback'
@@ -146,6 +165,7 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRoute
   ConnectionsEnergyConnectionRoute: typeof ConnectionsEnergyConnectionRoute
   ConnectionsAddRoute: typeof ConnectionsAddRoute
   ConnectionsCallbackRoute: typeof ConnectionsCallbackRoute
@@ -154,6 +174,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRoute: AuthenticatedRoute,
   ConnectionsEnergyConnectionRoute: ConnectionsEnergyConnectionRoute,
   ConnectionsAddRoute: ConnectionsAddRoute,
   ConnectionsCallbackRoute: ConnectionsCallbackRoute,
@@ -171,6 +192,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/_authenticated",
         "/connections/$energy-connection",
         "/connections/add",
         "/connections/callback",
@@ -179,6 +201,9 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/_authenticated": {
+      "filePath": "_authenticated.tsx"
     },
     "/connections/$energy-connection": {
       "filePath": "connections/$energy-connection.tsx"

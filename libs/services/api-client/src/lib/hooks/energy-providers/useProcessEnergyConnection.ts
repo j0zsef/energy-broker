@@ -19,7 +19,11 @@ export const useProcessEnergyConnection = (tokenUrl: string) => {
   const exchangeCode = useExchangeAuthCode(tokenUrl);
   const saveConnection = useSaveEnergyConnection();
 
-  const processConnection = async (code: string, clientId: string, energyProviderId: number, redirectUri: string) => {
+  const processConnection = async (code: string,
+                                   clientId: string,
+                                   energyProviderId: number,
+                                   redirectUri: string,
+                                   userId: string) => {
     const tokenResponse = await exchangeCode.mutateAsync({
       code,
       grant_type: 'authorization_code',
@@ -33,7 +37,7 @@ export const useProcessEnergyConnection = (tokenUrl: string) => {
       expiresAt: new Date(tokenResponse.expires_in),
       refreshToken: tokenResponse.refresh_token,
       resourceUri: tokenResponse.resourceURI,
-      userId: 1, // TODO: replace with actual user ID
+      userId,
     });
   };
 

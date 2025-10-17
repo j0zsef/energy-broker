@@ -19,21 +19,25 @@ Spin up the frontend and api:
 pnpm serve
 ```
 
+## Local Auth Setup
+
+Uses Auth0 for authentication. Need to add users in Auth0 dashboard. However, the `TBD` user is pre-configured for local development.
+
 ## App Structure
 
 ```
 /apps
 ├── frontend/         # React frontend
-├── api/              # Fastify backend
+├── api/              # Fastify API
 
 /libs
 ├── backend/          # Backend utilities (DB, auth, etc.)
 ├── components/       # Frontend components (UI library)
 ├── services/         # Domain-specific services (external API clients, etc.)
 │   ├── green-button-client/
-│   ├── carbon-credit-service/
+│   ├── api-client/
 │   ├── recommendations-service/
-├── shared/           # Common utilities & types (e.g., DTOs, schemas)
+├── shared/           # Common configs & types (e.g., DTOs, schemas)
 ```
 
 ## DB
