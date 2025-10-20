@@ -16,7 +16,6 @@ export const EnergyConnections = () => {
   return (
     <div className="energy-connections">
       <div className="d-flex justify-content-between">
-        <h2>Energy Connections</h2>
         <Link to="/connections/add">
           <Button>Add connection</Button>
         </Link>

@@ -17,6 +17,8 @@ import { Route as ConnectionsIndexImport } from './routes/connections/index'
 import { Route as ConnectionsCallbackImport } from './routes/connections/callback'
 import { Route as ConnectionsAddImport } from './routes/connections/add'
 import { Route as ConnectionsEnergyConnectionImport } from './routes/connections/$energy-connection'
+import { Route as AccountSummaryImport } from './routes/account/summary'
+import { Route as AccountSettingsImport } from './routes/account/settings'
 
 // Create/Update Routes
 
@@ -56,6 +58,18 @@ const ConnectionsEnergyConnectionRoute =
     getParentRoute: () => rootRoute,
   } as any)
 
+const AccountSummaryRoute = AccountSummaryImport.update({
+  id: '/account/summary',
+  path: '/account/summary',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AccountSettingsRoute = AccountSettingsImport.update({
+  id: '/account/settings',
+  path: '/account/settings',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -72,6 +86,20 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof AuthenticatedImport
+      parentRoute: typeof rootRoute
+    }
+    '/account/settings': {
+      id: '/account/settings'
+      path: '/account/settings'
+      fullPath: '/account/settings'
+      preLoaderRoute: typeof AccountSettingsImport
+      parentRoute: typeof rootRoute
+    }
+    '/account/summary': {
+      id: '/account/summary'
+      path: '/account/summary'
+      fullPath: '/account/summary'
+      preLoaderRoute: typeof AccountSummaryImport
       parentRoute: typeof rootRoute
     }
     '/connections/$energy-connection': {
@@ -110,6 +138,8 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof AuthenticatedRoute
+  '/account/settings': typeof AccountSettingsRoute
+  '/account/summary': typeof AccountSummaryRoute
   '/connections/$energy-connection': typeof ConnectionsEnergyConnectionRoute
   '/connections/add': typeof ConnectionsAddRoute
   '/connections/callback': typeof ConnectionsCallbackRoute
@@ -119,6 +149,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof AuthenticatedRoute
+  '/account/settings': typeof AccountSettingsRoute
+  '/account/summary': typeof AccountSummaryRoute
   '/connections/$energy-connection': typeof ConnectionsEnergyConnectionRoute
   '/connections/add': typeof ConnectionsAddRoute
   '/connections/callback': typeof ConnectionsCallbackRoute
@@ -129,6 +161,8 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRoute
+  '/account/settings': typeof AccountSettingsRoute
+  '/account/summary': typeof AccountSummaryRoute
   '/connections/$energy-connection': typeof ConnectionsEnergyConnectionRoute
   '/connections/add': typeof ConnectionsAddRoute
   '/connections/callback': typeof ConnectionsCallbackRoute
@@ -140,6 +174,8 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | ''
+    | '/account/settings'
+    | '/account/summary'
     | '/connections/$energy-connection'
     | '/connections/add'
     | '/connections/callback'
@@ -148,6 +184,8 @@ export interface FileRouteTypes {
   to:
     | '/'
     | ''
+    | '/account/settings'
+    | '/account/summary'
     | '/connections/$energy-connection'
     | '/connections/add'
     | '/connections/callback'
@@ -156,6 +194,8 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/account/settings'
+    | '/account/summary'
     | '/connections/$energy-connection'
     | '/connections/add'
     | '/connections/callback'
@@ -166,6 +206,8 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRoute
+  AccountSettingsRoute: typeof AccountSettingsRoute
+  AccountSummaryRoute: typeof AccountSummaryRoute
   ConnectionsEnergyConnectionRoute: typeof ConnectionsEnergyConnectionRoute
   ConnectionsAddRoute: typeof ConnectionsAddRoute
   ConnectionsCallbackRoute: typeof ConnectionsCallbackRoute
@@ -175,6 +217,8 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRoute,
+  AccountSettingsRoute: AccountSettingsRoute,
+  AccountSummaryRoute: AccountSummaryRoute,
   ConnectionsEnergyConnectionRoute: ConnectionsEnergyConnectionRoute,
   ConnectionsAddRoute: ConnectionsAddRoute,
   ConnectionsCallbackRoute: ConnectionsCallbackRoute,
@@ -193,6 +237,8 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/_authenticated",
+        "/account/settings",
+        "/account/summary",
         "/connections/$energy-connection",
         "/connections/add",
         "/connections/callback",
@@ -204,6 +250,12 @@ export const routeTree = rootRoute
     },
     "/_authenticated": {
       "filePath": "_authenticated.tsx"
+    },
+    "/account/settings": {
+      "filePath": "account/settings.tsx"
+    },
+    "/account/summary": {
+      "filePath": "account/summary.tsx"
     },
     "/connections/$energy-connection": {
       "filePath": "connections/$energy-connection.tsx"

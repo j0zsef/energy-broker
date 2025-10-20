@@ -16,6 +16,7 @@ export default defineConfig({
   },
 
   cacheDir: '../../node_modules/.vite/apps/frontend',
+  envDir: '../../',
   plugins: [
     TanStackRouterVite({
       autoCodeSplitting: true,

@@ -38,11 +38,11 @@
       "@shared": [
         "libs/shared/src/index.ts"
       ],
-      "@shared/node-config": [
-        "libs/shared/src/config/node-config.ts"
+      "@shared/node-env-vars": [
+        "libs/shared/src/config/node-env-vars.ts"
       ],
-      "@shared/vite-config": [
-        "libs/shared/src/config/vite-config.ts"
+      "@shared/vite-env-vars": [
+        "libs/shared/src/config/vite-env-vars.ts"
       ],
       "@stores": [
         "apps/frontend/src/stores/index.ts"

@@ -17,7 +17,7 @@ export function EnergyOverview() {
   if (!electricalMeters.length) {
     return (
       <>
-        <div>No electrical meters found.</div>
+        <div>No energy usage found.</div>
         <Link to="/connections/add">
           <Button>Add energy connection</Button>
         </Link>

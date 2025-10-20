@@ -64,7 +64,6 @@ export const AddEnergyProvider = () => {
 
   return (
     <>
-      <h2>Add Energy Sources</h2>
       <Form className="d-flex flex-column gap-3 col-md-6">
         {/* Loading State */}
         {loadingProviders && (

@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/connections/$energy-connection')({
+export const Route = createFileRoute('/account/summary')({
   beforeLoad: ({ context, location }) => {
     if (!context.auth.isAuthenticated) {
       throw redirect({
@@ -13,5 +13,5 @@ export const Route = createFileRoute('/connections/$energy-connection')({
 });
 
 function RouteComponent() {
-  return <div>Hello energy connection</div>;
+  return <div>Hello account summary</div>;
 }

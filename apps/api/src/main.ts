@@ -1,9 +1,9 @@
 import Fastify from 'fastify';
 import { app } from './app/app';
-import { nodeConfig } from '@shared/node-config';
+import { nodeEnvVars } from '../../../libs/shared/src/config/node-env-vars';
 
-const host = nodeConfig.apiHost;
-const port = nodeConfig.apiPort;
+const host = nodeEnvVars.apiHost;
+const port = nodeEnvVars.apiPort;
 
 const server = Fastify({
   logger: true,

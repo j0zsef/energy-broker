@@ -53,8 +53,7 @@ export const EnergyProviderCallback = ({ userId }: EnergyProviderCallbackProps) 
           });
           navigate({ to: '/connections' });
         },
-        )
-        .catch(console.error);
+        );
     }
     else {
       console.error('Missing auth configuration');
