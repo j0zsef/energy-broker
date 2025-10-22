@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '../../api-client';
-import { ElectricalDataUsagePoint, EnergyUsageRequest } from "@shared";
+import { ElectricalDataUsagePoint, EnergyUsageRequest } from "@energy-broker/shared";
 
 export const useEnergyUsage = ({ connectionId, max, min }: EnergyUsageRequest) => {
 

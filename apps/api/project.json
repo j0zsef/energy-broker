@@ -7,47 +7,75 @@
   "targets": {
     "build": {
       "executor": "@nx/esbuild:esbuild",
-      "outputs": ["{options.outputPath}"],
+      "dependsOn": [
+        "^build", "typecheck"
+      ],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "defaultConfiguration": "production",
-      "dependsOn": ["type-check"],
       "options": {
-        "platform": "node",
         "outputPath": "dist/apps/api",
-        "format": ["cjs"],
         "bundle": false,
         "main": "apps/api/src/main.ts",
         "tsConfig": "apps/api/tsconfig.json",
-        "assets": ["apps/api/src/assets"],
-        "generatePackageJson": true,
+        "assets": [
+          "apps/api/src/assets"
+        ],
         "esbuildOptions": {
           "sourcemap": true,
           "outExtension": {
             ".js": ".js"
-          },
-          "loader": {
-            ".md": "file"
           }
         }
       },
       "configurations": {
         "development": {},
         "production": {
+          "generateLockfile": true,
           "esbuildOptions": {
             "sourcemap": false,
             "outExtension": {
               ".js": ".js"
-            },
-            "loader": {
-              ".md": "file"
             }
           }
         }
       }
     },
+    "prune-lockfile": {
+      "dependsOn": [
+        "build"
+      ],
+      "cache": true,
+      "executor": "@nx/js:prune-lockfile",
+      "outputs": [
+        "{workspaceRoot}/apps/api/dist/package.json",
+        "{workspaceRoot}/apps/api/dist/package-lock.json"
+      ],
+      "options": {
+        "buildTarget": "build"
+      }
+    },
+    "copy-workspace-modules": {
+      "dependsOn": [
+        "build"
+      ],
+      "cache": true,
+      "outputs": [
+        "{workspaceRoot}/apps/api/dist/workspace_modules"
+      ],
+      "executor": "@nx/js:copy-workspace-modules",
+      "options": {
+        "buildTarget": "build"
+      }
+    },
     "serve": {
+      "continuous": true,
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
-      "dependsOn": ["build"],
+      "dependsOn": [
+        "build"
+      ],
       "options": {
         "buildTarget": "api:build",
         "runBuildTargetDependencies": false
@@ -60,13 +88,7 @@
           "buildTarget": "api:build:production"
         }
       }
-    },
-    "test": {
-      "options": {
-        "passWithNoTests": true
-      }
-    },
-    "type-check": {}
+    }
   },
-  "implicitDependencies": ["backend"]
+  "implicitDependencies": ["backend", "shared", "green-button-client"]
 }

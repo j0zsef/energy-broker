@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.project.json",
+  "compilerOptions": {
+    // outDir should be local to the project and not in the same folder as any other tsconfig.*.json
+    "outDir": "../../dist/out-tsc/apps/api-e2e",
+    "types": ["node"],
+    // Any overrides
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": [
+    // exclude config and test files
+  ],
+  "references": [
+    // tsconfig.lib.json files for project dependencies
+    // UPDATED BY NX SYNC
+  ]
+}

@@ -21,6 +21,11 @@ export interface EnergyProviderConnection {
   userId: string
 }
 
+export interface EnergyProviderConnectionResponse extends EnergyProviderConnection {
+  energyProvider: EnergyProvider
+  createdAt: Date
+}
+
 export interface OAuthProviderConfig {
   authUrl: string
   clientId: string

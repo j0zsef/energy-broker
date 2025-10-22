@@ -1,7 +1,18 @@
 {
-  "compilerOptions": {
-    "types": ["node"]
-  },
   "extends": "../../tsconfig.base.json",
-  "include": ["**/*"]
+  "files": [], // intentionally empty
+  "references": [
+    {
+      "path": "../stores"
+    },
+    {
+      "path": "../services/api-client"
+    },
+    {
+      "path": "./tsconfig.lib.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
 }

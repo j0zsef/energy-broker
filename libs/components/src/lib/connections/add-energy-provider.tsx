@@ -1,8 +1,8 @@
-import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
+import { Alert, Button, Form } from 'react-bootstrap';
 import { useEffect, useMemo, useState } from 'react';
 import { useForm, useStore } from '@tanstack/react-form';
 import { Spinner } from '../shared/spinner';
-import { useAuthStore } from '@stores';
+import { useAuthStore } from '@energy-broker/stores';
 import { useEnergyProviders } from '@energy-broker/api-client';
 
 const buildAuthUri = (baseUri: string, clientId: string, redirectUri: string) => {

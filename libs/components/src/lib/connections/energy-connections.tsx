@@ -1,17 +1,10 @@
 import './energy-connections.scss';
 import { Button, Table } from 'react-bootstrap';
 import { Link } from '@tanstack/react-router';
-import { useState } from 'react';
-
-interface EnergySource {
-  name?: string
-  // Add other properties as needed
-}
+import { useEnergyConnections } from '@energy-broker/api-client';
 
 export const EnergyConnections = () => {
-  // TODO: Fetch EnergyProviderConnections by user
-
-  const [energySources] = useState<EnergySource[]>([]);
+  const { data: energyConnections, isLoading, error } = useEnergyConnections();
 
   return (
     <div className="energy-connections">
@@ -20,6 +13,14 @@ export const EnergyConnections = () => {
           <Button>Add connection</Button>
         </Link>
       </div>
+
+      { isLoading && <p>Loading energy connections...</p> }
+      { error && (
+        <p className="text-danger">
+          Error loading energy connections:
+          {(error as Error).message}
+        </p>
+      ) }
 
       <Table hover={true} responsive={true}>
         <thead>
@@ -31,19 +32,19 @@ export const EnergyConnections = () => {
           </tr>
         </thead>
         <tbody>
-          { energySources.length === 0
+          { !energyConnections || energyConnections.length === 0
             ? (
                 <tr>
                   <td colSpan={4} className="text-center">No energy connections found.</td>
                 </tr>
               )
             : (
-                energySources.map((source, index) => (
+                energyConnections.map((connection, index) => (
                   <tr key={index}>
                     { /* link to dynamic energy connection route */ }
-                    <td>{source.name || 'N/A'}</td>
-                    <td>{/* Type */}</td>
-                    <td>{/* Date Added */}</td>
+                    <td>{connection.energyProvider.name || 'N/A'}</td>
+                    <td>{connection.energyProvider.type}</td>
+                    <td>{connection.createdAt.toLocaleDateString('en_US')}</td>
                     <td>{/* Delete action */}</td>
                   </tr>
                 ))

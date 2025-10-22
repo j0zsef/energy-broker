@@ -1,13 +1,12 @@
 import Fastify from 'fastify';
-import { app } from './app/app';
-import { nodeEnvVars } from '../../../libs/shared/src/config/node-env-vars';
+import { app } from './app.js';
+import { nodeEnvVars } from '@energy-broker/shared';
 
 const host = nodeEnvVars.apiHost;
 const port = nodeEnvVars.apiPort;
 
 const server = Fastify({
   logger: true,
-
 });
 
 server.register(app);

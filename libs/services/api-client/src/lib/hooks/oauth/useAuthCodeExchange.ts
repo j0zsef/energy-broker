@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { AuthTokenRequest, AuthTokenResponse } from '@shared';
+import { AuthTokenRequest, AuthTokenResponse } from '@energy-broker/shared';
 
 export const useExchangeAuthCode = (tokenUrl: string) => {
   return useMutation({

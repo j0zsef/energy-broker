@@ -1,0 +1,18 @@
+{
+  "extends": "../../../tsconfig.project.json",
+  "compilerOptions": {
+    "outDir": "../../../dist/out-tsc/libs/services/api-client",
+    "tsBuildInfoFile": "../../../dist/out-tsc/libs/services/api-client/tsconfig.lib.tsbuildinfo",
+    "types": ["node"],
+    "rootDir": "src"
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": [
+    // exclude config and test files
+  ],
+  "references": [
+    {
+      "path": "../../shared/tsconfig.lib.json"
+    }
+  ]
+}

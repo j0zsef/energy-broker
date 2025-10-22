@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '../../api-client';
-import { EnergyProvidersResponse } from '@shared';
+import { EnergyProvidersResponse } from '@energy-broker/shared';
 
 export function useEnergyProviders() {
   return useQuery({

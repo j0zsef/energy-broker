@@ -1,59 +1,8 @@
 {
-  "compileOnSave": false,
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "baseUrl": ".",
+    "composite": true,
     "declaration": true,
-    "declarationMap": true,
-    "emitDeclarationOnly": true,
-    "esModuleInterop": true,
-    "importHelpers": true,
-    "jsx": "react-jsx",
-    "lib": [
-      "es2020",
-      "dom"
-    ],
-    "module": "esnext",
-    "moduleResolution": "node",
-    "rootDir": ".",
-    "outDir": "dist/out-tsc",
-    "sourceMap": true,
-    "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
-    "strict": true,
-    "target": "es2022",
-    "paths": {
-      "@backend": [
-        "libs/backend/src/index.ts"
-      ],
-      "@energy-broker/api-client": [
-        "libs/services/api-client/src/index.ts"
-      ],
-      "@energy-broker/components": [
-        "libs/components/src/index.ts"
-      ],
-      "@green-button-client": [
-        "libs/services/green-button-client/src/index.ts"
-      ],
-      "@shared": [
-        "libs/shared/src/index.ts"
-      ],
-      "@shared/node-env-vars": [
-        "libs/shared/src/config/node-env-vars.ts"
-      ],
-      "@shared/vite-env-vars": [
-        "libs/shared/src/config/vite-env-vars.ts"
-      ],
-      "@stores": [
-        "apps/frontend/src/stores/index.ts"
-      ]
-    },
-    "pretty": true
-  },
-  "exclude": [
-    "**/node_modules",
-    "**/tmp",
-    "**/dist",
-    "**/*.yaml"
-  ]
+    "allowJs": false,
+    "allowSyntheticDefaultImports": true
+  }
 }

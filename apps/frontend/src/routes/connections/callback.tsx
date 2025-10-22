@@ -1,4 +1,4 @@
-import { createFileRoute, redirect, useRouteContext } from '@tanstack/react-router';
+import { createFileRoute, redirect } from '@tanstack/react-router';
 import { EnergyProviderCallback } from '@energy-broker/components';
 
 export const Route = createFileRoute('/connections/callback')({
@@ -11,13 +11,7 @@ export const Route = createFileRoute('/connections/callback')({
 });
 
 function RouteComponent() {
-  const { auth } = useRouteContext({ from: '/connections/callback' });
-
-  if (!auth?.user?.sub) {
-    return <div>Loading...</div>;
-  }
-
   return (
-    <EnergyProviderCallback userId={auth.user.sub} />
+    <EnergyProviderCallback />
   );
 };

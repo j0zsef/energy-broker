@@ -7,7 +7,6 @@ import stylistic from '@stylistic/eslint-plugin';
 import tsEslint from '@typescript-eslint/eslint-plugin';
 import tsEslintParser from '@typescript-eslint/parser';
 
-
 export default [
   js.configs.recommended,
   {
@@ -53,14 +52,13 @@ export default [
   },
   {
     plugins: {
-      '@stylistic': stylistic,
       '@nx': nxPlugin,
+      '@stylistic': stylistic,
     },
     rules: {
       ...stylistic.configs['recommended-flat'].rules,
       '@stylistic/semi': ['error', 'always'],
       'no-undef': 'off',
-      'sort-keys': ['error', 'asc', { caseSensitive: true, natural: false, minKeys: 2 }],
       'sort-imports': ['error', {
         allowSeparatedGroups: false,
         ignoreCase: false,
@@ -68,6 +66,7 @@ export default [
         ignoreMemberSort: false,
         memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
       }],
+      'sort-keys': ['error', 'asc', { caseSensitive: true, minKeys: 2, natural: false }],
     },
   },
 ];

@@ -2,7 +2,6 @@
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
 import { defineConfig } from 'vite';
 import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
-import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
@@ -12,6 +11,10 @@ export default defineConfig({
     },
     emptyOutDir: true,
     outDir: '../../dist/apps/frontend',
+    lib: {
+      name: '@energy-broker/frontend',
+      // ...
+    },
     reportCompressedSize: true,
   },
 
@@ -23,7 +26,6 @@ export default defineConfig({
       target: 'react',
     }),
     react(),
-    nxViteTsPaths(),
     nxCopyAssetsPlugin(['*.md']),
   ],
 

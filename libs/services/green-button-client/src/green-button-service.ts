@@ -3,7 +3,7 @@ import {
   ElectricalDataUsagePoint,
   GreenButtonSummaryRequest,
   GreenButtonUsageRequest,
-} from '@shared';
+} from '@energy-broker/shared';
 
 export interface GreenButtonService {
   fetchSummary(token: string, request: GreenButtonSummaryRequest): Promise<ElectricalDataSummary[]>

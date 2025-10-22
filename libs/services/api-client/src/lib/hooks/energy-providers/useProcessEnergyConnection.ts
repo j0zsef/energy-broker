@@ -1,9 +1,10 @@
 
 
 import { useMutation } from '@tanstack/react-query';
-import { EnergyProviderConnection } from '@shared';
+import { EnergyProviderConnection } from '@energy-broker/shared';
 import { apiClient } from '../../api-client';
 import { useExchangeAuthCode } from '../oauth/useAuthCodeExchange';
+import {useAuth0} from "@auth0/auth0-react";
 
 export const useSaveEnergyConnection = () => {
   return useMutation({
@@ -18,12 +19,12 @@ export const useSaveEnergyConnection = () => {
 export const useProcessEnergyConnection = (tokenUrl: string) => {
   const exchangeCode = useExchangeAuthCode(tokenUrl);
   const saveConnection = useSaveEnergyConnection();
+  const { user } = useAuth0();
 
   const processConnection = async (code: string,
                                    clientId: string,
                                    energyProviderId: number,
-                                   redirectUri: string,
-                                   userId: string) => {
+                                   redirectUri: string) => {
     const tokenResponse = await exchangeCode.mutateAsync({
       code,
       grant_type: 'authorization_code',
@@ -37,7 +38,7 @@ export const useProcessEnergyConnection = (tokenUrl: string) => {
       expiresAt: new Date(tokenResponse.expires_in),
       refreshToken: tokenResponse.refresh_token,
       resourceUri: tokenResponse.resourceURI,
-      userId,
+      userId: user?.sub || 'unknown',
     });
   };
 

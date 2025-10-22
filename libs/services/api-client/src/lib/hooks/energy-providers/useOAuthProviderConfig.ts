@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '../../api-client';
-import { OAuthProviderConfig } from '@shared';
+import { OAuthProviderConfig } from '@energy-broker/shared';
 
 export function useOAuthProviderConfig(oAuthProviderConfigId?: number) {
   return useQuery({

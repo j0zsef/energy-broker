@@ -1,7 +1,10 @@
 packages:
   - apps/*
+  - apps/frontend/src/stores/*
   - libs/*
+  - libs/services/*
 ignoredBuiltDependencies:
   - '@prisma/client'
   - '@prisma/engines'
+  - nx
   - prisma

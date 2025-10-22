@@ -1,11 +1,10 @@
 {
   "name": "green-button-client",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "implicitDependencies": ["shared"],
   "sourceRoot": "libs/services/green-button-client/src",
   "projectType": "library",
   "tags": [],
   "targets": {
-    "type-check": {}
-  }
+  },
+  "implicitDependencies": ["shared"]
 }

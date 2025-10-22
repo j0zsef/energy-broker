@@ -1,0 +1,22 @@
+{
+  "extends": "../../tsconfig.project.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc/apps/frontend",
+    "tsBuildInfoFile": "../../dist/out-tsc/apps/frontend/tsconfig.app.tsbuildinfo",
+    "jsx": "react-jsx",
+    "moduleResolution": "bundler"
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["vite.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"],
+  "references": [
+    {
+      "path": "../../libs/components/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/services/api-client/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/shared/tsconfig.lib.json"
+    }
+  ]
+}

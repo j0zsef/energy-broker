@@ -1,5 +1,5 @@
 {
-  "name": "@backend",
+  "name": "@energy-broker/backend",
   "version": "0.0.1",
   "private": true,
   "dependencies": {
@@ -14,5 +14,12 @@
   },
   "prisma": {
     "seed": "ts-node ./prisma/seed.ts"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
   }
 }

@@ -1,9 +1,10 @@
 import * as ReactDOM from 'react-dom/client';
 import { Auth0ContextType, Auth0Wrapper, useAuth0Context } from './auth/auth0';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
-import { StrictMode } from 'react';
-
+import { StrictMode, useEffect } from 'react';
 import { routeTree } from './routeTree.gen';
+import { setAuthTokenGetter } from '@energy-broker/api-client';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export type RouterContext = {
   auth: Auth0ContextType
@@ -32,6 +33,7 @@ declare module '@tanstack/react-router' {
 
 function App() {
   const auth = useAuth0Context();
+  const { getAccessTokenSilently } = useAuth0();
 
   if (auth.isLoading) {
     return (
@@ -40,6 +42,10 @@ function App() {
       </div>
     );
   }
+
+  useEffect(() => {
+    setAuthTokenGetter(() => getAccessTokenSilently());
+  }, [getAccessTokenSilently]);
 
   return <RouterProvider router={router} context={{ auth }} />;
 }

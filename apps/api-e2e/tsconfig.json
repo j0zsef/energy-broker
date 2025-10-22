@@ -1,10 +1,15 @@
 {
-  "compilerOptions": {
-    "types": [
-      "jest",
-      "node"
-    ]
-  },
   "extends": "../../tsconfig.base.json",
-  "include": ["**/*"]
+  "files": [], // intentionally empty
+  "references": [
+    // All project dependencies
+    // UPDATED BY NX SYNC
+    // This project's other tsconfig.*.json files
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
 }

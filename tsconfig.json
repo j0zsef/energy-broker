@@ -1,0 +1,39 @@
+{
+  "extends": "./tsconfig.base.json",
+  "files": [],
+  "references": [
+    {
+      "path": "./libs/backend"
+    },
+    {
+      "path": "./libs/components"
+    },
+    {
+      "path": "./libs/services/api-client"
+    },
+    {
+      "path": "./libs/services/green-button-client"
+    },
+    {
+      "path": "./libs/shared"
+    },
+    {
+      "path": "./apps/mock-green-button-server"
+    },
+    {
+      "path": "./apps/frontend-e2e"
+    },
+    {
+      "path": "./apps/frontend"
+    },
+    {
+      "path": "./apps/api-e2e"
+    },
+    {
+      "path": "./apps/api"
+    },
+    {
+      "path": "./libs/stores"
+    }
+  ]
+}

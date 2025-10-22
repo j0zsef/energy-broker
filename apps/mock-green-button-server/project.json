@@ -16,7 +16,6 @@
         "main": "apps/mock-green-button-server/src/main.ts",
         "tsConfig": "apps/mock-green-button-server/tsconfig.json",
         "assets": ["apps/mock-green-button-server/src/assets"],
-        "generatePackageJson": true,
         "esbuildOptions": {
           "sourcemap": true,
           "outExtension": {

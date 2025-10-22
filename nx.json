@@ -52,6 +52,20 @@
         "targetName": "test"
       },
       "exclude": ["apps/api-e2e/**/*"]
+    },
+    {
+      "plugin": "@nx/js/typescript",
+      "options": {
+        "typecheck": {
+          "targetName": "typecheck"
+        },
+        "build": {
+          "targetName": "build",
+          "configName": "tsconfig.lib.json",
+          "buildDepsName": "build-deps",
+          "watchDepsName": "watch-deps"
+        }
+      }
     }
   ],
   "targetDefaults": {
@@ -59,21 +73,6 @@
       "dependsOn": ["^build"]
     },
     "@nx/esbuild:esbuild": {
-      "cache": true,
-      "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
-    },
-    "type-check": {
-      "dependsOn": ["^type-check"],
-      "executor": "nx:run-commands",
-      "inputs": ["default"],
-      "options": {
-        "commands": ["tsc -p tsconfig.json"],
-        "cwd": "{projectRoot}"
-      }
-    },
-    "@nx/js:tsc": {
-      "cache": true,
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
     }

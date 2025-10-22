@@ -4,7 +4,7 @@ import {
   ElectricalDataUsagePoint,
   GreenButtonSummaryRequest,
   GreenButtonUsageRequest,
-} from '@shared';
+} from '@energy-broker/shared';
 import { AxiosInstance } from 'axios';
 import { GreenButtonService } from '../green-button-service';
 import { XMLParser } from 'fast-xml-parser';

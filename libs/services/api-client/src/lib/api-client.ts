@@ -1,15 +1,33 @@
 import { QueryClient } from '@tanstack/react-query';
-import { viteEnvVars } from '@shared/vite-env-vars';
+import { viteEnvVars } from '@energy-broker/shared';
 
 const baseUrl = `http://${viteEnvVars.apiHost}:${viteEnvVars.apiPort}`;
 
+let getAccessToken: (() => Promise<string>) | null = null;
+
+export const setAuthTokenGetter = (getter: () => Promise<string>) => {
+  getAccessToken = getter;
+};
+
 export const apiClient = async <T>(endpoint: string, options?: RequestInit): Promise<T> => {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...(options?.headers as Record<string, string>),
+  };
+
+  if (getAccessToken) {
+    try {
+      const token = await getAccessToken();
+      headers['Authorization'] = `Bearer ${token}`;
+    } catch (error) {
+      console.error('Failed to get access token:', error);
+      throw error;
+    }
+  }
+
   const response = await fetch(`${baseUrl}/${endpoint}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
     ...options,
+    headers,
   });
 
   if (!response.ok) {

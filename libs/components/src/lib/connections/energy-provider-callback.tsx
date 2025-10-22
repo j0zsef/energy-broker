@@ -1,15 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { Spinner } from '../shared/spinner';
-import { useAuthStore } from '@stores';
+import { useAuthStore } from '@energy-broker/stores';
 import { useNavigate } from '@tanstack/react-router';
 
 import { useProcessEnergyConnection } from '@energy-broker/api-client';
 
-export type EnergyProviderCallbackProps = {
-  userId: string
-};
-
-export const EnergyProviderCallback = ({ userId }: EnergyProviderCallbackProps) => {
+export const EnergyProviderCallback = () => {
   const navigate = useNavigate();
   const hasProcessed = useRef(false);
   const params = new URLSearchParams(window.location.search);
@@ -44,7 +40,7 @@ export const EnergyProviderCallback = ({ userId }: EnergyProviderCallbackProps) 
     if (tokenUrl && clientId && providerId) {
       hasProcessed.current = true;
 
-      processConnection(code, clientId, providerId, redirectUri, userId)
+      processConnection(code, clientId, providerId, redirectUri)
         .then(() => {
           useAuthStore.setState({
             authTokenUrl: undefined,
@@ -59,7 +55,7 @@ export const EnergyProviderCallback = ({ userId }: EnergyProviderCallbackProps) 
       console.error('Missing auth configuration');
       navigate({ to: '/connections' });
     }
-  }, [code, tokenUrl, userId]);
+  }, [code, tokenUrl]);
 
   if (isLoading) {
     return <Spinner />;

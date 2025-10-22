@@ -1,0 +1,21 @@
+{
+  "extends": "../../tsconfig.project.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc/apps/api",
+    "tsBuildInfoFile": "../../dist/out-tsc/apps/api/tsconfig.app.tsbuildinfo",
+    "moduleResolution": "bundler"
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"],
+  "references": [
+    {
+      "path": "../../libs/backend/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/services/green-button-client/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/shared/tsconfig.lib.json"
+    }
+  ]
+}
