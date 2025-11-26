@@ -5,7 +5,7 @@ import { GreenButtonUsageRequest } from '@energy-broker/shared';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import z from 'zod';
 
-export default async function (fastify: FastifyInstance) {
+const usage = async (fastify: FastifyInstance) => {
   const opts = {
     preHandler: fastify.requireAuth(),
     schema: {
@@ -43,7 +43,9 @@ export default async function (fastify: FastifyInstance) {
 
       return { usagePoints };
     });
-}
+};
+
+export default usage;
 
 /*
 TODO: AUTH

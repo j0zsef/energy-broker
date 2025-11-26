@@ -1,9 +1,9 @@
 import { FastifyInstance } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
-import { prismaClient } from '@energy-broker/backend';
+import { prismaClient } from '../../../prisma-client';
 import z from 'zod';
 
-export default async function (fastify: FastifyInstance) {
+const oAuthConfig = async (fastify: FastifyInstance) => {
   const ops = {
     preHandler: fastify.requireAuth(),
     schema: {
@@ -27,4 +27,6 @@ export default async function (fastify: FastifyInstance) {
         tokenUrl: config.tokenUrl,
       };
     });
-}
+};
+
+export default oAuthConfig;

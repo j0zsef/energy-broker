@@ -26,7 +26,8 @@
           "sourcemap": true,
           "outExtension": {
             ".js": ".js"
-          }
+          },
+          "resolveExtensions": [".ts", ".js"]
         }
       },
       "configurations": {
@@ -90,5 +91,5 @@
       }
     }
   },
-  "implicitDependencies": ["backend", "shared", "green-button-client"]
+  "implicitDependencies": ["shared", "green-button-client"]
 }

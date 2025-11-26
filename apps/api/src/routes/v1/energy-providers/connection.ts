@@ -1,8 +1,8 @@
 import { EnergyProviderConnection } from '@energy-broker/shared';
 import { FastifyInstance } from 'fastify';
-import { prismaClient } from '@energy-broker/backend';
+import { prismaClient } from '../../../prisma-client.js';
 
-export default async function (fastify: FastifyInstance) {
+const connection = async (fastify: FastifyInstance) => {
   fastify.post('/connection', async function (request, reply) {
     try {
       const authData = request.body as EnergyProviderConnection;
@@ -21,4 +21,6 @@ export default async function (fastify: FastifyInstance) {
       });
     }
   });
-}
+};
+
+export default connection;

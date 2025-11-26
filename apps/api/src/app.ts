@@ -1,11 +1,11 @@
-import * as summary from './routes/v1/connections/summary';
-import * as usage from './routes/v1/connections/usage';
-import * as connection from './routes/v1/energy-providers/connection';
-import * as connections from './routes/v1/energy-providers/connections';
-import * as energyProviders from './routes/v1/energy-providers/energy-providers';
-import * as oauthConfig from './routes/v1/energy-providers/oauth-config';
+import summary from './routes/v1/connections/summary.js';
+import usage from './routes/v1/connections/usage.js';
+import connection from './routes/v1/energy-providers/connection.js';
+import connections from './routes/v1/energy-providers/connections.js';
+import energyProviders from './routes/v1/energy-providers/energy-providers.js';
+import oauthConfig from './routes/v1/energy-providers/oauth-config.js';
 
-import { FastifyInstance, FastifyPluginAsync } from 'fastify';
+import { FastifyInstance } from 'fastify';
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 import Auth0 from '@auth0/auth0-fastify-api';
 
@@ -38,7 +38,12 @@ const envOptions = {
 export async function app(fastify: FastifyInstance) {
   fastify.register(sensible);
 
-  fastify.register(summary as FastifyPluginAsync);
+  fastify.register(summary);
+  fastify.register(usage);
+  fastify.register(connection);
+  fastify.register(connections);
+  fastify.register(energyProviders);
+  fastify.register(oauthConfig);
 
   fastify.register(fastifyCors, {
     origin: 'http://localhost:4200',

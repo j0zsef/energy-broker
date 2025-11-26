@@ -31,7 +31,6 @@ Uses Auth0 for authentication. Need to add users in Auth0 dashboard. However, th
 ├── api/              # Fastify API
 
 /libs
-├── backend/          # Backend utilities (DB, auth, etc.)
 ├── components/       # Frontend components (UI library)
 ├── services/         # Domain-specific services (external API clients, etc.)
 │   ├── green-button-client/

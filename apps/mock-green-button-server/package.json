@@ -1,3 +1,4 @@
 {
-  "name": "@energy-broker/mock-green-button-server"
+  "name": "@energy-broker/mock-green-button-server",
+  "type": "module"
 }

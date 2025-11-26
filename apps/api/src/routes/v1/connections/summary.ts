@@ -5,7 +5,7 @@ import { GreenButtonSummaryRequest } from '@energy-broker/shared';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import z from 'zod';
 
-export default async function (fastify: FastifyInstance) {
+const summary = async (fastify: FastifyInstance) => {
   const opts = {
     preHandler: fastify.requireAuth(),
     schema: {
@@ -43,3 +43,5 @@ export default async function (fastify: FastifyInstance) {
       return { summary };
     });
 }
+
+export default summary;

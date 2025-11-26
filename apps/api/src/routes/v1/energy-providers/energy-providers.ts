@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify';
-import { prismaClient } from '@energy-broker/backend';
+import { prismaClient } from '../../../prisma-client';
 
-export default async function (fastify: FastifyInstance) {
+const energyProviders = (fastify: FastifyInstance) => {
   fastify.get('/', { preHandler: fastify.requireAuth() },
     async function (request, reply) {
       try {
@@ -32,4 +32,6 @@ export default async function (fastify: FastifyInstance) {
         });
       }
     });
-}
+};
+
+export default energyProviders;
