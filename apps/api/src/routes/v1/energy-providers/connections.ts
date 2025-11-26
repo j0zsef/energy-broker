@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { prismaClient } from '../../../prisma-client';
+import { prismaClient } from '../../../prisma-client.js';
 
 const connections = async (fastify: FastifyInstance) => {
   fastify.get('/connections', { preHandler: fastify.requireAuth() },

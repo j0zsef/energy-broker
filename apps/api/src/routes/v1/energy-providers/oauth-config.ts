@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
-import { prismaClient } from '../../../prisma-client';
+import { prismaClient } from '../../../prisma-client.js';
 import z from 'zod';
 
 const oAuthConfig = async (fastify: FastifyInstance) => {

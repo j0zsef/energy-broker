@@ -9,9 +9,7 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "platform": "node",
         "outputPath": "dist/apps/mock-green-button-server",
-        "format": ["esm"],
         "bundle": false,
         "main": "apps/mock-green-button-server/src/main.ts",
         "tsConfig": "apps/mock-green-button-server/tsconfig.json",
@@ -22,7 +20,8 @@
             ".js": ".js"
           },
           "entryNames": "[name]",
-          "outbase": "apps/mock-green-button-server/src"
+          "outbase": "apps/mock-green-button-server/src",
+          "resolveExtensions": [".ts", ".js"]
         }
       },
       "configurations": {

@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { prismaClient } from '../../../prisma-client';
+import { prismaClient } from '../../../prisma-client.js';
 
 const energyProviders = (fastify: FastifyInstance) => {
   fastify.get('/', { preHandler: fastify.requireAuth() },
