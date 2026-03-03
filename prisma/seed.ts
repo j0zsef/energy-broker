@@ -1,5 +1,5 @@
-import { prismaClient } from "../src";
-import { EnergyProvider, EnergyProviderLocation, OAuthProviderConfig } from "../../shared/src";
+import { prismaClient } from '../src';
+import { EnergyProvider, EnergyProviderLocation, OAuthProviderConfig } from '../../shared/src';
 
 async function main() {
   const mockUtilOAuth = await prismaClient.oAuthProviderConfig.upsert({
@@ -8,25 +8,25 @@ async function main() {
     create: {
       authUrl: 'http://localhost:3001/authorize',
       clientId: 'mock-util',
-      redirectUri: "http://localhost:4200/connections/callback",
+      redirectUri: 'http://localhost:9200/connections/callback',
       scopes: '',
       tokenUrl: 'http://localhost:3002/token',
     } as OAuthProviderConfig,
-  })
-  console.log({ mockUtilOAuth })
+  });
+  console.log({ mockUtilOAuth });
 
   const mockUtilProvider = await prismaClient.energyProvider.upsert({
-      where: { name: 'Mock Utility' },
-      update: {},
-      create: {
-        fullName: 'Mock Utility',
-        name: 'Mock Utility',
-        oAuthProviderConfigId: mockUtilOAuth.id,
-        type: 'electrical',
-      } as EnergyProvider,
-  })
+    where: { name: 'Mock Utility' },
+    update: {},
+    create: {
+      fullName: 'Mock Utility',
+      name: 'Mock Utility',
+      oAuthProviderConfigId: mockUtilOAuth.id,
+      type: 'electrical',
+    } as EnergyProvider,
+  });
 
-  console.log({ mockUtilProvider })
+  console.log({ mockUtilProvider });
 
   const mockUtilLocation = await prismaClient.energyProviderLocation.upsert({
     where: { id: 1 },
@@ -35,16 +35,16 @@ async function main() {
       energyProviderId: mockUtilProvider.id,
       zip: '60657',
     } as EnergyProviderLocation,
-  })
+  });
 
-  console.log({ mockUtilLocation })
+  console.log({ mockUtilLocation });
 }
 main()
   .then(async () => {
-    await prismaClient.$disconnect()
+    await prismaClient.$disconnect();
   })
   .catch(async (e) => {
-    console.error(e)
-    await prismaClient.$disconnect()
-    process.exit(1)
-  })
+    console.error(e);
+    await prismaClient.$disconnect();
+    process.exit(1);
+  });

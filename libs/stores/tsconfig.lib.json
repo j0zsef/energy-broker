@@ -3,6 +3,7 @@
   "compilerOptions": {
     "outDir": "../../dist/out-tsc/libs/stores",
     "tsBuildInfoFile": "../../dist/out-tsc/libs/stores/tsconfig.lib.tsbuildinfo",
+    "rootDir": "src"
   },
   "include": ["src/**/*.ts"],
   "references": []

@@ -1,7 +1,7 @@
 import { Auth0Provider, User, useAuth0 } from '@auth0/auth0-react';
 import { createContext, useContext } from 'react';
 import { ReactNode } from 'react';
-import { viteEnvVars } from '@energy-broker/shared';
+import { authConfig } from '../config/auth-config';
 
 export interface Auth0ContextType {
   isAuthenticated: boolean
@@ -16,13 +16,15 @@ const Auth0Context = createContext<Auth0ContextType | undefined>(undefined);
 export function Auth0Wrapper({ children }: { children: ReactNode }) {
   return (
     <Auth0Provider
-      domain={viteEnvVars.auth0Domain}
-      clientId={viteEnvVars.auth0ClientId}
+      domain={authConfig.auth0Domain}
+      clientId={authConfig.auth0ClientId}
       authorizationParams={{
-        audience: viteEnvVars.auth0Audience,
+        audience: authConfig.auth0Audience,
         redirect_uri: window.location.origin,
-        scope: 'read:current_user update:current_user_metadata',
+        scope: 'openid profile email offline_access',
       }}
+      useRefreshTokens={true}
+      cacheLocation="localstorage"
     >
       <Auth0ContextProvider>{children}</Auth0ContextProvider>
     </Auth0Provider>

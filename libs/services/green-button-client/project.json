@@ -5,6 +5,27 @@
   "projectType": "library",
   "tags": [],
   "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/out-tsc/libs/services/green-button-client",
+        "main": "libs/services/green-button-client/src/index.ts",
+        "tsConfig": "libs/services/green-button-client/tsconfig.lib.json",
+        "bundle": false,
+        "esbuildOptions": {
+          "outExtension": { ".js": ".js" }
+        }
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/dist/out-tsc/libs/services/green-button-client"],
+      "options": {
+        "cwd": "libs/services/green-button-client",
+        "command": "tsc --build tsconfig.lib.json --emitDeclarationOnly"
+      }
+    }
   },
   "implicitDependencies": ["shared"]
 }

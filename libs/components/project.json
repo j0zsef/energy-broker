@@ -5,5 +5,12 @@
   "projectType": "library",
   "tags": [],
   "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "libs/components",
+        "command": "tsc --build tsconfig.lib.json --emitDeclarationOnly"
+      }
+    }
   }
 }

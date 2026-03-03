@@ -13,6 +13,6 @@ export default defineConfig({
         production: 'pnpm exec nx run frontend:preview',
       },
     }),
-    baseUrl: 'http://localhost:4200',
+    baseUrl: 'http://localhost:9200',
   },
 });

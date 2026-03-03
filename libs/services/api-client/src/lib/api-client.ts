@@ -1,7 +1,7 @@
 import { QueryClient } from '@tanstack/react-query';
-import { viteEnvVars } from '@energy-broker/shared';
+import { apiConfig } from '../config/api-config';
 
-const baseUrl = `http://${viteEnvVars.apiHost}:${viteEnvVars.apiPort}`;
+const baseUrl = apiConfig.apiBaseUrl;
 
 let getAccessToken: (() => Promise<string>) | null = null;
 

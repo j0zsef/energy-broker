@@ -5,6 +5,13 @@
   "projectType": "library",
   "tags": [],
   "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "libs/services/api-client",
+        "command": "tsc --build tsconfig.lib.json --emitDeclarationOnly"
+      }
+    }
   },
   "implicitDependencies": [
     "shared"

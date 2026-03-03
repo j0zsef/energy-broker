@@ -1,0 +1,16 @@
+{
+  "name": "stores",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/stores/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "libs/stores",
+        "command": "tsc --build tsconfig.lib.json --emitDeclarationOnly"
+      }
+    }
+  }
+}

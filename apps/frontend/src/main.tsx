@@ -35,6 +35,10 @@ function App() {
   const auth = useAuth0Context();
   const { getAccessTokenSilently } = useAuth0();
 
+  useEffect(() => {
+    setAuthTokenGetter(() => getAccessTokenSilently());
+  }, [getAccessTokenSilently]);
+
   if (auth.isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -42,10 +46,6 @@ function App() {
       </div>
     );
   }
-
-  useEffect(() => {
-    setAuthTokenGetter(() => getAccessTokenSilently());
-  }, [getAccessTokenSilently]);
 
   return <RouterProvider router={router} context={{ auth }} />;
 }

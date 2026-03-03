@@ -31,7 +31,7 @@ export default defineConfig({
 
   preview: {
     host: 'localhost',
-    port: 4300,
+    port: 9300,
 
   },
 
@@ -39,7 +39,7 @@ export default defineConfig({
 
   server: {
     host: 'localhost',
-    port: 4200,
+    port: 9200,
   },
 
   // Uncomment this if you are using workers.

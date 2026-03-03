@@ -1,5 +1,5 @@
-import { GenericGreenButtonProvider } from './providers/generic-green-button-provider';
-import { GreenButtonService } from './green-button-service';
+import { GenericGreenButtonProvider } from './providers/generic-green-button-provider.js';
+import { GreenButtonService } from './green-button-service.js';
 import axios from 'axios';
 
 export class GreenButtonFactory {

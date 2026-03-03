@@ -1,21 +1,16 @@
-import summary from './routes/v1/connections/summary.js';
-import usage from './routes/v1/connections/usage.js';
-import connection from './routes/v1/energy-providers/connection.js';
-import connections from './routes/v1/energy-providers/connections.js';
-import energyProviders from './routes/v1/energy-providers/energy-providers.js';
-import oauthConfig from './routes/v1/energy-providers/oauth-config.js';
-
 import { FastifyInstance } from 'fastify';
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 import Auth0 from '@auth0/auth0-fastify-api';
-
+import autoload from '@fastify/autoload';
 import fastifyCors from '@fastify/cors';
 import { fastifyEnv } from '@fastify/env';
-import { nodeEnvVars } from '@energy-broker/shared';
 import sensible from '@fastify/sensible';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
+import { authConfig } from "./config/auth-config.js";
 
-/* eslint-disable-next-line */
-export interface AppOptions {}
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export type Envs = {
   GREEN_BUTTON_TOKEN: string
@@ -37,24 +32,20 @@ const envOptions = {
 
 export async function app(fastify: FastifyInstance) {
   fastify.register(sensible);
-
-  fastify.register(summary);
-  fastify.register(usage);
-  fastify.register(connection);
-  fastify.register(connections);
-  fastify.register(energyProviders);
-  fastify.register(oauthConfig);
-
+  fastify.register(fastifyEnv, envOptions);
   fastify.register(fastifyCors, {
-    origin: 'http://localhost:4200',
+    origin: 'http://localhost:9200',
   });
 
   await Auth0(fastify, {
-    audience: nodeEnvVars.auth0Audience,
-    domain: nodeEnvVars.auth0Domain,
+    audience: authConfig.auth0Audience,
+    domain: authConfig.auth0Domain,
   });
 
-  fastify.register(fastifyEnv, envOptions);
+  fastify.register(autoload, {
+    dir: join(__dirname, 'routes'),
+    options: { prefix: '' },
+  });
 
   fastify.setValidatorCompiler(validatorCompiler);
   fastify.setSerializerCompiler(serializerCompiler);

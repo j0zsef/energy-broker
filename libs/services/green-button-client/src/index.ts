@@ -1,1 +1,1 @@
-export * from './green-button-factory';
+export * from './green-button-factory.js';

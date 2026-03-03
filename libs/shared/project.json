@@ -9,7 +9,7 @@
       "executor": "@nx/esbuild:esbuild",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/libs/shared",
+        "outputPath": "dist/out-tsc/libs/shared",
         "main": "libs/shared/src/index.ts",
         "tsConfig": "libs/shared/tsconfig.lib.json",
         "bundle": false,
@@ -18,6 +18,13 @@
         }
       }
     },
-    "typecheck": {}
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/dist/out-tsc/libs/shared"],
+      "options": {
+        "cwd": "libs/shared",
+        "command": "tsc --build tsconfig.lib.json --emitDeclarationOnly"
+      }
+    }
   }
 }
