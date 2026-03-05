@@ -7,11 +7,9 @@
   "targets": {
     "typecheck": {
       "executor": "nx:run-commands",
-      "dependsOn": ["^build","^typecheck"],
-      "outputs": ["{workspaceRoot}/dist/out-tsc/apps/api"],
       "options": {
         "cwd": "apps/api",
-        "command": "tsc --build tsconfig.app.json --emitDeclarationOnly"
+        "command": "tsc -p tsconfig.app.json --noEmit"
       }
     },
     "build": {
@@ -27,7 +25,7 @@
         "outputPath": "dist/apps/api",
         "bundle": false,
         "main": "apps/api/src/server.ts",
-        "tsConfig": "apps/api/tsconfig.json",
+        "tsConfig": "apps/api/tsconfig.app.json",
         "assets": [
           "apps/api/src/assets"
         ],

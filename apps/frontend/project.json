@@ -5,6 +5,13 @@
   "projectType": "application",
   "tags": [],
   "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/frontend",
+        "command": "tsc -p tsconfig.app.json --noEmit"
+      }
+    },
     "build": {
       "dependsOn": ["typecheck"]
     }

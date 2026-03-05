@@ -1,12 +1,5 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "files": [], // intentionally empty
-  "references": [
-    // All project dependencies
-    // UPDATED BY NX SYNC
-    // This project's other tsconfig.*.json files
-    {
-      "path": "./tsconfig.app.json"
-    }
-  ]
+  "extends": "../../tsconfig.project.json",
+  "include": ["src/**/*.ts"],
+  "exclude": []
 }

@@ -11,10 +11,6 @@ export default defineConfig({
     },
     emptyOutDir: true,
     outDir: '../../dist/apps/frontend',
-    lib: {
-      name: '@energy-broker/frontend',
-      // ...
-    },
     reportCompressedSize: true,
   },
 

@@ -9,7 +9,7 @@ export default [
       parser: tsEslintParser,
       parserOptions: {
         ecmaVersion: 'latest',
-        project: './tsconfig.lib.json',
+        project: './tsconfig.json',
         sourceType: 'module',
       },
     },

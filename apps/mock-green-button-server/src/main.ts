@@ -41,10 +41,11 @@ const MOCK_GREEN_BUTTON_PORT = 3002; // Your usage endpoint
     });
   });
 
-  app.get('/resource/usage', async (req, res) => {
+  app.get('/resource/usage', async (req, res): Promise<void> => {
     const authHeader = req.headers['authorization'];
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).send('Missing token');
+      res.status(401).send('Missing token');
+      return;
     }
 
     const token = authHeader.replace('Bearer ', '');
@@ -67,7 +68,8 @@ const MOCK_GREEN_BUTTON_PORT = 3002; // Your usage endpoint
     const introspectData = await introspectResp.json() as IntrospectResponse;
 
     if (!introspectData.active) {
-      return res.status(401).send('Invalid token');
+      res.status(401).send('Invalid token');
+      return;
     }
 
     // ✅ Token is valid, return fake usage data

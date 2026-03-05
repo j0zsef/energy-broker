@@ -21,8 +21,7 @@ const connections = async (fastify: FastifyInstance) => {
       catch (error) {
         fastify.log.error(error);
         return reply.status(500).send({
-          error: 'Failed to fetch energy provider auth',
-          message: error instanceof Error ? error.message : 'Unknown error',
+          error: 'Failed to fetch energy provider connections',
         });
       }
     });

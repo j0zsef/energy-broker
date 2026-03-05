@@ -24,7 +24,7 @@ export function Auth0Wrapper({ children }: { children: ReactNode }) {
         scope: 'openid profile email offline_access',
       }}
       useRefreshTokens={true}
-      cacheLocation="localstorage"
+      cacheLocation="memory"
     >
       <Auth0ContextProvider>{children}</Auth0ContextProvider>
     </Auth0Provider>

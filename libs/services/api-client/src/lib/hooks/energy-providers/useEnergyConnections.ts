@@ -1,6 +1,6 @@
-import { EnergyProviderConnectionResponse } from "@energy-broker/shared";
-import { useQuery } from "@tanstack/react-query";
-import { apiClient } from "../../api-client";
+import { EnergyProviderConnectionResponse } from '@energy-broker/shared';
+import { apiClient } from '../../api-client';
+import { useQuery } from '@tanstack/react-query';
 
 export const useEnergyConnections = () => {
   const endpoint = `v1/energy-providers/connections`;

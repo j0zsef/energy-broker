@@ -5,13 +5,16 @@ import { Spinner } from '../shared/spinner';
 import { useAuthStore } from '@energy-broker/stores';
 import { useEnergyProviders } from '@energy-broker/api-client';
 
-const buildAuthUri = (baseUri: string, clientId: string, redirectUri: string) => {
+const buildAuthUri = (baseUri: string, clientId: string, redirectUri: string, state: string) => {
   const url = new URL(baseUri);
   url.searchParams.set('client_id', clientId);
   url.searchParams.set('redirect_uri', redirectUri);
   url.searchParams.set('response_type', 'code');
+  url.searchParams.set('state', state);
   return url.toString();
 };
+
+const generateOAuthState = () => crypto.randomUUID();
 
 export const AddEnergyProvider = () => {
   const { data: energyProviders, isLoading: loadingProviders, error: providersError } = useEnergyProviders();
@@ -55,10 +58,12 @@ export const AddEnergyProvider = () => {
   // Redirect when config is loaded and pendingRedirect is true
   useEffect(() => {
     if (pendingRedirect && oauthConfig && selectedProvider) {
+      const state = generateOAuthState();
       useAuthStore.getState().setAuthTokenUrl(oauthConfig.tokenUrl);
       useAuthStore.getState().setClientId(oauthConfig.clientId);
+      useAuthStore.getState().setOAuthState(state);
       useAuthStore.getState().setProviderId(selectedProvider.id);
-      window.location.href = buildAuthUri(oauthConfig.authUrl, oauthConfig.clientId, oauthConfig.redirectUri);
+      window.location.href = buildAuthUri(oauthConfig.authUrl, oauthConfig.clientId, oauthConfig.redirectUri, state);
     }
   }, [pendingRedirect, oauthConfig, selectedProvider]);
 

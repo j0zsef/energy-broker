@@ -44,7 +44,7 @@ export const EnergyConnections = () => {
                     { /* link to dynamic energy connection route */ }
                     <td>{connection.energyProvider.name || 'N/A'}</td>
                     <td>{connection.energyProvider.type}</td>
-                    <td>{connection.createdAt.toLocaleDateString('en_US')}</td>
+                    <td>{new Date(connection.createdAt).toLocaleDateString('en-US')}</td>
                     <td>{/* Delete action */}</td>
                   </tr>
                 ))

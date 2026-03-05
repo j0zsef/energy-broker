@@ -1,5 +1,5 @@
 export * from './lib/api-client';
-export * from './lib/hooks/connections/useEnergySummary';
+export { fetchEnergySummary } from './lib/hooks/connections/useEnergySummary';
 export * from './lib/hooks/connections/useEnergyUsage';
 export * from './lib/hooks/energy-providers/useEnergyProviders';
 export * from './lib/hooks/energy-providers/useProcessEnergyConnection';

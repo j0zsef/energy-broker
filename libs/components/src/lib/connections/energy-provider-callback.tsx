@@ -11,6 +11,7 @@ export const EnergyProviderCallback = () => {
   const params = new URLSearchParams(window.location.search);
 
   const code = params.get('code');
+  const returnedState = params.get('state');
   const oauthError = params.get('error');
   const errorDescription = params.get('error_description');
 
@@ -27,8 +28,18 @@ export const EnergyProviderCallback = () => {
     );
   }
 
+  const storedState = useAuthStore.getState().oauthState;
+
+  if (!returnedState || returnedState !== storedState) {
+    return (
+      <div>
+        OAuth Error: State mismatch. This may indicate a CSRF attack. Please try again.
+      </div>
+    );
+  }
+
   const tokenUrl = useAuthStore.getState().authTokenUrl;
-  const redirectUri = window.location.href;
+  const redirectUri = window.location.origin + window.location.pathname;
   const { processConnection, isLoading, error } = useProcessEnergyConnection(tokenUrl || '');
 
   useEffect(() => {
@@ -45,6 +56,7 @@ export const EnergyProviderCallback = () => {
           useAuthStore.setState({
             authTokenUrl: undefined,
             clientId: undefined,
+            oauthState: undefined,
             providerId: undefined,
           });
           navigate({ to: '/connections' });

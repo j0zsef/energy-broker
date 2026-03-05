@@ -1,13 +1,6 @@
 {
   "extends": "../../tsconfig.project.json",
-  "compilerOptions": {
-    "outDir": "../../dist/out-tsc/libs/shared",
-    "tsBuildInfoFile": "../../dist/out-tsc/libs/shared/tsconfig.lib.tsbuildinfo",
-    "rootDir": "src"
-  },
+  "compilerOptions": {},
   "include": ["src/**/*.ts"],
-  "exclude": [
-  ],
-  "references": [
-  ]
+  "exclude": []
 }

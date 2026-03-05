@@ -46,28 +46,3 @@ const usage = async (fastify: FastifyInstance) => {
 };
 
 export default usage;
-
-/*
-TODO: AUTH
-
-const authHeader = request.headers.authorization;
-const gbToken = request.headers['x-gb-token'];
-const gbResourceUri = request.headers['x-gb-resource-uri'];
-const provider = request.headers['x-gb-provider'] || 'generic';
-
-if (!authHeader || !gbToken || !gbResourceUri) {
-  return reply.status(401).send({ error: 'Missing authentication data' });
-}
-
-const token = authHeader.split(' ')[1];
-try {
-  const decoded = jwt.verify(token, process.env.AUTH0_PUBLIC_KEY, {
-    algorithms: ['RS256'],
-  }) as { sub: string };
-
-  // ...proceed with third-party API call using gbToken, gbResourceUri, provider
-} catch (err) {
-  return reply.status(401).send({ error: 'Invalid token' });
-}
-
- */

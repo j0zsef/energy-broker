@@ -1,18 +1,8 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "files": [], // intentionally empty
-  "references": [
-    {
-      "path": "../../libs/components"
-    },
-    {
-      "path": "../../libs/services/api-client"
-    },
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.spec.json"
-    }
-  ]
+  "extends": "../../tsconfig.project.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "moduleResolution": "bundler"
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts"]
 }

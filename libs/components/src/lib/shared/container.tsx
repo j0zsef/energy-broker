@@ -1,14 +1,14 @@
 import './container.scss';
-import React from 'react';
 import { Container as ReactBootstrapContainer } from 'react-bootstrap';
+import { ReactNode } from 'react';
 
 export type ContainerProps = {
-  children: React.ReactNode
+  children: ReactNode
   border?: boolean
   fluid?: boolean
 };
 
-export const Container: React.FC<ContainerProps> = ({ border, children, fluid }) => {
+export const Container = ({ border, children, fluid }: ContainerProps) => {
   const borderStyle = border ? { border: '2px solid #ccc', borderRadius: '0.5rem' } : {};
 
   return (

@@ -28,7 +28,6 @@ const energyProviders = (fastify: FastifyInstance) => {
         fastify.log.error(error);
         return reply.status(500).send({
           error: 'Failed to fetch energy providers',
-          message: error instanceof Error ? error.message : 'Unknown error',
         });
       }
     });

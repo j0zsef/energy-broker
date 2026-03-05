@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c \" import sys, json data = sys.stdin.read\\(\\) lines = [l for l in data.strip\\(\\).split\\(''\\\\n''\\) if l.strip\\(\\)] for line in lines: try: obj = json.loads\\(line\\) if obj.get\\(''type''\\) == ''assistant'' and obj.get\\(''message'', {}\\).get\\(''role''\\) == ''assistant'': content = obj[''message''].get\\(''content'', []\\) for block in content: if isinstance\\(block, dict\\) and block.get\\(''type''\\) == ''text'': text = block[''text''] if len\\(text\\) > 200: print\\(''---ASSISTANT MSG---''\\) print\\(text[:5000]\\) print\\(''...''\\) except: pass \")",
+      "Bash(npx eslint:*)",
+      "Bash(pnpm nx run:*)",
+      "Bash(pnpm nx show project:*)",
+      "Bash(python3:*)",
+      "Bash(pnpm nx reset:*)",
+      "Bash(pnpm nx run-many:*)"
+    ]
+  }
+}

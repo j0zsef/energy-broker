@@ -1,10 +1,8 @@
-
-
-import { useMutation } from '@tanstack/react-query';
 import { EnergyProviderConnection } from '@energy-broker/shared';
 import { apiClient } from '../../api-client';
+import { useAuth0 } from '@auth0/auth0-react';
 import { useExchangeAuthCode } from '../oauth/useAuthCodeExchange';
-import {useAuth0} from "@auth0/auth0-react";
+import { useMutation } from '@tanstack/react-query';
 
 export const useSaveEnergyConnection = () => {
   return useMutation({
@@ -14,7 +12,7 @@ export const useSaveEnergyConnection = () => {
         method: 'POST',
       }),
   });
-}
+};
 
 export const useProcessEnergyConnection = (tokenUrl: string) => {
   const exchangeCode = useExchangeAuthCode(tokenUrl);
@@ -25,20 +23,24 @@ export const useProcessEnergyConnection = (tokenUrl: string) => {
                                    clientId: string,
                                    energyProviderId: number,
                                    redirectUri: string) => {
+    if (!user?.sub) {
+      throw new Error('User is not authenticated');
+    }
+
     const tokenResponse = await exchangeCode.mutateAsync({
+      client_id: clientId,
       code,
       grant_type: 'authorization_code',
       redirect_uri: redirectUri,
-      client_id: clientId,
     });
 
     await saveConnection.mutateAsync({
       authToken: tokenResponse.access_token,
       energyProviderId,
-      expiresAt: new Date(tokenResponse.expires_in),
+      expiresAt: new Date(Date.now() + tokenResponse.expires_in * 1000),
       refreshToken: tokenResponse.refresh_token,
       resourceUri: tokenResponse.resourceURI,
-      userId: user?.sub || 'unknown',
+      userId: user.sub,
     });
   };
 

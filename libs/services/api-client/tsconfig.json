@@ -1,15 +1,7 @@
 {
-  "extends": "../../../tsconfig.base.json",
-  "files": [], // intentionally empty
-  "references": [
-    {
-      "path": "../../shared"
-    },
-    {
-      "path": "./tsconfig.lib.json"
-    },
-    {
-      "path": "./tsconfig.spec.json"
-    }
-  ]
+  "extends": "../../../tsconfig.project.json",
+  "compilerOptions": {
+    "types": ["node"]
+  },
+  "include": ["src/**/*.ts", "jest.config.ts"]
 }

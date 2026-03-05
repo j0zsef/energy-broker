@@ -1,18 +1,7 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "files": [], // intentionally empty
-  "references": [
-    {
-      "path": "../../libs/services/green-button-client"
-    },
-    {
-      "path": "../../libs/shared"
-    },
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.spec.json"
-    }
-  ]
+  "extends": "../../tsconfig.project.json",
+  "compilerOptions": {
+    "moduleResolution": "node"
+  },
+  "include": ["src/**/*.ts", "jest.config.ts"]
 }

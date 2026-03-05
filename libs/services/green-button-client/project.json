@@ -9,7 +9,7 @@
       "executor": "@nx/esbuild:esbuild",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/out-tsc/libs/services/green-button-client",
+        "outputPath": "dist/libs/services/green-button-client",
         "main": "libs/services/green-button-client/src/index.ts",
         "tsConfig": "libs/services/green-button-client/tsconfig.lib.json",
         "bundle": false,
@@ -20,10 +20,9 @@
     },
     "typecheck": {
       "executor": "nx:run-commands",
-      "outputs": ["{workspaceRoot}/dist/out-tsc/libs/services/green-button-client"],
       "options": {
         "cwd": "libs/services/green-button-client",
-        "command": "tsc --build tsconfig.lib.json --emitDeclarationOnly"
+        "command": "tsc -p tsconfig.lib.json --noEmit"
       }
     }
   },
