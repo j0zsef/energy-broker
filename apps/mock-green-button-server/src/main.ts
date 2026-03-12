@@ -6,8 +6,8 @@ import fetch from 'node-fetch';
 const app = express();
 
 const oauthServer = new OAuth2Server();
-const OAUTH_PORT = 3001; // OAuth2 mock
-const MOCK_GREEN_BUTTON_PORT = 3002; // Your usage endpoint
+const OAUTH_PORT = 9500; // OAuth2 mock
+const MOCK_GREEN_BUTTON_PORT = 9501; // Your usage endpoint
 
 (async () => {
   // Start the OAuth2 mock server
@@ -21,7 +21,9 @@ const MOCK_GREEN_BUTTON_PORT = 3002; // Your usage endpoint
 
   app.use(express.json());
 
-  app.use(cors());
+  app.use(cors({
+    origin: ['http://localhost:9200', 'http://localhost:9400'],
+  }));
 
   app.post('/token', async (req, res) => {
     // Forward the request to the mock server
@@ -34,9 +36,9 @@ const MOCK_GREEN_BUTTON_PORT = 3002; // Your usage endpoint
 
     // Add custom fields
     res.json({
-      authorizationURI: 'http://localhost:3001/authorize',
-      customerResourceURI: 'http://localhost:3002/customer',
-      resourceURI: 'http://localhost:3002/resource',
+      authorizationURI: 'http://localhost:9501/authorize',
+      customerResourceURI: 'http://localhost:9501/customer',
+      resourceURI: 'http://localhost:9501/resource',
       ...data,
     });
   });

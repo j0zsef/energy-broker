@@ -1,20 +1,8 @@
 import { Alert, Button, Form } from 'react-bootstrap';
+import { apiClient, useEnergyProviders } from '@energy-broker/api-client';
 import { useEffect, useMemo, useState } from 'react';
 import { useForm, useStore } from '@tanstack/react-form';
 import { Spinner } from '../shared/spinner';
-import { useAuthStore } from '@energy-broker/stores';
-import { useEnergyProviders } from '@energy-broker/api-client';
-
-const buildAuthUri = (baseUri: string, clientId: string, redirectUri: string, state: string) => {
-  const url = new URL(baseUri);
-  url.searchParams.set('client_id', clientId);
-  url.searchParams.set('redirect_uri', redirectUri);
-  url.searchParams.set('response_type', 'code');
-  url.searchParams.set('state', state);
-  return url.toString();
-};
-
-const generateOAuthState = () => crypto.randomUUID();
 
 export const AddEnergyProvider = () => {
   const { data: energyProviders, isLoading: loadingProviders, error: providersError } = useEnergyProviders();
@@ -51,21 +39,22 @@ export const AddEnergyProvider = () => {
     return null;
   }, [filteredProviders, provider]);
 
-  // Fetch OAuth config for selected provider
-  // Should not fetch if the provider is not selected
-  const oauthConfig = selectedProvider?.oAuthProviderConfig;
-
-  // Redirect when config is loaded and pendingRedirect is true
+  // Redirect when pendingRedirect is true and provider is selected
   useEffect(() => {
-    if (pendingRedirect && oauthConfig && selectedProvider) {
-      const state = generateOAuthState();
-      useAuthStore.getState().setAuthTokenUrl(oauthConfig.tokenUrl);
-      useAuthStore.getState().setClientId(oauthConfig.clientId);
-      useAuthStore.getState().setOAuthState(state);
-      useAuthStore.getState().setProviderId(selectedProvider.id);
-      window.location.href = buildAuthUri(oauthConfig.authUrl, oauthConfig.clientId, oauthConfig.redirectUri, state);
+    if (pendingRedirect && selectedProvider) {
+      apiClient<{ url: string }>('v1/energy-providers/authorize', {
+        body: JSON.stringify({ energyProviderId: selectedProvider.id }),
+        method: 'POST',
+      })
+        .then((data) => {
+          window.location.href = data.url;
+        })
+        .catch((error) => {
+          console.error('Failed to initiate provider OAuth:', error);
+          setPendingRedirect(false);
+        });
     }
-  }, [pendingRedirect, oauthConfig, selectedProvider]);
+  }, [pendingRedirect, selectedProvider]);
 
   return (
     <>

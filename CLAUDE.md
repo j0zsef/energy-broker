@@ -37,19 +37,39 @@ pnpm prisma-studio              # Open Prisma Studio web UI
 - **apps/api** — Fastify 5 backend (Node ESM). Entry: `server.ts` → `app.ts`. Routes auto-loaded from `routes/v1/` via `@fastify/autoload`.
 - **apps/frontend** — React 18 + Vite. Uses TanStack Router (file-based routing in `src/routes/`). Auto-generated route tree at `routeTree.gen.ts`.
 - **libs/components** — Shared React UI components (React Bootstrap + SCSS)
-- **libs/services/api-client** — Frontend HTTP client (Axios). Injects Auth0 token via `setAuthTokenGetter()`. Wraps TanStack React Query.
+- **libs/services/api-client** — Frontend HTTP client (`fetch` wrapper with `credentials: 'include'`). Wraps TanStack React Query.
 - **libs/services/green-button-client** — Green Button Data XML parser. Factory pattern: `GreenButtonFactory.create(provider, baseUrl)`.
-- **libs/shared** — Common TypeScript types/interfaces (DTOs, schemas)
-- **libs/stores** — Zustand state stores
-- **apps/mock-green-button-server** — Mock OAuth server for local testing
+- **libs/shared** — Common TypeScript types/interfaces (DTOs, schemas, session types)
+- **libs/stores** — Zustand state stores (currently empty — auth state moved server-side)
+- **apps/mock-green-button-server** — Mock OAuth + Green Button API server for local testing
 
-### Auth
-Auth0 on both sides:
-- **Frontend:** `Auth0Provider` wrapper in `src/auth/auth0.tsx` with custom context. Config from `VITE_AUTH0_*` env vars.
-- **Backend:** `@auth0/auth0-fastify-api` plugin registered in `app.ts`. Routes use `fastify.requireAuth()` guards.
+### Auth (BFF Pattern)
+All OAuth token handling lives in the Fastify backend. The browser never sees or stores any tokens — auth state is maintained via HttpOnly session cookies.
+
+**How it works:**
+1. Frontend calls `GET /v1/auth/login` → backend returns Auth0 authorization URL
+2. User authenticates at Auth0 → Auth0 redirects to `GET /v1/auth/callback` on the API
+3. Backend exchanges the authorization code for tokens via `openid-client` (PKCE), stores them in a server-side session (Prisma-backed `Session` table), and redirects the user to the frontend with an HttpOnly session cookie
+4. All subsequent API calls include the session cookie (`credentials: 'include'`) — no Bearer tokens in the browser
+
+**Key files:**
+- `apps/api/src/routes/v1/auth/auth.ts` — Login, callback, logout, and me routes
+- `apps/api/src/plugins/session-auth.ts` — `fastify.requireSession()` guard (replaces old `requireAuth()`)
+- `apps/api/src/config/oidc-config.ts` — Auth0 OIDC discovery via `openid-client`
+- `apps/api/src/utils/prisma-session-store.ts` — Prisma-backed session store for `@fastify/session`
+- `apps/api/src/types/session.ts` — Fastify session type augmentation (extends `SessionData` from `@energy-broker/shared`)
+- `apps/frontend/src/auth/auth0.tsx` — `Auth0Wrapper` context (calls `/v1/auth/me` on mount, exposes `login`/`logout`)
+
+**Session infrastructure:** `@fastify/cookie` + `@fastify/session` with a custom Prisma store. Sessions stored in the `Session` DB table. `@fastify/helmet` provides CSP headers.
+
+**Energy provider OAuth** also runs server-side:
+1. Frontend calls `POST /v1/energy-providers/authorize` with `energyProviderId`
+2. Backend returns the provider's authorization URL (state stored in session)
+3. Provider redirects to `GET /v1/energy-providers/callback` on the API
+4. Backend exchanges the code for tokens, saves the `EnergyProviderConnection`, and redirects to the frontend
 
 ### Database
-MySQL 9 (Docker) + Prisma ORM. Schema at `/prisma/schema.prisma`. Models: `OAuthProviderConfig`, `EnergyProvider`, `EnergyProviderLocation`, `EnergyProviderConnection`. Seed script at `/prisma/seed.ts`.
+MySQL 9 (Docker) + Prisma ORM. Schema at `/prisma/schema.prisma`. Models: `OAuthProviderConfig`, `EnergyProvider`, `EnergyProviderLocation`, `EnergyProviderConnection`, `Session`. Seed script at `/prisma/seed.ts`.
 
 ### Request Validation
 Fastify uses `fastify-type-provider-zod` — Zod schemas define request/response types with automatic TypeScript inference.
@@ -73,12 +93,28 @@ Fastify uses `fastify-type-provider-zod` — Zod schemas define request/response
 - React does not require `import React` (react-in-jsx-scope off)
 - Node ESM: backend uses `.js` extensions in relative imports (e.g., `./config/auth-config.js`)
 
+## Environment Variables
+
+API uses `process.env.*`, frontend uses `import.meta.env.VITE_*`.
+
+| Variable | Used by | Description |
+|---|---|---|
+| `AUTH0_DOMAIN` | API | Auth0 tenant domain |
+| `AUTH0_CLIENT_ID` | API | Auth0 application client ID |
+| `AUTH0_CLIENT_SECRET` | API | Auth0 application client secret (keep in vault for prod) |
+| `SESSION_SECRET` | API | Secret for signing session cookies (32+ chars, keep in vault for prod) |
+| `FRONTEND_URL` | API | Frontend origin for CORS and redirects (`http://localhost:9200` locally) |
+| `API_BASE_URL` | API | API origin for OAuth callback URLs (`http://localhost:9400` locally) |
+| `DATABASE_URL` | API/Prisma | MySQL connection string |
+| `GREEN_BUTTON_TOKEN` | API | Green Button sandbox API token |
+| `VITE_API_BASE_URL` | Frontend | API base URL for `api-client` fetch calls |
+
 ## Key Constraints
 
 - **Node >= 24.0.0**, **pnpm >= 9.0.0**
 - Backend is **ESM** — use `import.meta.url` instead of `__dirname`, and `.js` extensions on relative imports
 - Prisma schema lives at repo root `/prisma/`, not inside any app
-- Environment variables: API uses `process.env.*`, frontend uses `import.meta.env.VITE_*`
+- **No tokens in the browser** — all OAuth tokens are stored server-side in Prisma sessions. The frontend authenticates via HttpOnly session cookies only.
 
 
 <!-- nx configuration start-->

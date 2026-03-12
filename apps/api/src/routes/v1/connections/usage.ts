@@ -7,7 +7,7 @@ import z from 'zod';
 
 const usage = async (fastify: FastifyInstance) => {
   const opts = {
-    preHandler: fastify.requireAuth(),
+    preHandler: fastify.requireSession(),
     schema: {
       params: z.object({
         connectionId: z.string(),

@@ -58,3 +58,13 @@ model EnergyProviderConnection {
 
   @@index([userId])
 }
+
+model Session {
+  id        String   @id
+  data      String   @db.Text
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([expiresAt])
+}

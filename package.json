@@ -9,8 +9,8 @@
     "start-dev": "pnpm db-setup && pnpm serve",
     "test": "nx run-many --target=test --all",
     "lint": "nx run-many --target=lint --all",
-    "db-setup": "docker compose up -d mysql && pnpm prisma-migrate && pnpm db-seed",
-    "db-reset": "docker compose down && docker compose up -d mysql && pnpm prisma-migrate && pnpm db-seed",
+    "db-setup": "docker-compose up -d mysql && pnpm prisma-migrate && pnpm db-seed",
+    "db-reset": "docker-compose down && docker compose up -d mysql && pnpm prisma-migrate && pnpm db-seed",
     "db-seed": "prisma db seed",
     "prisma-migrate": "prisma migrate dev",
     "prisma-generate": "prisma generate",
@@ -18,12 +18,13 @@
   },
   "private": true,
   "dependencies": {
-    "@auth0/auth0-fastify-api": "^1.1.0",
-    "@auth0/auth0-react": "^2.8.0",
     "@fastify/autoload": "^6.0.3",
+    "@fastify/cookie": "^11.0.2",
     "@fastify/cors": "^11.0.1",
     "@fastify/env": "^5.0.2",
+    "@fastify/helmet": "^13.0.2",
     "@fastify/sensible": "^6.0.2",
+    "@fastify/session": "^11.1.1",
     "@prisma/client": "6.15.0",
     "@tanstack/react-form": "^1.15.1",
     "@tanstack/react-query": "^5.76.1",
@@ -37,6 +38,7 @@
     "fastify-type-provider-zod": "^4.0.2",
     "node-fetch": "^3.3.2",
     "openapi-types": "^12.1.3",
+    "openid-client": "^6.8.2",
     "react": "18.3.1",
     "react-bootstrap": "^2.10.9",
     "react-dom": "18.3.1",
@@ -112,6 +114,9 @@
     "typescript-eslint": "^8.19.0",
     "vite": "^5.0.0",
     "vitest": "^1.3.1"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   },
   "engines": {
     "node": ">=24.0.0",

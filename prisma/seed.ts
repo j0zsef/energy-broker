@@ -1,44 +1,51 @@
-import { prismaClient } from '../src';
-import { EnergyProvider, EnergyProviderLocation, OAuthProviderConfig } from '../../shared/src';
+import { PrismaClient } from '@prisma/client';
+import seedConfig from './seed-config.json';
+
+const prismaClient = new PrismaClient();
 
 async function main() {
-  const mockUtilOAuth = await prismaClient.oAuthProviderConfig.upsert({
-    where: { clientId: 'mock-util' },
-    update: {},
-    create: {
-      authUrl: 'http://localhost:3001/authorize',
-      clientId: 'mock-util',
-      redirectUri: 'http://localhost:9200/connections/callback',
-      scopes: '',
-      tokenUrl: 'http://localhost:3002/token',
-    } as OAuthProviderConfig,
-  });
-  console.log({ mockUtilOAuth });
+  // Clear stale connections — tokens are tied to the OAuth redirect URI,
+  // so they become invalid if provider config changes.
+  const deleted = await prismaClient.energyProviderConnection.deleteMany();
+  console.log({ deletedConnections: deleted.count });
 
-  const mockUtilProvider = await prismaClient.energyProvider.upsert({
-    where: { name: 'Mock Utility' },
-    update: {},
-    create: {
-      fullName: 'Mock Utility',
-      name: 'Mock Utility',
-      oAuthProviderConfigId: mockUtilOAuth.id,
-      type: 'electrical',
-    } as EnergyProvider,
-  });
+  for (const provider of seedConfig.providers) {
+    const oauthConfig = await prismaClient.oAuthProviderConfig.upsert({
+      where: { clientId: provider.oauth.clientId },
+      update: provider.oauth,
+      create: provider.oauth,
+    });
+    console.log({ oauthConfig });
 
-  console.log({ mockUtilProvider });
+    const energyProvider = await prismaClient.energyProvider.upsert({
+      where: { name: provider.name },
+      update: {
+        fullName: provider.fullName,
+        name: provider.name,
+        oAuthProviderConfigId: oauthConfig.id,
+        type: provider.type,
+      },
+      create: {
+        fullName: provider.fullName,
+        name: provider.name,
+        oAuthProviderConfigId: oauthConfig.id,
+        type: provider.type,
+      },
+    });
+    console.log({ energyProvider });
 
-  const mockUtilLocation = await prismaClient.energyProviderLocation.upsert({
-    where: { id: 1 },
-    update: {},
-    create: {
-      energyProviderId: mockUtilProvider.id,
-      zip: '60657',
-    } as EnergyProviderLocation,
-  });
-
-  console.log({ mockUtilLocation });
+    for (const zip of provider.locations) {
+      const existing = await prismaClient.energyProviderLocation.findFirst({
+        where: { energyProviderId: energyProvider.id, zip },
+      });
+      const location = existing ?? await prismaClient.energyProviderLocation.create({
+        data: { energyProviderId: energyProvider.id, zip },
+      });
+      console.log({ location });
+    }
+  }
 }
+
 main()
   .then(async () => {
     await prismaClient.$disconnect();

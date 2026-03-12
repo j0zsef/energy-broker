@@ -2,7 +2,7 @@ import { FastifyInstance } from 'fastify';
 import { prismaClient } from '../../../utils/prisma-client.js';
 
 const energyProviders = (fastify: FastifyInstance) => {
-  fastify.get('/', { preHandler: fastify.requireAuth() },
+  fastify.get('/', { preHandler: fastify.requireSession() },
     async function (request, reply) {
       try {
         const providers = await prismaClient.energyProvider.findMany({

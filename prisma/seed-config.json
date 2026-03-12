@@ -1,0 +1,17 @@
+{
+  "providers": [
+    {
+      "name": "Mock Utility",
+      "fullName": "Mock Utility",
+      "type": "electrical",
+      "locations": ["60657"],
+      "oauth": {
+        "authUrl": "http://localhost:9500/authorize",
+        "clientId": "mock-util",
+        "redirectUri": "http://localhost:9400/v1/energy-providers/callback",
+        "scopes": "",
+        "tokenUrl": "http://localhost:9501/token"
+      }
+    }
+  ]
+}

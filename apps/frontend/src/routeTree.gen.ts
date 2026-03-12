@@ -14,7 +14,6 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
 import { Route as ConnectionsIndexImport } from './routes/connections/index'
-import { Route as ConnectionsCallbackImport } from './routes/connections/callback'
 import { Route as ConnectionsAddImport } from './routes/connections/add'
 import { Route as ConnectionsEnergyConnectionImport } from './routes/connections/$energy-connection'
 import { Route as AccountSummaryImport } from './routes/account/summary'
@@ -36,12 +35,6 @@ const IndexRoute = IndexImport.update({
 const ConnectionsIndexRoute = ConnectionsIndexImport.update({
   id: '/connections/',
   path: '/connections/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const ConnectionsCallbackRoute = ConnectionsCallbackImport.update({
-  id: '/connections/callback',
-  path: '/connections/callback',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -116,13 +109,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConnectionsAddImport
       parentRoute: typeof rootRoute
     }
-    '/connections/callback': {
-      id: '/connections/callback'
-      path: '/connections/callback'
-      fullPath: '/connections/callback'
-      preLoaderRoute: typeof ConnectionsCallbackImport
-      parentRoute: typeof rootRoute
-    }
     '/connections/': {
       id: '/connections/'
       path: '/connections'
@@ -142,7 +128,6 @@ export interface FileRoutesByFullPath {
   '/account/summary': typeof AccountSummaryRoute
   '/connections/$energy-connection': typeof ConnectionsEnergyConnectionRoute
   '/connections/add': typeof ConnectionsAddRoute
-  '/connections/callback': typeof ConnectionsCallbackRoute
   '/connections': typeof ConnectionsIndexRoute
 }
 
@@ -153,7 +138,6 @@ export interface FileRoutesByTo {
   '/account/summary': typeof AccountSummaryRoute
   '/connections/$energy-connection': typeof ConnectionsEnergyConnectionRoute
   '/connections/add': typeof ConnectionsAddRoute
-  '/connections/callback': typeof ConnectionsCallbackRoute
   '/connections': typeof ConnectionsIndexRoute
 }
 
@@ -165,7 +149,6 @@ export interface FileRoutesById {
   '/account/summary': typeof AccountSummaryRoute
   '/connections/$energy-connection': typeof ConnectionsEnergyConnectionRoute
   '/connections/add': typeof ConnectionsAddRoute
-  '/connections/callback': typeof ConnectionsCallbackRoute
   '/connections/': typeof ConnectionsIndexRoute
 }
 
@@ -178,7 +161,6 @@ export interface FileRouteTypes {
     | '/account/summary'
     | '/connections/$energy-connection'
     | '/connections/add'
-    | '/connections/callback'
     | '/connections'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -188,7 +170,6 @@ export interface FileRouteTypes {
     | '/account/summary'
     | '/connections/$energy-connection'
     | '/connections/add'
-    | '/connections/callback'
     | '/connections'
   id:
     | '__root__'
@@ -198,7 +179,6 @@ export interface FileRouteTypes {
     | '/account/summary'
     | '/connections/$energy-connection'
     | '/connections/add'
-    | '/connections/callback'
     | '/connections/'
   fileRoutesById: FileRoutesById
 }
@@ -210,7 +190,6 @@ export interface RootRouteChildren {
   AccountSummaryRoute: typeof AccountSummaryRoute
   ConnectionsEnergyConnectionRoute: typeof ConnectionsEnergyConnectionRoute
   ConnectionsAddRoute: typeof ConnectionsAddRoute
-  ConnectionsCallbackRoute: typeof ConnectionsCallbackRoute
   ConnectionsIndexRoute: typeof ConnectionsIndexRoute
 }
 
@@ -221,7 +200,6 @@ const rootRouteChildren: RootRouteChildren = {
   AccountSummaryRoute: AccountSummaryRoute,
   ConnectionsEnergyConnectionRoute: ConnectionsEnergyConnectionRoute,
   ConnectionsAddRoute: ConnectionsAddRoute,
-  ConnectionsCallbackRoute: ConnectionsCallbackRoute,
   ConnectionsIndexRoute: ConnectionsIndexRoute,
 }
 
@@ -241,7 +219,6 @@ export const routeTree = rootRoute
         "/account/summary",
         "/connections/$energy-connection",
         "/connections/add",
-        "/connections/callback",
         "/connections/"
       ]
     },
@@ -262,9 +239,6 @@ export const routeTree = rootRoute
     },
     "/connections/add": {
       "filePath": "connections/add.tsx"
-    },
-    "/connections/callback": {
-      "filePath": "connections/callback.tsx"
     },
     "/connections/": {
       "filePath": "connections/index.tsx"

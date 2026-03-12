@@ -2,7 +2,7 @@ import { FastifyInstance } from 'fastify';
 import { prismaClient } from '../../../utils/prisma-client.js';
 
 const connections = async (fastify: FastifyInstance) => {
-  fastify.get('/connections', { preHandler: fastify.requireAuth() },
+  fastify.get('/connections', { preHandler: fastify.requireSession() },
     async function (request, reply) {
       try {
         const userId = request.user.sub;

@@ -1,46 +1,70 @@
-import { Auth0Provider, User, useAuth0 } from '@auth0/auth0-react';
-import { createContext, useContext } from 'react';
-import { ReactNode } from 'react';
-import { authConfig } from '../config/auth-config';
+import { ReactNode, createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { apiClient } from '@energy-broker/api-client';
+
+interface AuthUser {
+  email?: string
+  name?: string
+  picture?: string
+  sub: string
+}
 
 export interface Auth0ContextType {
   isAuthenticated: boolean
-  user: User | undefined
+  isLoading: boolean
   login: () => void
   logout: () => void
-  isLoading: boolean
+  user: AuthUser | undefined
 }
 
 const Auth0Context = createContext<Auth0ContextType | undefined>(undefined);
 
 export function Auth0Wrapper({ children }: { children: ReactNode }) {
-  return (
-    <Auth0Provider
-      domain={authConfig.auth0Domain}
-      clientId={authConfig.auth0ClientId}
-      authorizationParams={{
-        audience: authConfig.auth0Audience,
-        redirect_uri: window.location.origin,
-        scope: 'openid profile email offline_access',
-      }}
-      useRefreshTokens={true}
-      cacheLocation="memory"
-    >
-      <Auth0ContextProvider>{children}</Auth0ContextProvider>
-    </Auth0Provider>
-  );
-}
+  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<AuthUser | undefined>(undefined);
 
-function Auth0ContextProvider({ children }: { children: ReactNode }) {
-  const { isAuthenticated, user, loginWithRedirect, logout, isLoading }
-    = useAuth0<User>();
+  useEffect(() => {
+    apiClient<{ email?: string, name?: string, picture?: string, userId: string }>('v1/auth/me')
+      .then((data) => {
+        setUser({
+          email: data.email,
+          name: data.name,
+          picture: data.picture,
+          sub: data.userId,
+        });
+      })
+      .catch(() => {
+        setUser(undefined);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
 
-  const contextValue = {
-    isAuthenticated,
+  const login = useCallback(() => {
+    apiClient<{ url: string }>('v1/auth/login')
+      .then((data) => {
+        window.location.href = data.url;
+      })
+      .catch((error) => {
+        console.error('Login failed:', error);
+      });
+  }, []);
+
+  const logout = useCallback(() => {
+    apiClient<{ url: string }>('v1/auth/logout', { method: 'POST' })
+      .then((data) => {
+        window.location.href = data.url;
+      })
+      .catch((error) => {
+        console.error('Logout failed:', error);
+      });
+  }, []);
+
+  const contextValue: Auth0ContextType = {
+    isAuthenticated: !!user,
     isLoading,
-    login: loginWithRedirect,
-    logout: () =>
-      logout({ logoutParams: { returnTo: window.location.origin } }),
+    login,
+    logout,
     user,
   };
 

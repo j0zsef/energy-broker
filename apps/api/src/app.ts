@@ -1,13 +1,16 @@
-import { FastifyInstance } from 'fastify';
+import { dirname, join } from 'node:path';
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
-import Auth0 from '@auth0/auth0-fastify-api';
+import { FastifyInstance } from 'fastify';
+import { PrismaSessionStore } from './utils/prisma-session-store.js';
 import autoload from '@fastify/autoload';
+import fastifyCookie from '@fastify/cookie';
 import fastifyCors from '@fastify/cors';
 import { fastifyEnv } from '@fastify/env';
-import sensible from '@fastify/sensible';
+import fastifySession from '@fastify/session';
 import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
-import { authConfig } from "./config/auth-config.js";
+import helmet from '@fastify/helmet';
+import sensible from '@fastify/sensible';
+import sessionAuth from './plugins/session-auth.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -30,17 +33,41 @@ const envOptions = {
   schema: envSchema,
 };
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 export async function app(fastify: FastifyInstance) {
   fastify.register(sensible);
   fastify.register(fastifyEnv, envOptions);
   fastify.register(fastifyCors, {
-    origin: 'http://localhost:9200',
+    credentials: true,
+    origin: process.env.FRONTEND_URL || 'http://localhost:9200',
   });
 
-  await Auth0(fastify, {
-    audience: authConfig.auth0Audience,
-    domain: authConfig.auth0Domain,
+  fastify.register(helmet, {
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ['\'self\''],
+        scriptSrc: ['\'self\''],
+        styleSrc: ['\'self\'', '\'unsafe-inline\''],
+      },
+    },
   });
+
+  fastify.register(fastifyCookie);
+  fastify.register(fastifySession, {
+    cookie: {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+      path: '/',
+      sameSite: 'lax',
+      secure: isProduction,
+    },
+    saveUninitialized: false,
+    secret: process.env.SESSION_SECRET || 'dev-secret-change-me-in-production!!',
+    store: new PrismaSessionStore(),
+  });
+
+  fastify.register(sessionAuth);
 
   fastify.register(autoload, {
     dir: join(__dirname, 'routes'),

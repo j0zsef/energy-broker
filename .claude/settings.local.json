@@ -7,7 +7,9 @@
       "Bash(pnpm nx show project:*)",
       "Bash(python3:*)",
       "Bash(pnpm nx reset:*)",
-      "Bash(pnpm nx run-many:*)"
+      "Bash(pnpm nx run-many:*)",
+      "Bash(npx tsx:*)",
+      "mcp__obsidian__read_note"
     ]
   }
 }

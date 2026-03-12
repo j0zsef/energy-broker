@@ -5,7 +5,7 @@ import z from 'zod';
 
 const oAuthConfig = async (fastify: FastifyInstance) => {
   const ops = {
-    preHandler: fastify.requireAuth(),
+    preHandler: fastify.requireSession(),
     schema: {
       params: z.object({
         id: z.coerce.number(),

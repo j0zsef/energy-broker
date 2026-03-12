@@ -18,7 +18,6 @@ export interface EnergyProviderConnection {
   expiresAt: Date
   refreshToken: string
   resourceUri: string
-  userId: string
 }
 
 export interface EnergyProviderConnectionResponse extends EnergyProviderConnection {

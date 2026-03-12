@@ -1,1 +1,1 @@
-export * from './lib/auth-store';
+// Auth store removed — session state is managed server-side

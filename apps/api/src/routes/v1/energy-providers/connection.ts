@@ -13,7 +13,7 @@ const connectionSchema = z.object({
 
 const connection = async (fastify: FastifyInstance) => {
   const opts = {
-    preHandler: fastify.requireAuth(),
+    preHandler: fastify.requireSession(),
     schema: {
       body: connectionSchema,
     },
