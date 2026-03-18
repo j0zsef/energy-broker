@@ -1,3 +1,27 @@
+# API Route Structure
+
+Routes are auto-loaded by `@fastify/autoload` from `apps/api/src/routes/v1/`. Follow these conventions:
+
+- **One route per file.** Each file exports a single Fastify route plugin (default export async function).
+- Routes are grouped by domain into subdirectories:
+  ```
+  routes/v1/
+  ├── auth/               # Auth0 login, callback, logout, me
+  ├── connections/         # Usage and summary for energy connections
+  └── energy-providers/    # Provider listing, OAuth authorize/callback
+  ```
+- File names match the route path segment (e.g., `login.ts` → `GET /login`, `authorize.ts` → `POST /authorize`).
+- Fastify autoload maps directory structure to URL prefixes automatically — do not hardcode prefixes in route files.
+- Session-protected routes use `preHandler: fastify.requireSession()`.
+
+# Mock Green Button Server Structure
+
+The mock server (`apps/mock-green-button-server/src/`) is separated by concern:
+
+- `main.ts` — Server boot only (Express + OAuth2 server startup, CORS, mounts routers)
+- `mock-oauth/` — OAuth token proxy and token validation middleware
+- `mock-green-button-api/` — ESPI Atom XML endpoints and mock response data
+
 <!-- nx configuration start-->
 <!-- Leave the start & end comments to automatically receive updates. -->
 
