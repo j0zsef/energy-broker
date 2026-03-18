@@ -9,7 +9,10 @@
       "Bash(pnpm nx reset:*)",
       "Bash(pnpm nx run-many:*)",
       "Bash(npx tsx:*)",
-      "mcp__obsidian__read_note"
+      "mcp__obsidian__read_note",
+      "WebFetch(domain:greenbuttonalliance.github.io)",
+      "WebFetch(domain:services.greenbuttondata.org)",
+      "WebFetch(domain:utilityapi.com)"
     ]
   }
 }

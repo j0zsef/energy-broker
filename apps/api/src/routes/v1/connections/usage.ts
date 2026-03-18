@@ -1,8 +1,9 @@
-import { Envs } from '../../../app';
+import '../../../types/session.js';
 import { FastifyInstance } from 'fastify';
 import { GreenButtonFactory } from '@energy-broker/green-button-client';
 import { GreenButtonUsageRequest } from '@energy-broker/shared';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
+import { prismaClient } from '../../../utils/prisma-client.js';
 import z from 'zod';
 
 const usage = async (fastify: FastifyInstance) => {
@@ -19,27 +20,26 @@ const usage = async (fastify: FastifyInstance) => {
     },
   };
 
-  // Level 1: Energy provider TYPE (electrical, gas, water)
-  // Level 2: Energy provider IMPLEMENTATION (PG&E, SCE, Generic - all use Green Button)
-
   fastify.withTypeProvider<ZodTypeProvider>().get('/:connectionId/usage', opts,
-    async function (request) {
-      // const user = request.user; // Retrieved from Auth0 JWT
+    async function (request, reply) {
+      const userId = request.user.sub;
+      const connectionId = Number(request.params.connectionId);
+
+      const connection = await prismaClient.energyProviderConnection.findFirst({
+        where: { id: connectionId, userId },
+      });
+
+      if (!connection) {
+        return reply.status(404).send({ error: 'Connection not found' });
+      }
+
       const usagePointRequest: GreenButtonUsageRequest = {
         max: request.query.max,
         min: request.query.min,
       };
 
-      // should be able to figure this out from the auth process
-      const provider = 'generic';
-      // we should be getting the base URL from the auth process: resourceURI. something like:
-      // https://utilityapi.com/DataCustodian/espi/1_1/resource/Subscription/1111
-      const baseUrl = 'https://sandbox.greenbuttonalliance.org:8443/DataCustodian';
-      // we should be getting the token from registering with the provider
-      const token = fastify.getEnvs<Envs>().GREEN_BUTTON_TOKEN;
-
-      const greenButtonService = GreenButtonFactory.create(provider, baseUrl);
-      const usagePoints = await greenButtonService.fetchUsagePoints(token, usagePointRequest);
+      const greenButtonService = GreenButtonFactory.create('generic', connection.resourceUri);
+      const usagePoints = await greenButtonService.fetchUsagePoints(connection.authToken, usagePointRequest);
 
       return { usagePoints };
     });

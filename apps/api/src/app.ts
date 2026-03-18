@@ -15,22 +15,9 @@ import sessionAuth from './plugins/session-auth.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export type Envs = {
-  GREEN_BUTTON_TOKEN: string
-};
-
-const envSchema = {
-  properties: {
-    GREEN_BUTTON_TOKEN: { type: 'string' },
-  },
-  required: ['GREEN_BUTTON_TOKEN'],
-  type: 'object',
-};
-
 const envOptions = {
-  confKey: 'config',
   dotenv: true,
-  schema: envSchema,
+  schema: { properties: {}, type: 'object' },
 };
 
 const isProduction = process.env.NODE_ENV === 'production';

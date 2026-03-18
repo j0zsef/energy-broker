@@ -1,88 +1,32 @@
+import { createOAuthRouter, createTokenValidator } from './mock-oauth/mock-oauth.js';
 import { OAuth2Server } from 'oauth2-mock-server';
 import cors from 'cors';
+import { createGreenButtonRouter } from './mock-green-button-api/mock-green-button-api.js';
 import express from 'express';
-import fetch from 'node-fetch';
 
-const app = express();
-
-const oauthServer = new OAuth2Server();
-const OAUTH_PORT = 9500; // OAuth2 mock
-const MOCK_GREEN_BUTTON_PORT = 9501; // Your usage endpoint
+const OAUTH_PORT = 9500;
+const MOCK_GREEN_BUTTON_PORT = 9501;
 
 (async () => {
   // Start the OAuth2 mock server
+  const oauthServer = new OAuth2Server();
   await oauthServer.issuer.keys.generate('RS256');
   await oauthServer.start(OAUTH_PORT);
   console.log(`OAuth2 mock server running at ${oauthServer.issuer.url}`);
 
-  app.listen(MOCK_GREEN_BUTTON_PORT, () => {
-    console.log(`Mock Green Button API running at http://localhost:${MOCK_GREEN_BUTTON_PORT}`);
-  });
-
+  // Set up the Express app
+  const app = express();
   app.use(express.json());
-
   app.use(cors({
     origin: ['http://localhost:9200', 'http://localhost:9400'],
   }));
 
-  app.post('/token', async (req, res) => {
-    // Forward the request to the mock server
-    const response = await fetch(`${oauthServer.issuer.url}/token`, {
-      body: JSON.stringify(req.body),
-      headers: { 'content-type': 'application/json' },
-      method: 'POST',
-    });
-    const data = await response.json() as Record<string, unknown>;
+  // Mount routers
+  const validateToken = createTokenValidator(oauthServer);
+  app.use(createOAuthRouter(oauthServer));
+  app.use(createGreenButtonRouter(validateToken));
 
-    // Add custom fields
-    res.json({
-      authorizationURI: 'http://localhost:9501/authorize',
-      customerResourceURI: 'http://localhost:9501/customer',
-      resourceURI: 'http://localhost:9501/resource',
-      ...data,
-    });
-  });
-
-  app.get('/resource/usage', async (req, res): Promise<void> => {
-    const authHeader = req.headers['authorization'];
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      res.status(401).send('Missing token');
-      return;
-    }
-
-    const token = authHeader.replace('Bearer ', '');
-
-    type IntrospectResponse = {
-      active: boolean
-      scope?: string
-      client_id?: string
-      username?: string
-      exp?: number
-    };
-
-    // Introspect token against mock OAuth server
-    const introspectResp = await fetch(`${oauthServer.issuer.url}/introspect`, {
-      body: `token=${token}&client_id=demo-client&client_secret=demo-secret`,
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      method: 'POST',
-
-    });
-    const introspectData = await introspectResp.json() as IntrospectResponse;
-
-    if (!introspectData.active) {
-      res.status(401).send('Invalid token');
-      return;
-    }
-
-    // ✅ Token is valid, return fake usage data
-    res.json({
-      customerId: '12345',
-      serviceAddress: '123 Main St',
-      usageIntervals: [
-        { kWh: 1.23, start: '2025-08-01T00:00:00Z' },
-        { kWh: 0.98, start: '2025-08-01T01:00:00Z' },
-        { kWh: 1.10, start: '2025-08-01T02:00:00Z' },
-      ],
-    });
+  app.listen(MOCK_GREEN_BUTTON_PORT, () => {
+    console.log(`Mock Green Button API running at http://localhost:${MOCK_GREEN_BUTTON_PORT}`);
   });
 })();

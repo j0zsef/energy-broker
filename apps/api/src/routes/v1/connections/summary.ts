@@ -1,8 +1,9 @@
-import { Envs } from '../../../app';
+import '../../../types/session.js';
 import { FastifyInstance } from 'fastify';
 import { GreenButtonFactory } from '@energy-broker/green-button-client';
 import { GreenButtonSummaryRequest } from '@energy-broker/shared';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
+import { prismaClient } from '../../../utils/prisma-client.js';
 import z from 'zod';
 
 const summary = async (fastify: FastifyInstance) => {
@@ -21,27 +22,29 @@ const summary = async (fastify: FastifyInstance) => {
   };
 
   fastify.withTypeProvider<ZodTypeProvider>().get('/:connectionId/summary/meters/:meterId', opts,
-    async function (request) {
-      // const user = request.user; // Retrieved from Auth0 JWT
+    async function (request, reply) {
+      const userId = request.user.sub;
+      const connectionId = Number(request.params.connectionId);
+
+      const connection = await prismaClient.energyProviderConnection.findFirst({
+        where: { id: connectionId, userId },
+      });
+
+      if (!connection) {
+        return reply.status(404).send({ error: 'Connection not found' });
+      }
+
       const summaryRequest: GreenButtonSummaryRequest = {
         max: request.query.max,
         meterId: request.params.meterId,
         min: request.query.min,
       };
 
-      // should be able to figure this out from the auth process
-      const provider = 'generic';
-      // we should be getting the base URL from the auth process: resourceURI. something like:
-      // https://utilityapi.com/DataCustodian/espi/1_1/resource/Subscription/1111
-      const baseUrl = 'https://sandbox.greenbuttonalliance.org:8443/DataCustodian';
-      // we should be getting the token from registering with the provider
-      const token = fastify.getEnvs<Envs>().GREEN_BUTTON_TOKEN;
+      const greenButtonService = GreenButtonFactory.create('generic', connection.resourceUri);
+      const summaryData = await greenButtonService.fetchSummary(connection.authToken, summaryRequest);
 
-      const greenButtonService = GreenButtonFactory.create(provider, baseUrl);
-      const summary = await greenButtonService.fetchSummary(token, summaryRequest);
-
-      return { summary };
+      return { summary: summaryData };
     });
-}
+};
 
 export default summary;
