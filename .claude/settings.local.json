@@ -12,7 +12,10 @@
       "mcp__obsidian__read_note",
       "WebFetch(domain:greenbuttonalliance.github.io)",
       "WebFetch(domain:services.greenbuttondata.org)",
-      "WebFetch(domain:utilityapi.com)"
+      "WebFetch(domain:utilityapi.com)",
+      "WebFetch(domain:excalidraw.com)",
+      "Bash(mdfind:*)",
+      "Bash(pnpm add:*)"
     ]
   }
 }
