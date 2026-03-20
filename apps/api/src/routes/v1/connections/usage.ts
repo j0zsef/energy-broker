@@ -33,15 +33,25 @@ const usage = async (fastify: FastifyInstance) => {
         return reply.status(404).send({ error: 'Connection not found' });
       }
 
+      if (connection.expiresAt < new Date()) {
+        return reply.status(410).send({ error: 'Connection expired' });
+      }
+
       const usagePointRequest: GreenButtonUsageRequest = {
         max: request.query.max,
         min: request.query.min,
       };
 
-      const greenButtonService = GreenButtonFactory.create('generic', connection.resourceUri);
-      const usagePoints = await greenButtonService.fetchUsagePoints(connection.authToken, usagePointRequest);
+      try {
+        const greenButtonService = GreenButtonFactory.create('generic', connection.resourceUri);
+        const usagePoints = await greenButtonService.fetchUsagePoints(connection.authToken, usagePointRequest);
 
-      return { usagePoints };
+        return usagePoints;
+      }
+      catch (error) {
+        fastify.log.error(error, 'Failed to fetch usage data from provider (resourceUri: %s)', connection.resourceUri);
+        return reply.status(502).send({ error: 'Failed to fetch usage data from energy provider' });
+      }
     });
 };
 

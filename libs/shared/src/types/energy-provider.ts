@@ -16,6 +16,7 @@ export interface EnergyProviderConnection {
   authToken: string
   energyProviderId: number
   expiresAt: Date
+  id: number
   refreshToken: string
   resourceUri: string
 }

@@ -34,16 +34,26 @@ const summary = async (fastify: FastifyInstance) => {
         return reply.status(404).send({ error: 'Connection not found' });
       }
 
+      if (connection.expiresAt < new Date()) {
+        return reply.status(410).send({ error: 'Connection expired' });
+      }
+
       const summaryRequest: GreenButtonSummaryRequest = {
         max: request.query.max,
         meterId: request.params.meterId,
         min: request.query.min,
       };
 
-      const greenButtonService = GreenButtonFactory.create('generic', connection.resourceUri);
-      const summaryData = await greenButtonService.fetchSummary(connection.authToken, summaryRequest);
+      try {
+        const greenButtonService = GreenButtonFactory.create('generic', connection.resourceUri);
+        const summaryData = await greenButtonService.fetchSummary(connection.authToken, summaryRequest);
 
-      return { summary: summaryData };
+        return summaryData;
+      }
+      catch (error) {
+        fastify.log.error(error, 'Failed to fetch summary from provider (resourceUri: %s)', connection.resourceUri);
+        return reply.status(502).send({ error: 'Failed to fetch summary from energy provider' });
+      }
     });
 };
 

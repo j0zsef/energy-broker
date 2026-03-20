@@ -14,8 +14,6 @@ const connections = async (fastify: FastifyInstance) => {
           where: { userId },
         });
 
-        if (!authRecords) return reply.status(404).send({ error: 'Not found' });
-
         return reply.status(200).send(authRecords);
       }
       catch (error) {
