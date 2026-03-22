@@ -27,6 +27,7 @@ export async function app(fastify: FastifyInstance) {
   fastify.register(fastifyEnv, envOptions);
   fastify.register(fastifyCors, {
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     origin: process.env.FRONTEND_URL || 'http://localhost:9200',
   });
 

@@ -15,7 +15,9 @@
       "WebFetch(domain:utilityapi.com)",
       "WebFetch(domain:excalidraw.com)",
       "Bash(mdfind:*)",
-      "Bash(pnpm add:*)"
+      "Bash(pnpm add:*)",
+      "Bash(pnpm build:*)",
+      "Bash(git mv:*)"
     ]
   }
 }

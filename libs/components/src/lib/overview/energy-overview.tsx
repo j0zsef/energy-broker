@@ -1,15 +1,19 @@
-import { Button, Col, Row } from 'react-bootstrap';
+import { Alert, Col, Row } from 'react-bootstrap';
 import { TimePeriod, useEnergyDashboard } from './use-energy-dashboard';
 import { fetchEnergySummary, useEnergyConnections, useEnergyUsage } from '@energy-broker/api-client';
-import { ConsumptionChart } from './consumption-chart';
+import { useCallback, useState } from 'react';
 import { EnergyBreakdown } from './energy-breakdown';
-import { Link } from '@tanstack/react-router';
-import { StatsCards } from './stats-cards';
-import { TimePeriodTabs } from './time-period-tabs';
+import { EnergyConsumptionChart } from './energy-consumption-chart';
+import { EnergyEmptyState } from './energy-empty-state';
+import { EnergyProviderContext } from './energy-provider-context';
+import { EnergyStatsCards } from './energy-stats-cards';
+import { EnergyTimePeriodTabs } from './energy-time-period-tabs';
+import { PageSpinner } from '../shared/page-spinner';
+import { useNavigate } from '@tanstack/react-router';
 import { useQueries } from '@tanstack/react-query';
-import { useState } from 'react';
 
 export function EnergyOverview() {
+  const navigate = useNavigate();
   const [selectedPeriod, setSelectedPeriod] = useState<TimePeriod>('3m');
 
   const { data: connections = [], isLoading: connectionsLoading } = useEnergyConnections();
@@ -34,47 +38,53 @@ export function EnergyOverview() {
   const summariesLoading = summaryQueries.some(q => q.isLoading);
   const filteredMeters = electricalMeters.filter(meter => !!meter.meterId);
 
-  const { energyMix, monthlyConsumption, stats } = useEnergyDashboard(allSummaries, filteredMeters, selectedPeriod);
+  const { energyMix, monthlyConsumption, stats } = useEnergyDashboard(
+    allSummaries, filteredMeters, selectedPeriod, firstConnection?.id ?? 0,
+  );
+
+  const handleSegmentClick = useCallback((index: number) => {
+    const entry = energyMix[index];
+    if (entry?.connectionId) {
+      navigate({
+        params: { 'energy-connection': String(entry.connectionId) },
+        to: '/connections/$energy-connection',
+      });
+    }
+  }, [energyMix, navigate]);
 
   if (connectionsLoading || usageLoading) {
-    return <div>Loading...</div>;
+    return <PageSpinner />;
   }
 
   if (!activeConnections.length) {
-    return (
-      <>
-        <div>No active energy connections found.</div>
-        <Link to="/connections/add">
-          <Button>Add energy connection</Button>
-        </Link>
-      </>
-    );
+    return <EnergyEmptyState />;
   }
 
   if (!electricalMeters.length) {
     return (
-      <div>
+      <Alert variant="warning">
         {'No energy usage data available for '}
         {firstConnection.energyProvider.fullName}
         .
-      </div>
+      </Alert>
     );
   }
 
   if (summariesLoading) {
-    return <div>Loading energy data...</div>;
+    return <PageSpinner label="Loading energy data..." />;
   }
 
   return (
     <div>
-      <TimePeriodTabs onSelect={setSelectedPeriod} selectedPeriod={selectedPeriod} />
-      <StatsCards stats={stats} />
-      <Row>
+      <EnergyProviderContext connections={activeConnections} />
+      <EnergyTimePeriodTabs onSelect={setSelectedPeriod} selectedPeriod={selectedPeriod} />
+      <EnergyStatsCards stats={stats} />
+      <Row className="g-3">
         <Col lg={7}>
-          <ConsumptionChart monthlyConsumption={monthlyConsumption} />
+          <EnergyConsumptionChart monthlyConsumption={monthlyConsumption} />
         </Col>
         <Col lg={5}>
-          <EnergyBreakdown energyMix={energyMix} />
+          <EnergyBreakdown energyMix={energyMix} onSegmentClick={handleSegmentClick} />
         </Col>
       </Row>
     </div>

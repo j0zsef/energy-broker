@@ -2,6 +2,7 @@ import * as ReactDOM from 'react-dom/client';
 import { Auth0ContextType, Auth0Wrapper, useAuth0Context } from './auth/auth0';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { StrictMode } from 'react';
+import { ThemeProvider } from './theme/theme-context';
 import { routeTree } from './routeTree.gen';
 
 export type RouterContext = {
@@ -49,8 +50,10 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <StrictMode>
-    <Auth0Wrapper>
-      <App />
-    </Auth0Wrapper>
+    <ThemeProvider>
+      <Auth0Wrapper>
+        <App />
+      </Auth0Wrapper>
+    </ThemeProvider>
   </StrictMode>,
 );

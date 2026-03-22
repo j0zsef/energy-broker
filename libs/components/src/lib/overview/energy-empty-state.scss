@@ -1,0 +1,19 @@
+.onboarding-step {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.onboarding-step__number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background-color: var(--bs-primary);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}

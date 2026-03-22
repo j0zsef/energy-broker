@@ -1,5 +1,5 @@
 import { Button } from 'react-bootstrap';
-import { Overview } from '@energy-broker/components';
+import { EnergyOverview } from '@energy-broker/components';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/')({
@@ -9,21 +9,24 @@ export const Route = createFileRoute('/')({
 export function Index() {
   const { auth } = Route.useRouteContext();
 
+  if (!auth.isAuthenticated) {
+    return (
+      <div className="d-flex flex-column align-items-center justify-content-center text-center py-5">
+        <h1 className="fw-bold mb-3">Take Control of Your Energy</h1>
+        <p className="text-muted mb-4" style={{ maxWidth: '32rem' }}>
+          Connect your utility accounts, track consumption, and discover ways to save on your energy bills.
+        </p>
+        <Button onClick={() => auth.login()} size="lg" variant="primary">Get Started</Button>
+      </div>
+    );
+  }
+
   return (
     <>
-      <h2>Energy Overview</h2>
-      { /* future marketing page if not auth */ }
-      { !auth.isAuthenticated
-        ? (
-            <div className="d-flex flex-column gap-2">
-              <span>Login to view your energy data: </span>
-              <Button className="align-self-start" onClick={() => auth.login()}>Login</Button>
-            </div>
-          )
-        : <Overview />}
+      <h2 className="mb-3">Energy Overview</h2>
+      <EnergyOverview />
     </>
-  )
-  ;
+  );
 }
 
 export default Index;

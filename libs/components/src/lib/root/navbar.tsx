@@ -1,31 +1,40 @@
 import './navbar.scss';
-import { Navbar as BootstrapNavBar, ListGroup, ListGroupItem } from 'react-bootstrap';
-import { Container } from '../shared/container';
 import { Link } from '@tanstack/react-router';
-import { NavbarBrand } from 'react-bootstrap';
+import { Nav } from 'react-bootstrap';
 
-export const Navbar = () => {
+interface NavbarProps {
+  onNavigate?: () => void
+}
+
+const NAV_ITEMS: { exact: boolean, label: string, to: string }[] = [
+  { exact: true, label: 'Overview', to: '/' },
+  { exact: false, label: 'Energy Connections', to: '/connections' },
+  { exact: false, label: 'Energy Providers', to: '/energy-providers' },
+  { exact: false, label: 'Carbon Credits', to: '/carbon-credits' },
+];
+
+export const Navbar = ({ onNavigate }: NavbarProps) => {
   return (
-    <BootstrapNavBar expand={false}>
-      <Container border={true}>
-        <NavbarBrand as={Link} to="/">Energy Broker</NavbarBrand>
-        <hr className="divider" />
-        <ListGroup>
-          <ListGroupItem as={Link} to="/" className="navbar-item">
-            Overview
-          </ListGroupItem>
-          <ListGroupItem as={Link} to="/connections" className="navbar-item">
-            Energy Connections
-          </ListGroupItem>
-          <ListGroupItem as={Link} to="/carbon-credits" className="navbar-item">
-            Carbon Credits
-          </ListGroupItem>
-          <ListGroupItem as={Link} to="/energy-providers" className="navbar-item">
-            Energy Providers
-          </ListGroupItem>
-        </ListGroup>
-      </Container>
-    </BootstrapNavBar>
+    <nav className="sidebar-nav">
+      <Link className="sidebar-nav__brand" onClick={onNavigate} to="/">
+        Energy Broker
+      </Link>
+      <Nav className="flex-column w-100">
+        {NAV_ITEMS.map(item => (
+          <Nav.Item key={item.to}>
+            <Link
+              activeOptions={{ exact: item.exact }}
+              activeProps={{ className: 'sidebar-nav__link sidebar-nav__link--active' }}
+              className="sidebar-nav__link"
+              onClick={onNavigate}
+              to={item.to}
+            >
+              {item.label}
+            </Link>
+          </Nav.Item>
+        ))}
+      </Nav>
+    </nav>
   );
 };
 

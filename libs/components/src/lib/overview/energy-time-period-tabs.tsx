@@ -7,12 +7,12 @@ const PERIODS: { label: string, value: TimePeriod }[] = [
   { label: 'Year', value: '1y' },
 ];
 
-interface TimePeriodTabsProps {
+interface EnergyTimePeriodTabsProps {
   onSelect: (period: TimePeriod) => void
   selectedPeriod: TimePeriod
 }
 
-export function TimePeriodTabs({ onSelect, selectedPeriod }: TimePeriodTabsProps) {
+export function EnergyTimePeriodTabs({ onSelect, selectedPeriod }: EnergyTimePeriodTabsProps) {
   return (
     <Nav
       activeKey={selectedPeriod}

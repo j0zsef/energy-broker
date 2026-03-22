@@ -1,89 +1,74 @@
-import { ElectricalDataSummary, ElectricalDataUsagePoint } from '@energy-broker/shared';
+import {
+  CARBON_LBS_PER_KWH,
+  filterByPeriod,
+  filterPreviousPeriod,
+  formatMonthLabel,
+  parseSummary,
+  pctChange,
+} from './energy-dashboard-utils';
+import {
+  DashboardStats,
+  ElectricalDataSummary,
+  ElectricalDataUsagePoint,
+  EnergyMixEntry,
+  MonthlyConsumption,
+  StatDeltas,
+  TimePeriod,
+} from '@energy-broker/shared';
 import { useMemo } from 'react';
 
-export type TimePeriod = '1m' | '3m' | '1y';
-
-export interface DashboardStats {
-  carbonFootprintLbs: number
-  totalConsumptionKwh: number
-  totalCostDollars: number
-}
-
-export interface MonthlyConsumption {
-  data: number[]
-  labels: string[]
-}
-
-export interface EnergyMixEntry {
-  kWh: number
-  label: string
-}
-
-interface ParsedSummary {
-  consumptionKwh: number
-  costDollars: number
-  date: Date
-  meterTitle: string
-}
-
-const CARBON_LBS_PER_KWH = 0.86;
-
-function parseSummary(summary: ElectricalDataSummary, meterTitle: string): ParsedSummary | null {
-  const eps = summary.content?.ElectricPowerUsageSummary;
-  if (!eps) return null;
-
-  const costDollars = (eps.billLastPeriod ?? 0) / 100;
-
-  const consumption = eps.overallConsumptionLastPeriod;
-  const rawValue = consumption?.value ?? 0;
-  const multiplier = Math.pow(10, consumption?.powerOfTenMultiplier ?? 0);
-  const consumptionKwh = (rawValue * multiplier) / 1000;
-
-  const startTimestamp = eps.billingPeriod?.start;
-  const date = startTimestamp ? new Date(startTimestamp * 1000) : new Date(summary.published ?? Date.now());
-
-  return { consumptionKwh, costDollars, date, meterTitle };
-}
-
-function filterByPeriod(entries: ParsedSummary[], period: TimePeriod): ParsedSummary[] {
-  const sorted = [...entries].sort((a, b) => b.date.getTime() - a.date.getTime());
-  const monthCount = period === '1m' ? 1 : period === '3m' ? 3 : 12;
-  return sorted.slice(0, monthCount);
-}
-
-function formatMonthLabel(date: Date): string {
-  return date.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
-}
+export type { DashboardStats, EnergyMixEntry, MonthlyConsumption, StatDeltas, TimePeriod };
 
 export function useEnergyDashboard(
   summaries: (ElectricalDataSummary[] | undefined)[],
   meters: ElectricalDataUsagePoint[],
   period: TimePeriod,
+  connectionId = 0,
 ) {
   return useMemo(() => {
-    const allParsed: ParsedSummary[] = [];
-
-    summaries.forEach((meterSummaries, idx) => {
-      if (!meterSummaries) return;
+    const allParsed = summaries.flatMap((meterSummaries, idx) => {
+      if (!meterSummaries) return [];
       const meterTitle = meters[idx]?.title ?? `Meter ${idx + 1}`;
-      for (const s of meterSummaries) {
-        const parsed = parseSummary(s, meterTitle);
-        if (parsed) allParsed.push(parsed);
-      }
+      return meterSummaries
+        .map(s => parseSummary(s, meterTitle, connectionId))
+        .filter((p): p is NonNullable<typeof p> => p !== null);
     });
 
     const filtered = filterByPeriod(allParsed, period);
+    const previous = filterPreviousPeriod(allParsed, period);
+
+    // Current period totals
+    let totalCost = 0;
+    let totalConsumption = 0;
+    for (const entry of filtered) {
+      totalCost += entry.costDollars;
+      totalConsumption += entry.consumptionKwh;
+    }
+    const totalCarbon = totalConsumption * CARBON_LBS_PER_KWH;
+
+    // Previous period totals (for deltas)
+    let prevCost = 0;
+    let prevConsumption = 0;
+    for (const entry of previous) {
+      prevCost += entry.costDollars;
+      prevConsumption += entry.consumptionKwh;
+    }
+    const prevCarbon = prevConsumption * CARBON_LBS_PER_KWH;
+
+    const deltas: StatDeltas = previous.length > 0
+      ? {
+          carbonPct: pctChange(totalCarbon, prevCarbon),
+          consumptionPct: pctChange(totalConsumption, prevConsumption),
+          costPct: pctChange(totalCost, prevCost),
+        }
+      : { carbonPct: null, consumptionPct: null, costPct: null };
 
     const stats: DashboardStats = {
-      carbonFootprintLbs: 0,
-      totalConsumptionKwh: 0,
-      totalCostDollars: 0,
+      carbonFootprintLbs: totalCarbon,
+      deltas,
+      totalConsumptionKwh: totalConsumption,
+      totalCostDollars: totalCost,
     };
-    for (const entry of filtered) {
-      stats.totalCostDollars += entry.costDollars;
-      stats.totalConsumptionKwh += entry.consumptionKwh;
-    }
-    stats.carbonFootprintLbs = stats.totalConsumptionKwh * CARBON_LBS_PER_KWH;
 
     // Monthly consumption: group by month label, chronological order
     const monthMap = new Map<string, number>();
@@ -98,12 +83,18 @@ export function useEnergyDashboard(
     };
 
     // Energy mix: group by meter
-    const mixMap = new Map<string, number>();
+    const mixMap = new Map<string, { connectionId: number, kWh: number }>();
     for (const entry of filtered) {
-      mixMap.set(entry.meterTitle, (mixMap.get(entry.meterTitle) ?? 0) + entry.consumptionKwh);
+      const existing = mixMap.get(entry.meterTitle);
+      mixMap.set(entry.meterTitle, {
+        connectionId: entry.connectionId,
+        kWh: (existing?.kWh ?? 0) + entry.consumptionKwh,
+      });
     }
-    const energyMix: EnergyMixEntry[] = [...mixMap.entries()].map(([label, kWh]) => ({ kWh, label }));
+    const energyMix: EnergyMixEntry[] = [...mixMap.entries()].map(
+      ([label, val]) => ({ connectionId: val.connectionId, kWh: val.kWh, label }),
+    );
 
     return { energyMix, monthlyConsumption, stats };
-  }, [summaries, meters, period]);
+  }, [summaries, meters, period, connectionId]);
 }

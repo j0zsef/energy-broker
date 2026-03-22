@@ -13,7 +13,9 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
+import { Route as EnergyProvidersIndexImport } from './routes/energy-providers/index'
 import { Route as ConnectionsIndexImport } from './routes/connections/index'
+import { Route as CarbonCreditsIndexImport } from './routes/carbon-credits/index'
 import { Route as ConnectionsAddImport } from './routes/connections/add'
 import { Route as ConnectionsEnergyConnectionImport } from './routes/connections/$energy-connection'
 import { Route as AccountSummaryImport } from './routes/account/summary'
@@ -32,9 +34,21 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const EnergyProvidersIndexRoute = EnergyProvidersIndexImport.update({
+  id: '/energy-providers/',
+  path: '/energy-providers/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const ConnectionsIndexRoute = ConnectionsIndexImport.update({
   id: '/connections/',
   path: '/connections/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CarbonCreditsIndexRoute = CarbonCreditsIndexImport.update({
+  id: '/carbon-credits/',
+  path: '/carbon-credits/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -109,11 +123,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConnectionsAddImport
       parentRoute: typeof rootRoute
     }
+    '/carbon-credits/': {
+      id: '/carbon-credits/'
+      path: '/carbon-credits'
+      fullPath: '/carbon-credits'
+      preLoaderRoute: typeof CarbonCreditsIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/connections/': {
       id: '/connections/'
       path: '/connections'
       fullPath: '/connections'
       preLoaderRoute: typeof ConnectionsIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/energy-providers/': {
+      id: '/energy-providers/'
+      path: '/energy-providers'
+      fullPath: '/energy-providers'
+      preLoaderRoute: typeof EnergyProvidersIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -128,7 +156,9 @@ export interface FileRoutesByFullPath {
   '/account/summary': typeof AccountSummaryRoute
   '/connections/$energy-connection': typeof ConnectionsEnergyConnectionRoute
   '/connections/add': typeof ConnectionsAddRoute
+  '/carbon-credits': typeof CarbonCreditsIndexRoute
   '/connections': typeof ConnectionsIndexRoute
+  '/energy-providers': typeof EnergyProvidersIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -138,7 +168,9 @@ export interface FileRoutesByTo {
   '/account/summary': typeof AccountSummaryRoute
   '/connections/$energy-connection': typeof ConnectionsEnergyConnectionRoute
   '/connections/add': typeof ConnectionsAddRoute
+  '/carbon-credits': typeof CarbonCreditsIndexRoute
   '/connections': typeof ConnectionsIndexRoute
+  '/energy-providers': typeof EnergyProvidersIndexRoute
 }
 
 export interface FileRoutesById {
@@ -149,7 +181,9 @@ export interface FileRoutesById {
   '/account/summary': typeof AccountSummaryRoute
   '/connections/$energy-connection': typeof ConnectionsEnergyConnectionRoute
   '/connections/add': typeof ConnectionsAddRoute
+  '/carbon-credits/': typeof CarbonCreditsIndexRoute
   '/connections/': typeof ConnectionsIndexRoute
+  '/energy-providers/': typeof EnergyProvidersIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -161,7 +195,9 @@ export interface FileRouteTypes {
     | '/account/summary'
     | '/connections/$energy-connection'
     | '/connections/add'
+    | '/carbon-credits'
     | '/connections'
+    | '/energy-providers'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -170,7 +206,9 @@ export interface FileRouteTypes {
     | '/account/summary'
     | '/connections/$energy-connection'
     | '/connections/add'
+    | '/carbon-credits'
     | '/connections'
+    | '/energy-providers'
   id:
     | '__root__'
     | '/'
@@ -179,7 +217,9 @@ export interface FileRouteTypes {
     | '/account/summary'
     | '/connections/$energy-connection'
     | '/connections/add'
+    | '/carbon-credits/'
     | '/connections/'
+    | '/energy-providers/'
   fileRoutesById: FileRoutesById
 }
 
@@ -190,7 +230,9 @@ export interface RootRouteChildren {
   AccountSummaryRoute: typeof AccountSummaryRoute
   ConnectionsEnergyConnectionRoute: typeof ConnectionsEnergyConnectionRoute
   ConnectionsAddRoute: typeof ConnectionsAddRoute
+  CarbonCreditsIndexRoute: typeof CarbonCreditsIndexRoute
   ConnectionsIndexRoute: typeof ConnectionsIndexRoute
+  EnergyProvidersIndexRoute: typeof EnergyProvidersIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -200,7 +242,9 @@ const rootRouteChildren: RootRouteChildren = {
   AccountSummaryRoute: AccountSummaryRoute,
   ConnectionsEnergyConnectionRoute: ConnectionsEnergyConnectionRoute,
   ConnectionsAddRoute: ConnectionsAddRoute,
+  CarbonCreditsIndexRoute: CarbonCreditsIndexRoute,
   ConnectionsIndexRoute: ConnectionsIndexRoute,
+  EnergyProvidersIndexRoute: EnergyProvidersIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -219,7 +263,9 @@ export const routeTree = rootRoute
         "/account/summary",
         "/connections/$energy-connection",
         "/connections/add",
-        "/connections/"
+        "/carbon-credits/",
+        "/connections/",
+        "/energy-providers/"
       ]
     },
     "/": {
@@ -240,8 +286,14 @@ export const routeTree = rootRoute
     "/connections/add": {
       "filePath": "connections/add.tsx"
     },
+    "/carbon-credits/": {
+      "filePath": "carbon-credits/index.tsx"
+    },
     "/connections/": {
       "filePath": "connections/index.tsx"
+    },
+    "/energy-providers/": {
+      "filePath": "energy-providers/index.tsx"
     }
   }
 }

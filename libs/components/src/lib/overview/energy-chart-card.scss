@@ -1,0 +1,7 @@
+.energy-chart-card {
+  height: 100%;
+
+  [data-bs-theme='dark'] & {
+    --bs-card-bg: var(--bs-tertiary-bg);
+  }
+}
