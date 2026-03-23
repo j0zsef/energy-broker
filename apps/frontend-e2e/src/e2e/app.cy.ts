@@ -35,8 +35,8 @@ const mockSummaries = [
   {
     content: {
       ElectricPowerUsageSummary: {
-        billingPeriod: { duration: 2678400, start: 1735689600 },
         billLastPeriod: 9245,
+        billingPeriod: { duration: 2678400, start: 1735689600 },
         overallConsumptionLastPeriod: { powerOfTenMultiplier: 0, uom: 72, value: 680000 },
       },
     },
@@ -46,8 +46,8 @@ const mockSummaries = [
   {
     content: {
       ElectricPowerUsageSummary: {
-        billingPeriod: { duration: 2419200, start: 1738368000 },
         billLastPeriod: 7830,
+        billingPeriod: { duration: 2419200, start: 1738368000 },
         overallConsumptionLastPeriod: { powerOfTenMultiplier: 0, uom: 72, value: 520000 },
       },
     },
@@ -57,8 +57,8 @@ const mockSummaries = [
   {
     content: {
       ElectricPowerUsageSummary: {
-        billingPeriod: { duration: 2678400, start: 1740787200 },
         billLastPeriod: 8520,
+        billingPeriod: { duration: 2678400, start: 1740787200 },
         overallConsumptionLastPeriod: { powerOfTenMultiplier: 0, uom: 72, value: 610000 },
       },
     },

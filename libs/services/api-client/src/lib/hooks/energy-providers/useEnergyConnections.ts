@@ -6,7 +6,7 @@ export const useEnergyConnections = () => {
   const endpoint = `v1/energy-providers/connections`;
 
   return useQuery({
-    queryKey: ['energyProvidersConnections'],
     queryFn: () => apiClient<EnergyProviderConnectionResponse[]>(endpoint),
+    queryKey: ['energyProvidersConnections'],
   });
 };

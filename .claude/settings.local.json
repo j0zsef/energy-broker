@@ -19,7 +19,13 @@
       "Bash(pnpm build:*)",
       "Bash(git mv:*)",
       "Bash(pnpm nx test:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(node -e \"const d=require\\(''fs''\\).readFileSync\\(''/dev/stdin'',''utf8''\\);const p=JSON.parse\\(d\\);console.log\\(JSON.stringify\\({scripts:p.scripts,devDeps:Object.keys\\(p.devDependencies||{}\\).filter\\(k=>k.includes\\(''husky''\\)||k.includes\\(''lint-staged''\\)\\)},null,2\\)\\)\")",
+      "Bash(ls:*)",
+      "Bash(pnpm nx show projects:*)",
+      "Bash(git -C /Users/jnevin/Projects/energy-broker log --oneline --max-count=10)",
+      "Bash(git -C /Users/jnevin/Projects/energy-broker config --get-regexp 'hook\\\\.')",
+      "Bash(pnpm exec husky:*)"
     ]
   }
 }

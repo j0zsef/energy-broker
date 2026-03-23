@@ -1,6 +1,6 @@
 import Fastify from 'fastify';
-import { app } from './app.js';
 import { apiConfig } from './config/api-config.js';
+import { app } from './app.js';
 
 const host = apiConfig.apiHost;
 const port = apiConfig.apiPort;
