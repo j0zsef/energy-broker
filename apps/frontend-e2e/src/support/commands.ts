@@ -1,37 +1,40 @@
 /// <reference types="cypress" />
 
-// ***********************************************
-// This example commands.ts shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface Chainable<Subject> {
-      login(email: string, password: string): void
+      mockAuth(): void
+      mockConnections(connections: unknown[]): void
+      mockProviders(providers: unknown[]): void
     }
   }
 }
 
-// -- This is a parent command --
-Cypress.Commands.add('login', (email, password) => {
-  console.log('Custom command example: Login', email, password);
+const API = 'http://localhost:9400';
+
+Cypress.Commands.add('mockAuth', () => {
+  cy.intercept('GET', `${API}/v1/auth/me`, {
+    body: {
+      email: 'test@example.com',
+      name: 'Test User',
+      userId: 'user-123',
+    },
+    statusCode: 200,
+  }).as('authMe');
 });
-//
-// -- This is a child command --
-// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('mockConnections', (connections: unknown[]) => {
+  cy.intercept('GET', `${API}/v1/energy-providers/connections`, {
+    body: connections,
+    statusCode: 200,
+  }).as('connections');
+});
+
+Cypress.Commands.add('mockProviders', (providers: unknown[]) => {
+  cy.intercept('GET', `${API}/v1/energy-providers`, {
+    body: providers,
+    statusCode: 200,
+  }).as('providers');
+});

@@ -19,7 +19,7 @@ export class GenericGreenButtonProvider implements GreenButtonService {
   }
 
   async fetchUsagePoints(token: string, request: GreenButtonUsageRequest): Promise<ElectricalDataUsagePoint[]> {
-    const url = `${this.baseUrl}/espi/1_1/resource/Subscription/1/UsagePoint`;
+    const url = `${this.baseUrl}/UsagePoint`;
 
     const response = await this.http.get(url, {
       headers: {
@@ -38,7 +38,7 @@ export class GenericGreenButtonProvider implements GreenButtonService {
   }
 
   async fetchSummary(token: string, request: GreenButtonSummaryRequest): Promise<ElectricalDataSummary[]> {
-    const url = `${this.baseUrl}/espi/1_1/resource/Subscription/1/UsagePoint/${request.meterId}/ElectricPowerUsageSummary`;
+    const url = `${this.baseUrl}/UsagePoint/${request.meterId}/ElectricPowerUsageSummary`;
 
     const response = await this.http.get(url, {
       headers: {

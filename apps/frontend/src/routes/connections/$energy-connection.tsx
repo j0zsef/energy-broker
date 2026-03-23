@@ -4,6 +4,7 @@ import {
   EnergyConsumptionChart,
   EnergyStatsCards,
   EnergyTimePeriodTabs,
+  MeterEntry,
   PageSpinner,
   TimePeriod,
   useEnergyDashboard,
@@ -47,11 +48,21 @@ function RouteComponent() {
     })),
   });
 
-  const allSummaries = summaryQueries.map(q => q.data);
   const summariesLoading = summaryQueries.some(q => q.isLoading);
 
+  const connectionLabel = connection
+    ? (connection.energyProvider.fullName || connection.energyProvider.name)
+    : '';
+
+  const meterEntries: MeterEntry[] = filteredMeters.map((meter, idx) => ({
+    connectionId,
+    connectionLabel,
+    meterTitle: meter.title ?? `Meter ${idx + 1}`,
+    summaries: summaryQueries[idx]?.data,
+  }));
+
   const { energyMix, monthlyConsumption, stats } = useEnergyDashboard(
-    allSummaries, filteredMeters, selectedPeriod, connectionId,
+    meterEntries, selectedPeriod,
   );
 
   if (connectionsLoading || usageLoading) {

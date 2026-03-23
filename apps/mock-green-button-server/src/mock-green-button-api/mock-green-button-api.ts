@@ -1,8 +1,13 @@
 import { Request, Response, Router } from 'express';
-import { buildSummaryXml, usagePointsXml } from './mock-green-button-responses.js';
+import {
+  buildGasSummaryXml,
+  buildGasUsagePointsXml,
+  buildSummaryXml,
+  buildUsagePointsXml,
+} from './mock-green-button-responses.js';
 import { TokenValidator } from '../mock-oauth/mock-oauth.js';
 
-const BASE_PATH = '/espi/1_1/resource/Subscription/1';
+const BASE_PATH = '/espi/1_1/resource/Subscription/:subscriptionId';
 
 export function createGreenButtonRouter(validateToken: TokenValidator): Router {
   const router = Router();
@@ -10,9 +15,11 @@ export function createGreenButtonRouter(validateToken: TokenValidator): Router {
   router.get(
     `${BASE_PATH}/UsagePoint`,
     validateToken,
-    (_req: Request, res: Response) => {
+    (req: Request, res: Response) => {
+      const basePath = `/espi/1_1/resource/Subscription/${req.params.subscriptionId}`;
+      const isGas = req.params.subscriptionId === '2';
       res.set('Content-Type', 'application/atom+xml');
-      res.send(usagePointsXml);
+      res.send(isGas ? buildGasUsagePointsXml(basePath) : buildUsagePointsXml(basePath));
     },
   );
 
@@ -20,8 +27,9 @@ export function createGreenButtonRouter(validateToken: TokenValidator): Router {
     `${BASE_PATH}/UsagePoint/:meterId/ElectricPowerUsageSummary`,
     validateToken,
     (req: Request, res: Response) => {
+      const isGas = req.params.subscriptionId === '2';
       res.set('Content-Type', 'application/atom+xml');
-      res.send(buildSummaryXml(req.params.meterId));
+      res.send(isGas ? buildGasSummaryXml(req.params.meterId) : buildSummaryXml(req.params.meterId));
     },
   );
 

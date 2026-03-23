@@ -15,10 +15,15 @@ export function createOAuthRouter(oauthServer: OAuth2Server): Router {
     });
     const data = await response.json() as Record<string, unknown>;
 
+    const body = req.body as Record<string, unknown>;
+    const clientId = body.client_id as string | undefined;
+    const subscriptionId = clientId === 'mock-gas' ? '2' : '1';
+    const subscriptionPath = `http://localhost:9501/espi/1_1/resource/Subscription/${subscriptionId}`;
+
     res.json({
       authorizationURI: 'http://localhost:9500/authorize',
-      customerResourceURI: 'http://localhost:9501/espi/1_1/resource/Subscription/1',
-      resourceURI: 'http://localhost:9501',
+      customerResourceURI: subscriptionPath,
+      resourceURI: subscriptionPath,
       ...data,
     });
   });

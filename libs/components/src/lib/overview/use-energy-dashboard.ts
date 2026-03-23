@@ -9,7 +9,6 @@ import {
 import {
   DashboardStats,
   ElectricalDataSummary,
-  ElectricalDataUsagePoint,
   EnergyMixEntry,
   MonthlyConsumption,
   StatDeltas,
@@ -19,18 +18,22 @@ import { useMemo } from 'react';
 
 export type { DashboardStats, EnergyMixEntry, MonthlyConsumption, StatDeltas, TimePeriod };
 
+export interface MeterEntry {
+  connectionId: number
+  connectionLabel: string
+  meterTitle: string
+  summaries: ElectricalDataSummary[] | undefined
+}
+
 export function useEnergyDashboard(
-  summaries: (ElectricalDataSummary[] | undefined)[],
-  meters: ElectricalDataUsagePoint[],
+  meterEntries: MeterEntry[],
   period: TimePeriod,
-  connectionId = 0,
 ) {
   return useMemo(() => {
-    const allParsed = summaries.flatMap((meterSummaries, idx) => {
-      if (!meterSummaries) return [];
-      const meterTitle = meters[idx]?.title ?? `Meter ${idx + 1}`;
-      return meterSummaries
-        .map(s => parseSummary(s, meterTitle, connectionId))
+    const allParsed = meterEntries.flatMap((entry) => {
+      if (!entry.summaries) return [];
+      return entry.summaries
+        .map(s => parseSummary(s, entry.meterTitle, entry.connectionId, entry.connectionLabel))
         .filter((p): p is NonNullable<typeof p> => p !== null);
     });
 
@@ -82,11 +85,11 @@ export function useEnergyDashboard(
       labels: [...monthMap.keys()],
     };
 
-    // Energy mix: group by meter
+    // Energy mix: group by connection label (doughnut segments = providers)
     const mixMap = new Map<string, { connectionId: number, kWh: number }>();
     for (const entry of filtered) {
-      const existing = mixMap.get(entry.meterTitle);
-      mixMap.set(entry.meterTitle, {
+      const existing = mixMap.get(entry.connectionLabel);
+      mixMap.set(entry.connectionLabel, {
         connectionId: entry.connectionId,
         kWh: (existing?.kWh ?? 0) + entry.consumptionKwh,
       });
@@ -96,5 +99,5 @@ export function useEnergyDashboard(
     );
 
     return { energyMix, monthlyConsumption, stats };
-  }, [summaries, meters, period, connectionId]);
+  }, [meterEntries, period]);
 }

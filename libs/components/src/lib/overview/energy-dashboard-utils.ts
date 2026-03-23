@@ -2,6 +2,7 @@ import { ElectricalDataSummary, TimePeriod } from '@energy-broker/shared';
 
 export interface ParsedSummary {
   connectionId: number
+  connectionLabel: string
   consumptionKwh: number
   costDollars: number
   date: Date
@@ -11,7 +12,7 @@ export interface ParsedSummary {
 export const CARBON_LBS_PER_KWH = 0.86;
 
 export function parseSummary(
-  summary: ElectricalDataSummary, meterTitle: string, connectionId: number,
+  summary: ElectricalDataSummary, meterTitle: string, connectionId: number, connectionLabel: string,
 ): ParsedSummary | null {
   const eps = summary.content?.ElectricPowerUsageSummary;
   if (!eps) return null;
@@ -26,7 +27,7 @@ export function parseSummary(
   const startTimestamp = eps.billingPeriod?.start;
   const date = startTimestamp ? new Date(startTimestamp * 1000) : new Date(summary.published ?? Date.now());
 
-  return { connectionId, consumptionKwh, costDollars, date, meterTitle };
+  return { connectionId, connectionLabel, consumptionKwh, costDollars, date, meterTitle };
 }
 
 export function getMonthCount(period: TimePeriod): number {

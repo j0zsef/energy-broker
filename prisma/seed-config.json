@@ -12,6 +12,19 @@
         "scopes": "",
         "tokenUrl": "http://localhost:9501/token"
       }
+    },
+    {
+      "name": "Mock Gas Co",
+      "fullName": "Mock Gas Company",
+      "type": "gas",
+      "locations": ["60657"],
+      "oauth": {
+        "authUrl": "http://localhost:9500/authorize",
+        "clientId": "mock-gas",
+        "redirectUri": "http://localhost:9400/v1/energy-providers/callback",
+        "scopes": "",
+        "tokenUrl": "http://localhost:9501/token"
+      }
     }
   ]
 }
