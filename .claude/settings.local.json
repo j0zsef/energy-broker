@@ -25,7 +25,8 @@
       "Bash(pnpm nx show projects:*)",
       "Bash(git -C /Users/jnevin/Projects/energy-broker log --oneline --max-count=10)",
       "Bash(git -C /Users/jnevin/Projects/energy-broker config --get-regexp 'hook\\\\.')",
-      "Bash(pnpm exec husky:*)"
+      "Bash(pnpm exec husky:*)",
+      "Bash(pnpm ls:*)"
     ]
   }
 }
