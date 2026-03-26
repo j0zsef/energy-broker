@@ -40,16 +40,28 @@ describe('apiClient', () => {
     );
   });
 
-  it('sets Content-Type to application/json by default', async () => {
+  it('sets Content-Type to application/json when body is present', async () => {
     mockFetch.mockResolvedValue({
       json: () => Promise.resolve({}),
       ok: true,
     });
 
-    await apiClient('test');
+    await apiClient('test', { body: JSON.stringify({ key: 'val' }) });
 
     const callArgs = mockFetch.mock.calls[0][1];
     expect(callArgs.headers['Content-Type']).toBe('application/json');
+  });
+
+  it('omits Content-Type when no body is present', async () => {
+    mockFetch.mockResolvedValue({
+      json: () => Promise.resolve({}),
+      ok: true,
+    });
+
+    await apiClient('test', { method: 'DELETE' });
+
+    const callArgs = mockFetch.mock.calls[0][1];
+    expect(callArgs.headers['Content-Type']).toBeUndefined();
   });
 
   it('merges custom headers with defaults', async () => {
@@ -59,6 +71,7 @@ describe('apiClient', () => {
     });
 
     await apiClient('test', {
+      body: JSON.stringify({ key: 'val' }),
       headers: { 'X-Custom': 'value' } as Record<string, string>,
     });
 

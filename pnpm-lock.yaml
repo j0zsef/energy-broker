@@ -303,8 +303,6 @@ importers:
 
   apps/api: {}
 
-  apps/api-e2e: {}
-
   apps/frontend: {}
 
   apps/frontend-e2e: {}
