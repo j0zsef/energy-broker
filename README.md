@@ -1,3 +1,5 @@
+[![CI](https://github.com/j0zsef/energy-broker/actions/workflows/ci.yml/badge.svg)](https://github.com/j0zsef/energy-broker/actions/workflows/ci.yml)
+
 # energy-broker
 Broker your personal energy. Save money on utilities, search for sustainable alternatives, and access the carbon market.
 
