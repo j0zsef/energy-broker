@@ -27,7 +27,10 @@
       "Bash(git -C /Users/jnevin/Projects/energy-broker config --get-regexp 'hook\\\\.')",
       "Bash(pnpm exec husky:*)",
       "Bash(pnpm ls:*)",
-      "Bash(pnpm --version:*)"
+      "Bash(pnpm --version:*)",
+      "Bash(pnpm nx graph:*)",
+      "Bash(node --version:*)",
+      "Bash(pnpm nx:*)"
     ]
   }
 }
