@@ -126,6 +126,9 @@
     "vite-plugin-istanbul": "^8.0.0",
     "vitest": "^1.6.1"
   },
+  "overrides": {
+    "minimatch": ">=9.0.7"
+  },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
   },
