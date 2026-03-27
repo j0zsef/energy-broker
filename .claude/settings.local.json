@@ -33,7 +33,11 @@
       "Bash(pnpm nx:*)",
       "Bash(pnpm audit:*)",
       "Bash(pnpm update:*)",
-      "Bash(pnpm install:*)"
+      "Bash(pnpm install:*)",
+      "Bash(node -e:*)",
+      "Bash(pnpm ci-test:*)",
+      "Bash(pnpm why:*)",
+      "Bash(pnpm view:*)"
     ]
   }
 }
