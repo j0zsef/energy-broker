@@ -44,4 +44,4 @@ jobs:
 
       - run: pnpm nx run frontend:build
 
-      - run: pnpm nx run frontend-e2e:e2e-ci
+      - run: pnpm nx run e2e

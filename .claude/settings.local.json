@@ -30,7 +30,10 @@
       "Bash(pnpm --version:*)",
       "Bash(pnpm nx graph:*)",
       "Bash(node --version:*)",
-      "Bash(pnpm nx:*)"
+      "Bash(pnpm nx:*)",
+      "Bash(pnpm audit:*)",
+      "Bash(pnpm update:*)",
+      "Bash(pnpm install:*)"
     ]
   }
 }
