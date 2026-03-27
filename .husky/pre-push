@@ -1,2 +1,2 @@
 pnpm nx run-many -t typecheck,lint,test
-pnpm audit --audit-level=high
+pnpm audit
