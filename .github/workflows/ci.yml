@@ -24,7 +24,15 @@ jobs:
 
       - run: pnpm prisma generate
 
-      - run: pnpm nx run-many -t typecheck,lint,test
+      - run: pnpm nx run-many -t typecheck,lint
+
+      - run: pnpm nx run-many -t test -- --coverage
+
+      - uses: codecov/codecov-action@v5
+        with:
+          directory: ./coverage
+          flags: unit
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   e2e:
     name: E2E Tests
@@ -45,3 +53,11 @@ jobs:
       - run: pnpm exec cypress install
 
       - run: pnpm e2e
+        env:
+          CYPRESS_COVERAGE: 'true'
+
+      - uses: codecov/codecov-action@v5
+        with:
+          directory: ./coverage/apps/frontend-e2e
+          flags: e2e
+          token: ${{ secrets.CODECOV_TOKEN }}
