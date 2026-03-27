@@ -22,6 +22,8 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      - run: pnpm prisma generate
+
       - run: pnpm nx run-many -t typecheck,lint,test
 
   e2e:
