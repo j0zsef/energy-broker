@@ -113,8 +113,8 @@ importers:
         specifier: ^7.14.5
         version: 7.26.3(@babel/core@7.26.10)
       '@cypress/code-coverage':
-        specifier: ^4.0.3
-        version: 4.0.3(@babel/core@7.26.10)(@babel/preset-env@7.26.7(@babel/core@7.26.10))(babel-loader@10.1.1(@babel/core@7.26.10)(@rspack/core@1.7.10(@swc/helpers@0.5.15))(webpack@5.105.4(@swc/core@1.5.29(@swc/helpers@0.5.15))(esbuild@0.25.5)))(cypress@13.17.0)(webpack@5.105.4(@swc/core@1.5.29(@swc/helpers@0.5.15))(esbuild@0.25.5))
+        specifier: ^3.11.0
+        version: 3.11.0(@babel/core@7.26.10)(@babel/preset-env@7.26.7(@babel/core@7.26.10))(babel-loader@10.1.1(@babel/core@7.26.10)(@rspack/core@1.7.10(@swc/helpers@0.5.15))(webpack@5.105.4(@swc/core@1.5.29(@swc/helpers@0.5.15))(esbuild@0.25.5)))(cypress@13.17.0)(webpack@5.105.4(@swc/core@1.5.29(@swc/helpers@0.5.15))(esbuild@0.25.5))
       '@energy-broker/api-client':
         specifier: workspace:*
         version: link:libs/services/api-client
@@ -1110,26 +1110,21 @@ packages:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
 
-  '@cypress/code-coverage@4.0.3':
-    resolution: {integrity: sha512-Dsx95C6rPJrN7ruRyyh3xOy39iAmrLBclHdF+yiC7f8O1SIAOojplveBdFGj0EHf2I2ieNw7ZZpT3Qy1Fju0aA==}
-    engines: {node: '>=20'}
+  '@cypress/code-coverage@3.11.0':
+    resolution: {integrity: sha512-ihSO1s03gmLRE224oIjrbdG1ey63vw/UY+VSqQ5m/TKkAvyz6GIiniq6juk3AV/+0vQC1Eb4UWFu8ndtji4M1g==}
     peerDependencies:
-      '@babel/core': ^7.0.1
-      '@babel/preset-env': ^7.0.0
-      babel-loader: ^8.3 || ^9 || ^10
-      cypress: '>=15.10.0'
-      webpack: ^4 || ^5
+      cypress: '*'
 
   '@cypress/request@3.0.7':
     resolution: {integrity: sha512-LzxlLEMbBOPYB85uXrDqvD4MgcenjRBLIns3zyhx7vTPj/0u2eQhzXvPiGcaJrV38Q9dbkExWp6cOHPJ+EtFYg==}
     engines: {node: '>= 6'}
 
-  '@cypress/webpack-preprocessor@6.0.4':
-    resolution: {integrity: sha512-ly+EcabWWbhrSPr2J/njQX7Y3da+QqOmFg8Og/MVmLxhDLKIzr2WhTdgzDYviPTLx/IKsdb41cc2RLYp6mSBRA==}
+  '@cypress/webpack-preprocessor@5.17.1':
+    resolution: {integrity: sha512-FE/e8ikPc8z4EVopJCaior3RGy0jd2q9Xcp5NtiwNG4XnLfEnUFTZlAGwXe75sEh4fNMPrBJW1KIz77PX5vGAw==}
     peerDependencies:
-      '@babel/core': ^7.25.2
-      '@babel/preset-env': ^7.25.3
-      babel-loader: ^8.3 || ^9 || ^10
+      '@babel/core': ^7.0.1
+      '@babel/preset-env': ^7.0.0
+      babel-loader: ^8.0.2 || ^9
       webpack: ^4 || ^5
 
   '@cypress/xvfb@1.2.4':
@@ -4262,8 +4257,8 @@ packages:
   dayjs@1.11.13:
     resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
 
-  dayjs@1.11.20:
-    resolution: {integrity: sha512-YbwwqR/uYpeoP4pu043q+LTDLFBLApUP6VxRihdfNTqu4ubqMlGDLd6ErXhEgsyvY0K6nCs7nggYumAN+9uEuQ==}
+  dayjs@1.11.9:
+    resolution: {integrity: sha512-QvzAURSbQ0pKdIye2txOzNaHmxtUBXerpY0FJsFXUMKbIZeFm5ht1LS/jFsrncjnmtv8HsG0W2g6c0zUjZWmpA==}
 
   debug@2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
@@ -4283,6 +4278,15 @@ packages:
 
   debug@4.3.1:
     resolution: {integrity: sha512-doEwdvm4PCeK4K3RQN2ZC2BYUBaxwLARCqZmMjtF8a51J2Rb0xpVloFRnCODwqjpwnAoao4pelN8l3RJdv3gRQ==}
+    engines: {node: '>=6.0'}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
+
+  debug@4.3.4:
+    resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}
     engines: {node: '>=6.0'}
     peerDependencies:
       supports-color: '*'
@@ -5229,6 +5233,10 @@ packages:
     resolution: {integrity: sha512-sSs4inE1FB2YQiymcmTv6NWENryABjUNPeWhOvmn4SjtKybglsyPZxFB3U1/+L1bYi0rNZDqCLlHyLYDl1Pq5A==}
     engines: {node: '>=8'}
 
+  globby@11.0.4:
+    resolution: {integrity: sha512-9O4MVG9ioZJ08ffbcyVYyLOJLk5JQ688pJ4eMGLpdWLHq/Wr1D9BlriLQyL0E+jbkuePVZXYFj47QM/v093wHg==}
+    engines: {node: '>=10'}
+
   goober@2.1.16:
     resolution: {integrity: sha512-erjk19y1U33+XAMe1VTvIONHYoSqE4iS7BYUZfHaqeohLmnC0FdxEh7rQU+6MZ4OajItzjZFSRtVANrQwNq6/g==}
     peerDependencies:
@@ -5663,12 +5671,20 @@ packages:
   isstream@0.1.2:
     resolution: {integrity: sha512-Yljz7ffyPbrLpLngrMtZ7NduUgVvi6wG9RJ9IUcyCd59YQ911PBJphODUcbOVbqYfxe1wuYf/LJ8PauMRwsM/g==}
 
+  istanbul-lib-coverage@3.0.0:
+    resolution: {integrity: sha512-UiUIqxMgRDET6eR+o5HbfRYP1l0hqkWOs7vNxC/mggutCMUIhWMm8gAHb8tHlyfD3/l6rlgNA5cKdDzEAf6hEg==}
+    engines: {node: '>=8'}
+
   istanbul-lib-coverage@3.2.2:
     resolution: {integrity: sha512-O8dpsF+r0WV/8MNRKfnmrtCWhuKjxrq2w+jpzBL5UZKTi2LeVWnWOmWRxFlesJONmc+wLAGvKQZEOanko0LFTg==}
     engines: {node: '>=8'}
 
   istanbul-lib-hook@3.0.0:
     resolution: {integrity: sha512-Pt/uge1Q9s+5VAZ+pCo16TYMWPBIl+oaNIjgLQxcX0itS6ueeaA+pEfThZpH8WxhFgCiEb8sAJY6MdUKgiIWaQ==}
+    engines: {node: '>=8'}
+
+  istanbul-lib-instrument@4.0.3:
+    resolution: {integrity: sha512-BXgQl9kf4WTCPCCpmFGoJkz/+uhvm7h7PFKUYxh7qarQd3ER33vHG//qaE8eN25l07YqZPpHXU9I09l/RD5aGQ==}
     engines: {node: '>=8'}
 
   istanbul-lib-instrument@5.2.1:
@@ -5679,9 +5695,9 @@ packages:
     resolution: {integrity: sha512-Vtgk7L/R2JHyyGW07spoFlB8/lpjiOLTjMdms6AFMraYt3BaJauod/NGrfnVG/y4Ix1JEuMRPDPEj2ua+zz1/Q==}
     engines: {node: '>=10'}
 
-  istanbul-lib-processinfo@3.0.0:
-    resolution: {integrity: sha512-P7nLXRRlo7Sqinty6lNa7+4o9jBUYGpqtejqCOZKfgXlRoxY/QArflcB86YO500Ahj4pDJEG34JjMRbQgePLnQ==}
-    engines: {node: 20 || >=22}
+  istanbul-lib-processinfo@2.0.3:
+    resolution: {integrity: sha512-NkwHbo3E00oybX6NGJi6ar0B29vxyvNwoC7eJ4G4Yq28UfY758Hgn/heV8VRFhevPED4LXfFz0DQ8z/0kw9zMg==}
+    engines: {node: '>=8'}
 
   istanbul-lib-report@3.0.1:
     resolution: {integrity: sha512-GCfE1mtsHGOELCU8e/Z7YWzpmybrx/+dSTfLrvY8qRmaY6zXTKWn6WQIjaAFw069icm6GVMNkgu0NzI4iPZUNw==}
@@ -5694,10 +5710,6 @@ packages:
   istanbul-lib-source-maps@5.0.6:
     resolution: {integrity: sha512-yg2d+Em4KizZC5niWhQaIomgf5WlL4vOOjZ5xGCmF8SnPE/mDWWXgvRExdcpCgh9lLRRa1/fSYp2ymmbJ1pI+A==}
     engines: {node: '>=10'}
-
-  istanbul-reports@3.1.7:
-    resolution: {integrity: sha512-BewmUXImeuRk2YY0PVbxgKAysvhRPUQE0h5QRM++nVWyubKGV0l8qQ5op8+B2DOmwSe63Jivj0BjkPQVf8fP5g==}
-    engines: {node: '>=8'}
 
   istanbul-reports@3.2.0:
     resolution: {integrity: sha512-HGYWWS/ehqTV3xN10i23tkPkpH46MLCIMFNCaaKNavAXTF1RkqxawEPtnjnGZ6XKSInBKkiOA5BKS+aZiY3AvA==}
@@ -5964,6 +5976,10 @@ packages:
 
   js-yaml@3.14.2:
     resolution: {integrity: sha512-PMSmkqxr106Xa156c2M265Z+FTrPl+oxd/rgOQy2tijQeK5TxQ43psO1ZCwhVOSdnn+RzkzlRz/eY4BgJBYVpg==}
+    hasBin: true
+
+  js-yaml@4.1.0:
+    resolution: {integrity: sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==}
     hasBin: true
 
   js-yaml@4.1.1:
@@ -6445,9 +6461,9 @@ packages:
       '@swc/core':
         optional: true
 
-  nyc@18.0.0:
-    resolution: {integrity: sha512-G5UyHinFkB1BxqGTrmZdB6uIYH0+v7ZnVssuflUDi+J+RhKWyAhRT1RCehBSI6jLFLuUUgFDyLt49mUtdO1XeQ==}
-    engines: {node: 20 || >=22}
+  nyc@15.1.0:
+    resolution: {integrity: sha512-jMW04n9SxKdKi1ZMGhvUTHBN0EICCRkHemEoE5jm6mTYcqcdas0ATzgUgejlQUHMvpnOZqGB5Xxsv9KxJW1j8A==}
+    engines: {node: '>=8.9'}
     hasBin: true
 
   nypm@0.6.2:
@@ -7243,9 +7259,9 @@ packages:
   rfdc@1.4.1:
     resolution: {integrity: sha512-q1b3N5QkRUWUl7iyylaaj3kOpIT0N2i9MqIEQXP73GVsN9cw3fdx8X63cEmWhJGi2PPCF23Ijp7ktmd39rawIA==}
 
-  rimraf@6.1.3:
-    resolution: {integrity: sha512-LKg+Cr2ZF61fkcaK1UdkH2yEBBKnYjTyWzTJT6KNPcSPaiT7HSdhtMXQuN5wkTX0Xu72KQ1l8S42rlmexS2hSA==}
-    engines: {node: 20 || >=22}
+  rimraf@3.0.2:
+    resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
   rollup-plugin-copy@3.5.0:
@@ -7535,8 +7551,8 @@ packages:
     resolution: {integrity: sha512-i5uvt8C3ikiWeNZSVZNWcfZPItFQOsYTUAOkcUPGd8DqDy1uOUikjt5dG+uRlwyvR108Fb9DOd4GvXfT0N2/uQ==}
     engines: {node: '>= 12'}
 
-  spawn-wrap@3.0.0:
-    resolution: {integrity: sha512-z+s5vv4KzFPJVddGab0xX2n7kQPGMdNUX5l9T8EJqsXdKTWpcxmAqWHpsgHEXoC1taGBCc7b79bi62M5kdbrxQ==}
+  spawn-wrap@2.0.0:
+    resolution: {integrity: sha512-EeajNjfN9zMnULLwhZZQU3GWBoFNkbngTUPfaawT4RkMiviTxcX0qfhVbGey39mfctfDHkWtuecgQ8NJcyQWHg==}
     engines: {node: '>=8'}
 
   split2@4.2.0:
@@ -9472,24 +9488,24 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
 
-  '@cypress/code-coverage@4.0.3(@babel/core@7.26.10)(@babel/preset-env@7.26.7(@babel/core@7.26.10))(babel-loader@10.1.1(@babel/core@7.26.10)(@rspack/core@1.7.10(@swc/helpers@0.5.15))(webpack@5.105.4(@swc/core@1.5.29(@swc/helpers@0.5.15))(esbuild@0.25.5)))(cypress@13.17.0)(webpack@5.105.4(@swc/core@1.5.29(@swc/helpers@0.5.15))(esbuild@0.25.5))':
+  '@cypress/code-coverage@3.11.0(@babel/core@7.26.10)(@babel/preset-env@7.26.7(@babel/core@7.26.10))(babel-loader@10.1.1(@babel/core@7.26.10)(@rspack/core@1.7.10(@swc/helpers@0.5.15))(webpack@5.105.4(@swc/core@1.5.29(@swc/helpers@0.5.15))(esbuild@0.25.5)))(cypress@13.17.0)(webpack@5.105.4(@swc/core@1.5.29(@swc/helpers@0.5.15))(esbuild@0.25.5))':
     dependencies:
-      '@babel/core': 7.26.10
-      '@babel/preset-env': 7.26.7(@babel/core@7.26.10)
-      '@cypress/webpack-preprocessor': 6.0.4(@babel/core@7.26.10)(@babel/preset-env@7.26.7(@babel/core@7.26.10))(babel-loader@10.1.1(@babel/core@7.26.10)(@rspack/core@1.7.10(@swc/helpers@0.5.15))(webpack@5.105.4(@swc/core@1.5.29(@swc/helpers@0.5.15))(esbuild@0.25.5)))(webpack@5.105.4(@swc/core@1.5.29(@swc/helpers@0.5.15))(esbuild@0.25.5))
-      babel-loader: 10.1.1(@babel/core@7.26.10)(@rspack/core@1.7.10(@swc/helpers@0.5.15))(webpack@5.105.4(@swc/core@1.5.29(@swc/helpers@0.5.15))(esbuild@0.25.5))
+      '@cypress/webpack-preprocessor': 5.17.1(@babel/core@7.26.10)(@babel/preset-env@7.26.7(@babel/core@7.26.10))(babel-loader@10.1.1(@babel/core@7.26.10)(@rspack/core@1.7.10(@swc/helpers@0.5.15))(webpack@5.105.4(@swc/core@1.5.29(@swc/helpers@0.5.15))(esbuild@0.25.5)))(webpack@5.105.4(@swc/core@1.5.29(@swc/helpers@0.5.15))(esbuild@0.25.5))
       chalk: 4.1.2
       cypress: 13.17.0
-      dayjs: 1.11.20
-      debug: 4.4.3(supports-color@8.1.1)
+      dayjs: 1.11.9
+      debug: 4.3.4
       execa: 4.1.0
-      istanbul-lib-coverage: 3.2.2
-      js-yaml: 4.1.1
-      nyc: 18.0.0
-      tinyglobby: 0.2.15
-      webpack: 5.105.4(@swc/core@1.5.29(@swc/helpers@0.5.15))(esbuild@0.25.5)
+      globby: 11.0.4
+      istanbul-lib-coverage: 3.0.0
+      js-yaml: 4.1.0
+      nyc: 15.1.0
     transitivePeerDependencies:
+      - '@babel/core'
+      - '@babel/preset-env'
+      - babel-loader
       - supports-color
+      - webpack
 
   '@cypress/request@3.0.7':
     dependencies:
@@ -9512,7 +9528,7 @@ snapshots:
       tunnel-agent: 0.6.0
       uuid: 8.3.2
 
-  '@cypress/webpack-preprocessor@6.0.4(@babel/core@7.26.10)(@babel/preset-env@7.26.7(@babel/core@7.26.10))(babel-loader@10.1.1(@babel/core@7.26.10)(@rspack/core@1.7.10(@swc/helpers@0.5.15))(webpack@5.105.4(@swc/core@1.5.29(@swc/helpers@0.5.15))(esbuild@0.25.5)))(webpack@5.105.4(@swc/core@1.5.29(@swc/helpers@0.5.15))(esbuild@0.25.5))':
+  '@cypress/webpack-preprocessor@5.17.1(@babel/core@7.26.10)(@babel/preset-env@7.26.7(@babel/core@7.26.10))(babel-loader@10.1.1(@babel/core@7.26.10)(@rspack/core@1.7.10(@swc/helpers@0.5.15))(webpack@5.105.4(@swc/core@1.5.29(@swc/helpers@0.5.15))(esbuild@0.25.5)))(webpack@5.105.4(@swc/core@1.5.29(@swc/helpers@0.5.15))(esbuild@0.25.5))':
     dependencies:
       '@babel/core': 7.26.10
       '@babel/preset-env': 7.26.7(@babel/core@7.26.10)
@@ -9520,7 +9536,6 @@ snapshots:
       bluebird: 3.7.1
       debug: 4.4.3(supports-color@8.1.1)
       lodash: 4.17.23
-      semver: 7.7.4
       webpack: 5.105.4(@swc/core@1.5.29(@swc/helpers@0.5.15))(esbuild@0.25.5)
     transitivePeerDependencies:
       - supports-color
@@ -13477,7 +13492,7 @@ snapshots:
 
   dayjs@1.11.13: {}
 
-  dayjs@1.11.20: {}
+  dayjs@1.11.9: {}
 
   debug@2.6.9:
     dependencies:
@@ -13490,6 +13505,10 @@ snapshots:
       supports-color: 8.1.1
 
   debug@4.3.1:
+    dependencies:
+      ms: 2.1.2
+
+  debug@4.3.4:
     dependencies:
       ms: 2.1.2
 
@@ -14690,6 +14709,15 @@ snapshots:
       merge2: 1.4.1
       slash: 3.0.0
 
+  globby@11.0.4:
+    dependencies:
+      array-union: 2.1.0
+      dir-glob: 3.0.1
+      fast-glob: 3.3.3
+      ignore: 5.3.2
+      merge2: 1.4.1
+      slash: 3.0.0
+
   goober@2.1.16(csstype@3.1.3):
     dependencies:
       csstype: 3.1.3
@@ -15116,11 +15144,22 @@ snapshots:
 
   isstream@0.1.2: {}
 
+  istanbul-lib-coverage@3.0.0: {}
+
   istanbul-lib-coverage@3.2.2: {}
 
   istanbul-lib-hook@3.0.0:
     dependencies:
       append-transform: 2.0.0
+
+  istanbul-lib-instrument@4.0.3:
+    dependencies:
+      '@babel/core': 7.29.0
+      '@istanbuljs/schema': 0.1.3
+      istanbul-lib-coverage: 3.2.2
+      semver: 6.3.1
+    transitivePeerDependencies:
+      - supports-color
 
   istanbul-lib-instrument@5.2.1:
     dependencies:
@@ -15142,13 +15181,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  istanbul-lib-processinfo@3.0.0:
+  istanbul-lib-processinfo@2.0.3:
     dependencies:
       archy: 1.0.0
       cross-spawn: 7.0.6
       istanbul-lib-coverage: 3.2.2
       p-map: 3.0.0
-      rimraf: 6.1.3
+      rimraf: 3.0.2
       uuid: 8.3.2
 
   istanbul-lib-report@3.0.1:
@@ -15172,11 +15211,6 @@ snapshots:
       istanbul-lib-coverage: 3.2.2
     transitivePeerDependencies:
       - supports-color
-
-  istanbul-reports@3.1.7:
-    dependencies:
-      html-escaper: 2.0.2
-      istanbul-lib-report: 3.0.1
 
   istanbul-reports@3.2.0:
     dependencies:
@@ -15810,6 +15844,10 @@ snapshots:
       argparse: 1.0.10
       esprima: 4.0.1
 
+  js-yaml@4.1.0:
+    dependencies:
+      argparse: 2.0.1
+
   js-yaml@4.1.1:
     dependencies:
       argparse: 2.0.1
@@ -16297,7 +16335,7 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  nyc@18.0.0:
+  nyc@15.1.0:
     dependencies:
       '@istanbuljs/load-nyc-config': 1.1.0
       '@istanbuljs/schema': 0.1.3
@@ -16306,25 +16344,25 @@ snapshots:
       decamelize: 1.2.0
       find-cache-dir: 3.3.2
       find-up: 4.1.0
-      foreground-child: 3.3.1
+      foreground-child: 2.0.0
       get-package-type: 0.1.0
-      glob: 13.0.6
+      glob: 7.2.3
       istanbul-lib-coverage: 3.2.2
       istanbul-lib-hook: 3.0.0
-      istanbul-lib-instrument: 6.0.3
-      istanbul-lib-processinfo: 3.0.0
+      istanbul-lib-instrument: 4.0.3
+      istanbul-lib-processinfo: 2.0.3
       istanbul-lib-report: 3.0.1
       istanbul-lib-source-maps: 4.0.1
-      istanbul-reports: 3.1.7
+      istanbul-reports: 3.2.0
       make-dir: 3.1.0
       node-preload: 0.2.1
       p-map: 3.0.0
       process-on-spawn: 1.1.0
       resolve-from: 5.0.0
-      rimraf: 6.1.3
+      rimraf: 3.0.2
       signal-exit: 3.0.7
-      spawn-wrap: 3.0.0
-      test-exclude: 8.0.0
+      spawn-wrap: 2.0.0
+      test-exclude: 6.0.0
       yargs: 15.4.1
     transitivePeerDependencies:
       - supports-color
@@ -17124,10 +17162,9 @@ snapshots:
 
   rfdc@1.4.1: {}
 
-  rimraf@6.1.3:
+  rimraf@3.0.2:
     dependencies:
-      glob: 13.0.6
-      package-json-from-dist: 1.0.1
+      glob: 7.2.3
 
   rollup-plugin-copy@3.5.0:
     dependencies:
@@ -17514,13 +17551,12 @@ snapshots:
 
   source-map@0.7.6: {}
 
-  spawn-wrap@3.0.0:
+  spawn-wrap@2.0.0:
     dependencies:
-      cross-spawn: 7.0.6
       foreground-child: 2.0.0
       is-windows: 1.0.2
       make-dir: 3.1.0
-      rimraf: 6.1.3
+      rimraf: 3.0.2
       signal-exit: 3.0.7
       which: 2.0.2
 
