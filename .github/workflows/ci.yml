@@ -30,8 +30,6 @@ jobs:
     name: E2E Tests
     needs: checks
     runs-on: ubuntu-latest
-    container:
-      image: cypress/browsers:latest
     steps:
       - uses: actions/checkout@v4
 
@@ -40,6 +38,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
+          cache: pnpm
 
       - run: pnpm install --frozen-lockfile
 
