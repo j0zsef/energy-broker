@@ -1,7 +1,6 @@
 {
-  "report-dir": "coverage/apps/frontend-e2e",
+  "report-dir": "../../coverage/apps/frontend-e2e",
   "reporter": ["lcov", "text-summary"],
-  "include": ["apps/frontend/src/**"],
   "exclude": [
     "**/*.cy.ts",
     "**/*.spec.ts",
