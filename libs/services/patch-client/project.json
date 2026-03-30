@@ -1,0 +1,30 @@
+{
+  "name": "patch-client",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/services/patch-client/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/services/patch-client",
+        "main": "libs/services/patch-client/src/index.ts",
+        "tsConfig": "libs/services/patch-client/tsconfig.lib.json",
+        "bundle": false,
+        "esbuildOptions": {
+          "outExtension": { ".js": ".js" }
+        }
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "libs/services/patch-client",
+        "command": "tsc -p tsconfig.lib.json --noEmit"
+      }
+    }
+  },
+  "implicitDependencies": ["shared"]
+}

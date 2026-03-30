@@ -1,3 +1,4 @@
+export * from './types/carbon-credit.js';
 export * from './types/energy-dashboard.js';
 export * from './types/energy-provider.js';
 export * from './types/green-button.js';

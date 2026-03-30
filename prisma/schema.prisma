@@ -68,3 +68,21 @@ model Session {
 
   @@index([expiresAt])
 }
+
+model CarbonCreditOrder {
+  id           Int      @id @default(autoincrement())
+  patchOrderId String   @unique
+  userId       String
+  massGrams    Int
+  priceCents   Int
+  currency     String   @default("USD")
+  state        String   @default("draft")
+  projectId    String?
+  projectName  String?
+  projectType  String?
+  vintageYear  Int?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([userId])
+}

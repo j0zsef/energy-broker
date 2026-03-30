@@ -18,6 +18,8 @@ import { Route as ConnectionsIndexImport } from './routes/connections/index'
 import { Route as CarbonCreditsIndexImport } from './routes/carbon-credits/index'
 import { Route as ConnectionsAddImport } from './routes/connections/add'
 import { Route as ConnectionsEnergyConnectionImport } from './routes/connections/$energy-connection'
+import { Route as CarbonCreditsSuccessImport } from './routes/carbon-credits/success'
+import { Route as CarbonCreditsOffsetImport } from './routes/carbon-credits/offset'
 import { Route as AccountSummaryImport } from './routes/account/summary'
 import { Route as AccountSettingsImport } from './routes/account/settings'
 
@@ -65,6 +67,18 @@ const ConnectionsEnergyConnectionRoute =
     getParentRoute: () => rootRoute,
   } as any)
 
+const CarbonCreditsSuccessRoute = CarbonCreditsSuccessImport.update({
+  id: '/carbon-credits/success',
+  path: '/carbon-credits/success',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CarbonCreditsOffsetRoute = CarbonCreditsOffsetImport.update({
+  id: '/carbon-credits/offset',
+  path: '/carbon-credits/offset',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const AccountSummaryRoute = AccountSummaryImport.update({
   id: '/account/summary',
   path: '/account/summary',
@@ -107,6 +121,20 @@ declare module '@tanstack/react-router' {
       path: '/account/summary'
       fullPath: '/account/summary'
       preLoaderRoute: typeof AccountSummaryImport
+      parentRoute: typeof rootRoute
+    }
+    '/carbon-credits/offset': {
+      id: '/carbon-credits/offset'
+      path: '/carbon-credits/offset'
+      fullPath: '/carbon-credits/offset'
+      preLoaderRoute: typeof CarbonCreditsOffsetImport
+      parentRoute: typeof rootRoute
+    }
+    '/carbon-credits/success': {
+      id: '/carbon-credits/success'
+      path: '/carbon-credits/success'
+      fullPath: '/carbon-credits/success'
+      preLoaderRoute: typeof CarbonCreditsSuccessImport
       parentRoute: typeof rootRoute
     }
     '/connections/$energy-connection': {
@@ -154,6 +182,8 @@ export interface FileRoutesByFullPath {
   '': typeof AuthenticatedRoute
   '/account/settings': typeof AccountSettingsRoute
   '/account/summary': typeof AccountSummaryRoute
+  '/carbon-credits/offset': typeof CarbonCreditsOffsetRoute
+  '/carbon-credits/success': typeof CarbonCreditsSuccessRoute
   '/connections/$energy-connection': typeof ConnectionsEnergyConnectionRoute
   '/connections/add': typeof ConnectionsAddRoute
   '/carbon-credits': typeof CarbonCreditsIndexRoute
@@ -166,6 +196,8 @@ export interface FileRoutesByTo {
   '': typeof AuthenticatedRoute
   '/account/settings': typeof AccountSettingsRoute
   '/account/summary': typeof AccountSummaryRoute
+  '/carbon-credits/offset': typeof CarbonCreditsOffsetRoute
+  '/carbon-credits/success': typeof CarbonCreditsSuccessRoute
   '/connections/$energy-connection': typeof ConnectionsEnergyConnectionRoute
   '/connections/add': typeof ConnectionsAddRoute
   '/carbon-credits': typeof CarbonCreditsIndexRoute
@@ -179,6 +211,8 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRoute
   '/account/settings': typeof AccountSettingsRoute
   '/account/summary': typeof AccountSummaryRoute
+  '/carbon-credits/offset': typeof CarbonCreditsOffsetRoute
+  '/carbon-credits/success': typeof CarbonCreditsSuccessRoute
   '/connections/$energy-connection': typeof ConnectionsEnergyConnectionRoute
   '/connections/add': typeof ConnectionsAddRoute
   '/carbon-credits/': typeof CarbonCreditsIndexRoute
@@ -193,6 +227,8 @@ export interface FileRouteTypes {
     | ''
     | '/account/settings'
     | '/account/summary'
+    | '/carbon-credits/offset'
+    | '/carbon-credits/success'
     | '/connections/$energy-connection'
     | '/connections/add'
     | '/carbon-credits'
@@ -204,6 +240,8 @@ export interface FileRouteTypes {
     | ''
     | '/account/settings'
     | '/account/summary'
+    | '/carbon-credits/offset'
+    | '/carbon-credits/success'
     | '/connections/$energy-connection'
     | '/connections/add'
     | '/carbon-credits'
@@ -215,6 +253,8 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/account/settings'
     | '/account/summary'
+    | '/carbon-credits/offset'
+    | '/carbon-credits/success'
     | '/connections/$energy-connection'
     | '/connections/add'
     | '/carbon-credits/'
@@ -228,6 +268,8 @@ export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRoute
   AccountSettingsRoute: typeof AccountSettingsRoute
   AccountSummaryRoute: typeof AccountSummaryRoute
+  CarbonCreditsOffsetRoute: typeof CarbonCreditsOffsetRoute
+  CarbonCreditsSuccessRoute: typeof CarbonCreditsSuccessRoute
   ConnectionsEnergyConnectionRoute: typeof ConnectionsEnergyConnectionRoute
   ConnectionsAddRoute: typeof ConnectionsAddRoute
   CarbonCreditsIndexRoute: typeof CarbonCreditsIndexRoute
@@ -240,6 +282,8 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRoute,
   AccountSettingsRoute: AccountSettingsRoute,
   AccountSummaryRoute: AccountSummaryRoute,
+  CarbonCreditsOffsetRoute: CarbonCreditsOffsetRoute,
+  CarbonCreditsSuccessRoute: CarbonCreditsSuccessRoute,
   ConnectionsEnergyConnectionRoute: ConnectionsEnergyConnectionRoute,
   ConnectionsAddRoute: ConnectionsAddRoute,
   CarbonCreditsIndexRoute: CarbonCreditsIndexRoute,
@@ -261,6 +305,8 @@ export const routeTree = rootRoute
         "/_authenticated",
         "/account/settings",
         "/account/summary",
+        "/carbon-credits/offset",
+        "/carbon-credits/success",
         "/connections/$energy-connection",
         "/connections/add",
         "/carbon-credits/",
@@ -279,6 +325,12 @@ export const routeTree = rootRoute
     },
     "/account/summary": {
       "filePath": "account/summary.tsx"
+    },
+    "/carbon-credits/offset": {
+      "filePath": "carbon-credits/offset.tsx"
+    },
+    "/carbon-credits/success": {
+      "filePath": "carbon-credits/success.tsx"
     },
     "/connections/$energy-connection": {
       "filePath": "connections/$energy-connection.tsx"

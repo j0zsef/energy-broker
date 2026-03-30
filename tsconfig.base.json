@@ -5,6 +5,7 @@
       "@energy-broker/shared": ["libs/shared/src/index.ts"],
       "@energy-broker/api-client": ["libs/services/api-client/src/index.ts"],
       "@energy-broker/green-button-client": ["libs/services/green-button-client/src/index.ts"],
+      "@energy-broker/patch-client": ["libs/services/patch-client/src/index.ts"],
       "@energy-broker/stores": ["libs/stores/src/index.ts"],
       "@energy-broker/components": ["libs/components/src/index.ts"]
     },

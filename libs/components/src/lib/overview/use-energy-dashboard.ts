@@ -10,6 +10,7 @@ import {
   DashboardStats,
   ElectricalDataSummary,
   EnergyMixEntry,
+  LBS_TO_METRIC_TONS,
   MonthlyConsumption,
   StatDeltas,
   TimePeriod,
@@ -69,6 +70,7 @@ export function useEnergyDashboard(
     const stats: DashboardStats = {
       carbonFootprintLbs: totalCarbon,
       deltas,
+      emissionsMtCo2: totalCarbon * LBS_TO_METRIC_TONS,
       totalConsumptionKwh: totalConsumption,
       totalCostDollars: totalCost,
     };

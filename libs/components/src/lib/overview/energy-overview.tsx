@@ -1,7 +1,8 @@
 import { Alert, Col, Row } from 'react-bootstrap';
 import { MeterEntry, TimePeriod, useEnergyDashboard } from './use-energy-dashboard';
-import { fetchEnergySummary, fetchEnergyUsage, useEnergyConnections } from '@energy-broker/api-client';
+import { fetchEnergySummary, fetchEnergyUsage, useCarbonOrders, useEnergyConnections } from '@energy-broker/api-client';
 import { useCallback, useState } from 'react';
+import { EmissionsStatsCards } from './emissions-stats-cards';
 import { EnergyBreakdown } from './energy-breakdown';
 import { EnergyConsumptionChart } from './energy-consumption-chart';
 import { EnergyEmptyState } from './energy-empty-state';
@@ -17,6 +18,7 @@ export function EnergyOverview() {
   const [selectedPeriod, setSelectedPeriod] = useState<TimePeriod>('3m');
 
   const { data: connections = [], isLoading: connectionsLoading } = useEnergyConnections();
+  const { data: carbonSummary } = useCarbonOrders();
   const activeConnections = connections.filter(c => new Date(c.expiresAt) > new Date());
 
   // Fetch meters for ALL active connections
@@ -100,6 +102,12 @@ export function EnergyOverview() {
       <EnergyProviderContext connections={activeConnections} />
       <EnergyTimePeriodTabs onSelect={setSelectedPeriod} selectedPeriod={selectedPeriod} />
       <EnergyStatsCards stats={stats} />
+      {carbonSummary && (
+        <EmissionsStatsCards
+          creditsUsedMtCo2={carbonSummary.totalOffsetMtCo2}
+          emissionsMtCo2={stats.emissionsMtCo2}
+        />
+      )}
       <Row className="g-3">
         <Col lg={7}>
           <EnergyConsumptionChart monthlyConsumption={monthlyConsumption} />

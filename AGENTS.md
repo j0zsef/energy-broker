@@ -87,6 +87,17 @@ The mock server (`apps/mock-green-button-server/src/`) is separated by concern:
 - `mock-oauth/` — OAuth token proxy and token validation middleware
 - `mock-green-button-api/` — ESPI Atom XML endpoints and mock response data
 
+## Styling
+
+- **Dedicated SCSS files** — every component gets a colocated `.scss` file (e.g., `my-component.tsx` + `my-component.scss`). Never use inline `style={{ }}` attributes or className-only utility overloads for layout/sizing. Bootstrap utility classes (`mb-3`, `g-3`, `text-center`) are acceptable for simple spacing on container elements, but visual styling (colors, borders, shadows, transitions, responsive breakpoints) must go in SCSS.
+- **BEM naming** — `.block__element--modifier` convention (e.g., `.stat-card__value`, `.project-card--selected`).
+- **Bootstrap CSS variables** — use `var(--bs-*)` tokens for colors, borders, and backgrounds. Never hardcode hex values that duplicate Bootstrap theme tokens.
+- **Dark mode** — support via `[data-bs-theme='dark'] &` selector when overriding backgrounds or shadows.
+- **Responsive** — mobile-first, use `@media (min-width: 768px)` for desktop overrides. Tables use the responsive pattern: hide table on mobile, show stacked cards instead (see `energy-connections.scss`, `carbon-credits-table.scss`).
+- **Transitions** — `0.15s ease` for standard interactions, `0.2s ease` for brand/filter effects.
+- **Shared components** — reusable UI primitives live in `libs/components/src/lib/shared/` (e.g., `StatCard`, `PageSpinner`, `DeltaBadge`). Extract shared patterns rather than duplicating SCSS across feature components.
+- **SCSS variables** — Bootstrap theme overrides live in `apps/frontend/src/styles/_variables.scss`, imported before Bootstrap in `root.scss`.
+
 ## Code Style & Linting
 
 - **ESLint flat config** (`eslint.config.mjs`) with `@stylistic` plugin for formatting

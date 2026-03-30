@@ -1,0 +1,36 @@
+// ── Carbon order success confirmation ──────────
+// Centered confirmation card after checkout return.
+
+.carbon-success {
+  text-align: center;
+  padding: 2rem 1rem;
+  max-width: 32rem;
+  margin: 0 auto;
+
+  @media (min-width: 768px) {
+    padding: 3rem 2rem;
+  }
+}
+
+.carbon-success__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background-color: rgba(var(--bs-success-rgb), 0.12);
+  color: var(--bs-success);
+  font-size: 1.5rem;
+  margin: 0 auto 1.25rem;
+}
+
+.carbon-success__title {
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.carbon-success__description {
+  color: var(--bs-secondary-color);
+  margin-bottom: 1.5rem;
+}

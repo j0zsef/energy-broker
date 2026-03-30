@@ -1,0 +1,17 @@
+// ── Carbon Credits page layout ─────────────────
+.carbon-credits {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.carbon-credits__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.carbon-credits__title {
+  margin-bottom: 0;
+}

@@ -1,4 +1,8 @@
 export * from './lib/api-client';
+export * from './lib/hooks/carbon/useCarbonOrders';
+export * from './lib/hooks/carbon/useCarbonProjects';
+export * from './lib/hooks/carbon/useCreateCarbonOrder';
+export * from './lib/hooks/carbon/usePlaceCarbonOrder';
 export * from './lib/hooks/connections/useDeleteConnection';
 export { fetchEnergySummary } from './lib/hooks/connections/useEnergySummary';
 export { fetchEnergyUsage, useEnergyUsage } from './lib/hooks/connections/useEnergyUsage';

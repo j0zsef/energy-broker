@@ -1,0 +1,70 @@
+// ── Carbon credits order table ─────────────────
+// Responsive: table on desktop (md+), stacked cards on mobile.
+// Follows the energy-connections responsive pattern.
+
+.carbon-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+// ── Desktop table ──────────────────────────────
+.carbon-table__desktop {
+  display: none;
+
+  @media (min-width: 768px) {
+    display: block;
+  }
+
+  .table {
+    margin-bottom: 0;
+  }
+}
+
+// ── Mobile cards ───────────────────────────────
+.carbon-table__mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
+
+.carbon-table__card {
+  border: 1px solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius);
+  border-left: 3px solid var(--bs-success);
+  background-color: var(--bs-body-bg);
+  padding: 1rem;
+
+  [data-bs-theme='dark'] & {
+    background-color: var(--bs-tertiary-bg);
+  }
+}
+
+.carbon-table__card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.carbon-table__card-credits {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.carbon-table__card-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.8125rem;
+  color: var(--bs-secondary-color);
+}
+
+.carbon-table__empty {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--bs-secondary-color);
+}

@@ -43,7 +43,15 @@
       "Bash(gh api:*)",
       "WebFetch(domain:api.github.com)",
       "WebSearch",
-      "Bash(CYPRESS_COVERAGE=true pnpm e2e:*)"
+      "Bash(CYPRESS_COVERAGE=true pnpm e2e:*)",
+      "WebFetch(domain:docs.patch.io)",
+      "WebFetch(domain:www.patch.io)",
+      "WebFetch(domain:api.patch.io)",
+      "WebFetch(domain:www.npmjs.com)",
+      "mcp__obsidian__search_notes",
+      "mcp__obsidian__list_directory",
+      "Bash(pnpm prisma-generate:*)",
+      "Bash(xargs:*)"
     ]
   }
 }

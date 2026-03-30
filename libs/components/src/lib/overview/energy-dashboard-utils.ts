@@ -1,4 +1,6 @@
-import { ElectricalDataSummary, TimePeriod } from '@energy-broker/shared';
+import { CARBON_LBS_PER_KWH, ElectricalDataSummary, TimePeriod } from '@energy-broker/shared';
+
+export { CARBON_LBS_PER_KWH };
 
 export interface ParsedSummary {
   connectionId: number
@@ -8,8 +10,6 @@ export interface ParsedSummary {
   date: Date
   meterTitle: string
 }
-
-export const CARBON_LBS_PER_KWH = 0.86;
 
 export function parseSummary(
   summary: ElectricalDataSummary, meterTitle: string, connectionId: number, connectionLabel: string,

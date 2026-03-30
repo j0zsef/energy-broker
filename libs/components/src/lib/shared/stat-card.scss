@@ -1,0 +1,62 @@
+// ── Shared stat card ───────────────────────────
+// Reusable stat card with left-border accent, hover lift, and large value display.
+// Used by EnergyStatsCards, CarbonCreditsStats, EmissionsStatsCards.
+
+.stat-card {
+  border-left: 4px solid var(--stat-card-accent, var(--bs-primary));
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  text-align: center;
+
+  &:hover {
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+  }
+
+  [data-bs-theme='dark'] & {
+    &:hover {
+      box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.24);
+    }
+  }
+}
+
+.stat-card--success {
+  --stat-card-accent: var(--bs-success);
+}
+
+.stat-card--net-positive {
+  --stat-card-accent: var(--bs-success);
+  border-left-width: 4px;
+}
+
+.stat-card__subtitle {
+  margin-bottom: 0.5rem;
+  color: var(--bs-secondary-color);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.stat-card__value {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--bs-emphasis-color);
+  line-height: 1.2;
+}
+
+.stat-card__unit {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--bs-secondary-color);
+  margin-left: 0.25rem;
+}
+
+.stat-card__footer {
+  margin-top: 0.25rem;
+}
+
+// Used by DeltaBadge inside stat cards
+.stat-delta {
+  font-size: 0.8125rem;
+  font-weight: 500;
+}

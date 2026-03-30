@@ -9,6 +9,7 @@ export interface StatDeltas {
 export interface DashboardStats {
   carbonFootprintLbs: number
   deltas: StatDeltas
+  emissionsMtCo2: number
   totalConsumptionKwh: number
   totalCostDollars: number
 }

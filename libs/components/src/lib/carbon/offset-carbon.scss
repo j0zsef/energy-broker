@@ -1,0 +1,34 @@
+// ── Offset carbon page ────────────────────────
+// Project selection + checkout flow layout.
+
+.offset-carbon__back {
+  display: inline-block;
+  margin-bottom: 1rem;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--bs-secondary-color);
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: var(--bs-primary);
+  }
+}
+
+.offset-carbon__subtitle {
+  color: var(--bs-secondary-color);
+  margin-bottom: 1.5rem;
+}
+
+.offset-carbon__checkout {
+  margin-top: 1.5rem;
+}
+
+.offset-carbon__checkout-title {
+  margin-bottom: 1rem;
+}
+
+.offset-carbon__amount-input {
+  max-width: 16rem;
+  margin-bottom: 1rem;
+}
