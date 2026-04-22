@@ -11,7 +11,7 @@ const patchClient = createPatchClient(process.env.PATCH_API_KEY ?? '');
 const orders = async (fastify: FastifyInstance) => {
   // GET /v1/carbon/orders — list user's orders with summary
   fastify.withTypeProvider<ZodTypeProvider>().get(
-    '/',
+    '/orders',
     { preHandler: fastify.requireSession() },
     async (request) => {
       const userId = request.user.sub;
@@ -49,7 +49,7 @@ const orders = async (fastify: FastifyInstance) => {
     },
   );
 
-  // POST /v1/carbon/orders — create draft order
+  // POST /v1/carbon/orders/create — create draft order
   const createOpts = {
     preHandler: fastify.requireSession(),
     schema: {
@@ -60,29 +60,37 @@ const orders = async (fastify: FastifyInstance) => {
     },
   };
 
-  fastify.withTypeProvider<ZodTypeProvider>().post('/create', createOpts, async (request) => {
+  fastify.withTypeProvider<ZodTypeProvider>().post('/orders/create', createOpts, async (request) => {
     const userId = request.user.sub;
     const { massGrams, projectId } = request.body;
 
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:9200';
-    const returnUrl = `${frontendUrl}/carbon-credits/success`;
 
-    const patchOrder = await patchClient.createOrder(projectId, massGrams, returnUrl);
-
+    // Create the DB record first so we have its id for the return_url
     const dbOrder = await prismaClient.carbonCreditOrder.create({
       data: {
         massGrams,
-        patchOrderId: patchOrder.id,
-        priceCents: patchOrder.priceCents,
+        patchOrderId: null,
+        priceCents: 0,
         projectId,
         state: 'draft',
         userId,
       },
     });
 
-    return {
-      checkoutUrl: `${patchOrder.checkoutUrl}&orderId=${dbOrder.id}`,
-    };
+    const returnUrl = `${frontendUrl}/carbon-credits/success?orderId=${dbOrder.id}`;
+    const patchOrder = await patchClient.createOrder(projectId, massGrams, returnUrl);
+
+    // Write the Patch order id back to the DB record
+    await prismaClient.carbonCreditOrder.update({
+      data: {
+        patchOrderId: patchOrder.id,
+        priceCents: patchOrder.priceCents,
+      },
+      where: { id: dbOrder.id },
+    });
+
+    return { checkoutUrl: patchOrder.checkoutUrl };
   });
 
   // PATCH /v1/carbon/orders/:id/place — place a draft order after checkout
@@ -95,7 +103,7 @@ const orders = async (fastify: FastifyInstance) => {
     },
   };
 
-  fastify.withTypeProvider<ZodTypeProvider>().patch('/:id/place', placeOpts, async (request, reply) => {
+  fastify.withTypeProvider<ZodTypeProvider>().patch('/orders/:id/place', placeOpts, async (request, reply) => {
     const userId = request.user.sub;
     const orderId = Number(request.params.id);
 
@@ -109,6 +117,10 @@ const orders = async (fastify: FastifyInstance) => {
 
     if (dbOrder.state !== 'draft') {
       return reply.status(400).send({ error: 'Order already placed' });
+    }
+
+    if (!dbOrder.patchOrderId) {
+      return reply.status(400).send({ error: 'Order not fully initialized' });
     }
 
     const patchResult = await patchClient.placeOrder(dbOrder.patchOrderId);

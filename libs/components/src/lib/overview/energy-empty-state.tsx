@@ -2,30 +2,37 @@ import './energy-empty-state.scss';
 import { Button, Card } from 'react-bootstrap';
 import { Link } from '@tanstack/react-router';
 
+const steps = [
+  { icon: '🔌', label: 'Connect an energy provider' },
+  { icon: '📊', label: 'View your usage and costs' },
+  { icon: '🌱', label: 'Save money and offset carbon' },
+];
+
 export function EnergyEmptyState() {
   return (
-    <Card className="text-center py-4">
-      <Card.Body>
-        <h3 className="fw-bold mb-3">Welcome to Energy Broker</h3>
-        <p className="text-body-secondary mb-4">
+    <Card className="empty-state">
+      <Card.Body className="empty-state__body">
+        <div className="empty-state__icon-ring">⚡</div>
+        <h3 className="empty-state__heading">Welcome to Energy Broker</h3>
+        <p className="empty-state__subheading">
           Connect your utility account to start tracking usage, costs, and your carbon footprint.
         </p>
-        <div className="d-flex flex-column align-items-center gap-3 mb-4">
-          <div className="onboarding-step">
-            <span className="onboarding-step__number">1</span>
-            <span>Connect an energy provider</span>
-          </div>
-          <div className="onboarding-step">
-            <span className="onboarding-step__number">2</span>
-            <span>View your usage and costs</span>
-          </div>
-          <div className="onboarding-step">
-            <span className="onboarding-step__number">3</span>
-            <span>Save money and offset carbon</span>
-          </div>
+
+        <div className="empty-state__steps">
+          {steps.map((step, i) => (
+            <div className="empty-state__step" key={step.label}>
+              <span className="empty-state__step-number">{i + 1}</span>
+              <span className="empty-state__step-icon">{step.icon}</span>
+              <span className="empty-state__step-label">{step.label}</span>
+            </div>
+          ))}
+          <div className="empty-state__step-connector" />
         </div>
+
         <Link to="/connections/add">
-          <Button size="lg" variant="primary">Add energy connection</Button>
+          <Button className="empty-state__cta" size="lg" variant="primary">
+            Add energy connection
+          </Button>
         </Link>
       </Card.Body>
     </Card>

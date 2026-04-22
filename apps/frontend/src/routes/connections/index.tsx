@@ -1,5 +1,4 @@
-import { Button } from 'react-bootstrap';
-import { EnergyConnections } from '@energy-broker/components';
+import { EnergyConnections, UnauthenticatedSpotlight } from '@energy-broker/components';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/connections/')({
@@ -9,18 +8,23 @@ export const Route = createFileRoute('/connections/')({
 export function Index() {
   const { auth } = Route.useRouteContext();
 
-  return (
-    <>
-      <h2>Energy Connections</h2>
-      { /* future marketing page if not auth */ }
-      { !auth.isAuthenticated
-        ? (
-            <div className="d-flex flex-column gap-2">
-              <span>Login to add energy connections: </span>
-              <Button className="align-self-start" onClick={() => auth.login()}>Login</Button>
-            </div>
-          )
-        : <EnergyConnections />}
-    </>
-  );
+  if (!auth.isAuthenticated) {
+    return (
+      <UnauthenticatedSpotlight
+        ctaText="Sign in to connect"
+        description="Link your providers to start tracking consumption and costs across all accounts."
+        icon="🔌"
+        iconVariant="connections"
+        onLogin={() => auth.login()}
+        pills={[
+          { label: 'Monitor usage', variant: 'primary' },
+          { label: 'Track costs', variant: 'info' },
+          { label: 'Manage access', variant: 'secondary' },
+        ]}
+        title="Connect your energy providers."
+      />
+    );
+  }
+
+  return <EnergyConnections />;
 }

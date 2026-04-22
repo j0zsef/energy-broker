@@ -63,7 +63,7 @@ export function EnergyOverview() {
     summaries: summaryQueries[idx]?.data,
   }));
 
-  const { energyMix, monthlyConsumption, stats } = useEnergyDashboard(
+  const { energyMix, monthlyByProvider, monthlyConsumption, stats } = useEnergyDashboard(
     dashboardEntries, selectedPeriod,
   );
 
@@ -99,6 +99,7 @@ export function EnergyOverview() {
 
   return (
     <div>
+      <h2 className="mb-3">Energy Overview</h2>
       <EnergyProviderContext connections={activeConnections} />
       <EnergyTimePeriodTabs onSelect={setSelectedPeriod} selectedPeriod={selectedPeriod} />
       <EnergyStatsCards stats={stats} />
@@ -110,7 +111,7 @@ export function EnergyOverview() {
       )}
       <Row className="g-3">
         <Col lg={7}>
-          <EnergyConsumptionChart monthlyConsumption={monthlyConsumption} />
+          <EnergyConsumptionChart energyMix={energyMix} monthlyByProvider={monthlyByProvider} monthlyConsumption={monthlyConsumption} />
         </Col>
         <Col lg={5}>
           <EnergyBreakdown energyMix={energyMix} onSegmentClick={handleSegmentClick} />

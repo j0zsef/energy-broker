@@ -12,12 +12,13 @@ import {
   EnergyMixEntry,
   LBS_TO_METRIC_TONS,
   MonthlyConsumption,
+  MonthlyProviderConsumption,
   StatDeltas,
   TimePeriod,
 } from '@energy-broker/shared';
 import { useMemo } from 'react';
 
-export type { DashboardStats, EnergyMixEntry, MonthlyConsumption, StatDeltas, TimePeriod };
+export type { DashboardStats, EnergyMixEntry, MonthlyConsumption, MonthlyProviderConsumption, StatDeltas, TimePeriod };
 
 export interface MeterEntry {
   connectionId: number
@@ -88,18 +89,54 @@ export function useEnergyDashboard(
     };
 
     // Energy mix: group by connection label (doughnut segments = providers)
-    const mixMap = new Map<string, { connectionId: number, kWh: number }>();
+    const mixMap = new Map<string, { connectionId: number, costDollars: number, kWh: number }>();
     for (const entry of filtered) {
       const existing = mixMap.get(entry.connectionLabel);
       mixMap.set(entry.connectionLabel, {
         connectionId: entry.connectionId,
+        costDollars: (existing?.costDollars ?? 0) + entry.costDollars,
         kWh: (existing?.kWh ?? 0) + entry.consumptionKwh,
       });
     }
     const energyMix: EnergyMixEntry[] = [...mixMap.entries()].map(
-      ([label, val]) => ({ connectionId: val.connectionId, kWh: val.kWh, label }),
+      ([label, val]) => ({ connectionId: val.connectionId, costDollars: val.costDollars, kWh: val.kWh, label }),
     );
 
-    return { energyMix, monthlyConsumption, stats };
+    // Monthly consumption per provider (for stacked bar chart)
+    const providerLabels = [...mixMap.keys()];
+    const monthLabels = [...monthMap.keys()];
+    const PROVIDER_PALETTE = [
+      'rgba(13, 148, 136, 0.7)',
+      'rgba(8, 145, 178, 0.7)',
+      'rgba(22, 163, 74, 0.7)',
+      'rgba(217, 119, 6, 0.7)',
+      'rgba(71, 85, 105, 0.7)',
+      'rgba(124, 58, 237, 0.7)',
+    ];
+
+    const monthlyByProvider: MonthlyProviderConsumption = {
+      datasets: providerLabels.map((provider, i) => {
+        const providerEntries = chronological.filter(e => e.connectionLabel === provider);
+        const dataByMonth = monthLabels.map(month =>
+          providerEntries
+            .filter(e => formatMonthLabel(e.date) === month)
+            .reduce((sum, e) => sum + e.consumptionKwh, 0),
+        );
+        const costByMonth = monthLabels.map(month =>
+          providerEntries
+            .filter(e => formatMonthLabel(e.date) === month)
+            .reduce((sum, e) => sum + e.costDollars, 0),
+        );
+        return {
+          color: PROVIDER_PALETTE[i % PROVIDER_PALETTE.length],
+          costDollars: costByMonth,
+          data: dataByMonth,
+          label: provider,
+        };
+      }),
+      labels: monthLabels,
+    };
+
+    return { energyMix, monthlyByProvider, monthlyConsumption, stats };
   }, [meterEntries, period]);
 }

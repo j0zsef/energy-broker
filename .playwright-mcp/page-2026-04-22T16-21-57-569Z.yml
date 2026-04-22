@@ -1,0 +1,69 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - complementary [ref=e4]:
+      - navigation [ref=e5]:
+        - link "Energy Broker" [ref=e6] [cursor=pointer]:
+          - /url: /
+        - generic [ref=e7]:
+          - link "Overview" [ref=e9] [cursor=pointer]:
+            - /url: /
+          - link "Energy Connections" [ref=e11] [cursor=pointer]:
+            - /url: /connections
+          - link "Energy Providers" [ref=e13] [cursor=pointer]:
+            - /url: /energy-providers
+          - link "Carbon Credits" [ref=e15] [cursor=pointer]:
+            - /url: /carbon-credits
+    - generic [ref=e16]:
+      - banner [ref=e17]:
+        - button "test@gmail.com" [ref=e20] [cursor=pointer]
+      - main [ref=e21]:
+        - generic [ref=e22]:
+          - heading "Energy Overview" [level=2] [ref=e23]
+          - generic [ref=e24]:
+            - generic [ref=e25]: "Data from:"
+            - link "Mock Utilityelectrical" [ref=e26] [cursor=pointer]:
+              - /url: /connections/11
+              - generic [ref=e27]: Mock Utilityelectrical
+            - link "Mock Gas Cogas" [ref=e28] [cursor=pointer]:
+              - /url: /connections/12
+              - generic [ref=e29]: Mock Gas Cogas
+          - generic [ref=e30]:
+            - button "1 Month" [ref=e32] [cursor=pointer]
+            - button "3 Months" [active] [ref=e34] [cursor=pointer]
+            - button "Year" [ref=e36] [cursor=pointer]
+          - generic [ref=e37]:
+            - generic [ref=e40]:
+              - generic [ref=e41]: Total Cost
+              - generic [ref=e42]: $193.60
+              - generic [ref=e44]: ▼ 13.4%
+            - generic [ref=e47]:
+              - generic [ref=e48]: Consumption
+              - generic [ref=e49]: 3082.8kWh
+              - generic [ref=e51]: ▼ 14.7%
+            - generic [ref=e54]:
+              - generic [ref=e55]: Carbon Footprint
+              - generic [ref=e56]: 1.2026MT CO2
+              - generic [ref=e58]: ▼ 14.7%
+          - generic [ref=e59]:
+            - generic [ref=e62]:
+              - generic [ref=e63]: Emissions
+              - generic [ref=e64]: 1.2026MT
+            - generic [ref=e68]:
+              - generic [ref=e69]: Credits Used
+              - generic [ref=e70]: 0.0000MT
+            - generic [ref=e74]:
+              - generic [ref=e75]: Net Emissions
+              - generic [ref=e76]: 1.2026MT
+          - generic [ref=e78]:
+            - img [ref=e82]
+            - img [ref=e86]
+      - contentinfo [ref=e87]:
+        - generic [ref=e88]: © 2026 Energy Broker. All rights reserved. | Energy data is provided for informational purposes only and does not constitute financial or legal advice.
+  - generic:
+    - contentinfo:
+      - button "Open TanStack Router Devtools" [ref=e89] [cursor=pointer]:
+        - generic [ref=e90]:
+          - img [ref=e92]
+          - img [ref=e127]
+        - generic [ref=e161]: "-"
+        - generic [ref=e162]: TanStack Router

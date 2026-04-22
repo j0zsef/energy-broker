@@ -61,7 +61,7 @@ function RouteComponent() {
     summaries: summaryQueries[idx]?.data,
   }));
 
-  const { energyMix, monthlyConsumption, stats } = useEnergyDashboard(
+  const { energyMix, monthlyByProvider, monthlyConsumption, stats } = useEnergyDashboard(
     meterEntries, selectedPeriod,
   );
 
@@ -114,7 +114,7 @@ function RouteComponent() {
                 <EnergyStatsCards stats={stats} />
                 <Row className="g-3">
                   <Col lg={7}>
-                    <EnergyConsumptionChart monthlyConsumption={monthlyConsumption} />
+                    <EnergyConsumptionChart energyMix={energyMix} monthlyByProvider={monthlyByProvider} monthlyConsumption={monthlyConsumption} />
                   </Col>
                   <Col lg={5}>
                     <EnergyBreakdown energyMix={energyMix} />

@@ -14,10 +14,5 @@ export const Route = createFileRoute('/connections/add')({
 });
 
 function RouteComponent() {
-  return (
-    <>
-      <h2>Add Energy Sources</h2>
-      <AddEnergyProvider />
-    </>
-  );
+  return <AddEnergyProvider />;
 }

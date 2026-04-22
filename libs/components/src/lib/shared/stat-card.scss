@@ -53,6 +53,7 @@
 
 .stat-card__footer {
   margin-top: 0.25rem;
+  min-height: 1.25rem; // Reserve space so cards align when some have deltas and others don't
 }
 
 // Used by DeltaBadge inside stat cards

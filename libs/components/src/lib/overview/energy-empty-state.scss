@@ -1,19 +1,161 @@
-.onboarding-step {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
+// ── Energy empty state ────────────────────────
+// Onboarding welcome card shown when no connections exist.
+// Steps are left-aligned within a centered container for visual consistency.
+
+.empty-state {
+  border: none;
+  overflow: hidden;
+  position: relative;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% -10%, rgba(13, 148, 136, 0.08), transparent),
+    #fff;
+
+  [data-bs-theme='dark'] & {
+    background:
+      radial-gradient(ellipse 60% 50% at 50% -10%, rgba(13, 148, 136, 0.14), transparent),
+      var(--bs-body-bg);
+  }
 }
 
-.onboarding-step__number {
+.empty-state__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 1.5rem 2.5rem;
+
+  @media (min-width: 768px) {
+    padding: 4rem 2.5rem 3rem;
+  }
+}
+
+// ── Icon ring ──
+
+.empty-state__icon-ring {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, rgba(13, 148, 136, 0.15), rgba(6, 182, 212, 0.1));
+  box-shadow:
+    0 0 0 6px rgba(13, 148, 136, 0.06),
+    0 0 0 12px rgba(13, 148, 136, 0.03);
+  animation: icon-pulse 3s ease-in-out infinite;
+}
+
+@keyframes icon-pulse {
+  0%, 100% { box-shadow: 0 0 0 6px rgba(13, 148, 136, 0.06), 0 0 0 12px rgba(13, 148, 136, 0.03); }
+  50% { box-shadow: 0 0 0 8px rgba(13, 148, 136, 0.1), 0 0 0 16px rgba(13, 148, 136, 0.04); }
+}
+
+// ── Heading ──
+
+.empty-state__heading {
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--bs-body-color) 60%, var(--bs-primary));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.empty-state__subheading {
+  color: var(--bs-secondary-color);
+  max-width: 26rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+// ── Steps (left-aligned in a centered container) ──
+
+.empty-state__steps {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 2rem;
+  width: fit-content;
+}
+
+.empty-state__step {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 1rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: rgba(13, 148, 136, 0.05);
+
+    [data-bs-theme='dark'] & {
+      background-color: rgba(13, 148, 136, 0.1);
+    }
+  }
+}
+
+.empty-state__step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
   border-radius: 50%;
-  background-color: var(--bs-primary);
+  background: linear-gradient(135deg, var(--bs-primary), #06b6d4);
   color: #fff;
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   flex-shrink: 0;
+}
+
+.empty-state__step-icon {
+  font-size: 1.125rem;
+  flex-shrink: 0;
+  width: 1.5rem;
+  text-align: center;
+}
+
+.empty-state__step-label {
+  font-weight: 500;
+  color: var(--bs-body-color);
+}
+
+// Vertical connector line between step numbers
+.empty-state__step-connector {
+  position: absolute;
+  // center on the number circles: 1rem padding-left + (1.75rem / 2) = 1.875rem
+  left: 1.875rem;
+  top: 2.25rem;
+  bottom: 2.25rem;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--bs-primary), #06b6d4);
+  opacity: 0.2;
+  border-radius: 1px;
+  pointer-events: none;
+}
+
+// ── CTA ──
+
+.empty-state__cta.btn {
+  font-weight: 600;
+  padding: 0.625rem 1.75rem;
+  background: linear-gradient(135deg, var(--bs-primary), #06b6d4);
+  border: none;
+  box-shadow: 0 2px 8px rgba(13, 148, 136, 0.25);
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+
+  &:hover {
+    box-shadow: 0 4px 16px rgba(13, 148, 136, 0.35);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(13, 148, 136, 0.25);
+  }
 }

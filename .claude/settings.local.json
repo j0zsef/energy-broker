@@ -51,7 +51,18 @@
       "mcp__obsidian__search_notes",
       "mcp__obsidian__list_directory",
       "Bash(pnpm prisma-generate:*)",
-      "Bash(xargs:*)"
+      "Bash(xargs:*)",
+      "Skill(update-config)",
+      "Bash(grep -E \"\\\\.\\(tsx?|jsx?\\)$\")",
+      "Read(//Users/jnevin/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.6/**)",
+      "Bash(bash scripts/start-server.sh --project-dir /Users/jnevin/Projects/energy-broker)",
+      "Bash(bash /Users/jnevin/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.6/skills/brainstorming/scripts/start-server.sh --project-dir /Users/jnevin/Projects/energy-broker 2>&1)",
+      "Bash(pnpm:*)",
+      "mcp__plugin_playwright_playwright__browser_click",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:9400/v1/auth/me)",
+      "mcp__plugin_playwright_playwright__browser_navigate",
+      "mcp__plugin_playwright_playwright__browser_snapshot",
+      "mcp__plugin_playwright_playwright__browser_take_screenshot"
     ]
   }
 }

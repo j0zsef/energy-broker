@@ -1,0 +1,180 @@
+// ── Unauthenticated spotlight ────────────────────
+// Centered CTA card shown when user is not logged in.
+// Used by Overview, Energy Connections, and Carbon Credits routes.
+// Each variant gets a unique accent color in the radial glow and icon ring.
+
+// ── Variant color maps ──
+// Using Sass color values + custom alpha function to avoid Sass rgba() conflicts.
+
+$energy-color:      #d97706;
+$connections-color: #0d9488;
+$carbon-color:      #16a34a;
+
+@function alpha($color, $a) {
+  @return rgba(red($color), green($color), blue($color), $a);
+}
+
+// ── Card ──
+
+.unauth-spotlight {
+  border: none;
+  overflow: hidden;
+  position: relative;
+
+  &--energy {
+    background: radial-gradient(ellipse 60% 50% at 50% -10%, alpha($energy-color, 0.08), transparent), #fff;
+    [data-bs-theme='dark'] & {
+      background: radial-gradient(ellipse 60% 50% at 50% -10%, alpha($energy-color, 0.14), transparent), var(--bs-body-bg);
+    }
+  }
+
+  &--connections {
+    background: radial-gradient(ellipse 60% 50% at 50% -10%, alpha($connections-color, 0.08), transparent), #fff;
+    [data-bs-theme='dark'] & {
+      background: radial-gradient(ellipse 60% 50% at 50% -10%, alpha($connections-color, 0.14), transparent), var(--bs-body-bg);
+    }
+  }
+
+  &--carbon {
+    background: radial-gradient(ellipse 60% 50% at 50% -10%, alpha($carbon-color, 0.08), transparent), #fff;
+    [data-bs-theme='dark'] & {
+      background: radial-gradient(ellipse 60% 50% at 50% -10%, alpha($carbon-color, 0.14), transparent), var(--bs-body-bg);
+    }
+  }
+}
+
+.unauth-spotlight__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 3rem 1.5rem 2.5rem;
+
+  @media (min-width: 768px) {
+    padding: 4rem 2.5rem 3rem;
+  }
+}
+
+// ── Icon ring ──
+
+.unauth-spotlight__icon {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
+  animation: spotlight-pulse 3s ease-in-out infinite;
+
+  &--energy {
+    background: linear-gradient(135deg, alpha($energy-color, 0.15), alpha($energy-color, 0.06));
+    box-shadow: 0 0 0 6px alpha($energy-color, 0.06), 0 0 0 12px alpha($energy-color, 0.03);
+  }
+
+  &--connections {
+    background: linear-gradient(135deg, alpha($connections-color, 0.15), alpha($connections-color, 0.06));
+    box-shadow: 0 0 0 6px alpha($connections-color, 0.06), 0 0 0 12px alpha($connections-color, 0.03);
+  }
+
+  &--carbon {
+    background: linear-gradient(135deg, alpha($carbon-color, 0.15), alpha($carbon-color, 0.06));
+    box-shadow: 0 0 0 6px alpha($carbon-color, 0.06), 0 0 0 12px alpha($carbon-color, 0.03);
+  }
+}
+
+@keyframes spotlight-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+// ── Heading ──
+
+.unauth-spotlight__title {
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--bs-body-color) 60%, var(--bs-primary));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.unauth-spotlight__description {
+  color: var(--bs-secondary-color);
+  margin-bottom: 1.5rem;
+  max-width: 26rem;
+  line-height: 1.6;
+}
+
+// ── Pills (custom, not Bootstrap Badge) ──
+
+.unauth-spotlight__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.unauth-spotlight__pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+
+  &--primary {
+    background-color: alpha($connections-color, 0.1);
+    color: var(--bs-primary);
+  }
+
+  &--success {
+    background-color: alpha($carbon-color, 0.1);
+    color: var(--bs-success);
+  }
+
+  &--warning {
+    background-color: alpha($energy-color, 0.1);
+    color: var(--bs-warning);
+  }
+
+  &--info {
+    background-color: alpha(#0891b2, 0.1);
+    color: var(--bs-info);
+  }
+
+  &--secondary {
+    background-color: alpha(#475569, 0.1);
+    color: var(--bs-secondary);
+  }
+}
+
+// ── CTA ──
+
+.unauth-spotlight__cta.btn {
+  font-weight: 600;
+  padding: 0.625rem 1.75rem;
+  background: linear-gradient(135deg, var(--bs-primary), #06b6d4);
+  border: none;
+  box-shadow: 0 2px 8px alpha($connections-color, 0.25);
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+
+  &:hover {
+    box-shadow: 0 4px 16px alpha($connections-color, 0.35);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px alpha($connections-color, 0.25);
+  }
+}

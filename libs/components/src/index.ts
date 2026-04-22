@@ -23,3 +23,4 @@ export * from './lib/shared/container';
 export * from './lib/shared/delta-badge';
 export * from './lib/shared/page-spinner';
 export * from './lib/shared/stat-card';
+export * from './lib/shared/unauth-spotlight';

@@ -1,5 +1,4 @@
-import { Button } from 'react-bootstrap';
-import { EnergyOverview } from '@energy-broker/components';
+import { EnergyOverview, UnauthenticatedSpotlight } from '@energy-broker/components';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/')({
@@ -11,22 +10,23 @@ export function Index() {
 
   if (!auth.isAuthenticated) {
     return (
-      <div className="d-flex flex-column align-items-center justify-content-center text-center py-5">
-        <h1 className="fw-bold mb-3">Take Control of Your Energy</h1>
-        <p className="text-muted mb-4" style={{ maxWidth: '32rem' }}>
-          Connect your utility accounts, track consumption, and discover ways to save on your energy bills.
-        </p>
-        <Button onClick={() => auth.login()} size="lg" variant="primary">Get Started</Button>
-      </div>
+      <UnauthenticatedSpotlight
+        ctaText="Sign in to get started"
+        description="Sign in to see a summary of all your energy data in one place."
+        icon="⚡"
+        iconVariant="energy"
+        onLogin={() => auth.login()}
+        pills={[
+          { label: 'Usage trends', variant: 'warning' },
+          { label: 'Connections', variant: 'primary' },
+          { label: 'Carbon offset', variant: 'success' },
+        ]}
+        title="Your energy, at a glance."
+      />
     );
   }
 
-  return (
-    <>
-      <h2 className="mb-3">Energy Overview</h2>
-      <EnergyOverview />
-    </>
-  );
+  return <EnergyOverview />;
 }
 
 export default Index;

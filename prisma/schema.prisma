@@ -71,7 +71,7 @@ model Session {
 
 model CarbonCreditOrder {
   id           Int      @id @default(autoincrement())
-  patchOrderId String   @unique
+  patchOrderId String?  @unique
   userId       String
   massGrams    Int
   priceCents   Int

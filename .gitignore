@@ -192,5 +192,9 @@ Temporary Items
 workspace-data
 tmp
 
+### Superpowers
+.superpowers/
+docs/superpowers/
+
 ### Build
 dist

@@ -27,9 +27,11 @@ export function createGreenButtonRouter(validateToken: TokenValidator): Router {
     `${BASE_PATH}/UsagePoint/:meterId/ElectricPowerUsageSummary`,
     validateToken,
     (req: Request, res: Response) => {
-      const isGas = req.params.subscriptionId === '2';
+      const subscriptionId = req.params.subscriptionId as string;
+      const meterId = req.params.meterId as string;
+      const isGas = subscriptionId === '2';
       res.set('Content-Type', 'application/atom+xml');
-      res.send(isGas ? buildGasSummaryXml(req.params.meterId) : buildSummaryXml(req.params.meterId));
+      res.send(isGas ? buildGasSummaryXml(meterId) : buildSummaryXml(meterId));
     },
   );
 

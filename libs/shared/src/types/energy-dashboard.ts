@@ -21,6 +21,13 @@ export interface MonthlyConsumption {
 
 export interface EnergyMixEntry {
   connectionId: number
+  costDollars: number
   kWh: number
   label: string
+}
+
+export interface MonthlyProviderConsumption {
+  /** One dataset per provider, each with values aligned to `labels` */
+  datasets: { color: string, costDollars: number[], data: number[], label: string }[]
+  labels: string[]
 }

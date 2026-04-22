@@ -159,6 +159,7 @@ These protections are already in place. Do not weaken or bypass them:
 
 - **Node >= 24.0.0**, **pnpm >= 9.0.0**
 - Backend is **ESM** — use `import.meta.url` instead of `__dirname`, and `.js` extensions on relative imports
+- **CJS dependencies in ESM** — some npm packages (e.g., `@patch-technology/patch`) are CommonJS. When importing a CJS module that uses `exports.default`, Node's ESM loader wraps `module.exports` as the default import, so `import Foo from 'cjs-pkg'` may yield `{ default: Foo }` instead of `Foo`. Use the runtime interop pattern: `const Foo = FooModule.default ?? FooModule;`. If the package has no type declarations, suppress with `// @ts-expect-error` on the import — do **not** add `.d.ts` declaration files.
 - Prisma schema lives at repo root `/prisma/`, not inside any app
 - **No tokens in the browser** — all OAuth tokens are stored server-side in Prisma sessions. The frontend authenticates via HttpOnly session cookies only.
 

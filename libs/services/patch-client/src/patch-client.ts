@@ -1,7 +1,9 @@
-// eslint-disable-next-line @typescript-eslint/triple-slash-reference
-/// <reference path="./patch-technology-patch.d.ts" />
 import { CarbonProject } from '@energy-broker/shared';
-import Patch from '@patch-technology/patch';
+// @ts-expect-error — @patch-technology/patch is untyped CJS
+import PatchModule from '@patch-technology/patch';
+
+// CJS default export interop — at runtime the import may be { default: Patch } or Patch directly
+const Patch = PatchModule.default ?? PatchModule;
 
 const CHECKOUT_BASE_URL = 'https://checkout.patch.io/orders';
 
@@ -68,7 +70,8 @@ export function createPatchClient(apiKey: string) {
         type: opts?.type,
       });
 
-      return (response.data ?? []).map(p => ({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- untyped CJS SDK response
+      return (response.data ?? []).map((p: any) => ({
         country: p.country ?? '',
         description: p.description ?? '',
         id: p.id,

@@ -31,7 +31,12 @@ export class GenericGreenButtonProvider implements GreenButtonService {
       },
     });
 
-    const parser = new XMLParser({ attributeNamePrefix: '@_', ignoreAttributes: false, removeNSPrefix: true });
+    const parser = new XMLParser({
+      attributeNamePrefix: '@_',
+      ignoreAttributes: false,
+      isArray: name => name === 'entry' || name === 'link',
+      removeNSPrefix: true,
+    });
     const parsedData = parser.parse(response.data) as AtomFeed;
 
     return this.parseUsagePoints(parsedData);
@@ -50,7 +55,11 @@ export class GenericGreenButtonProvider implements GreenButtonService {
       },
     });
 
-    const parser = new XMLParser({ ignoreAttributes: false, removeNSPrefix: true });
+    const parser = new XMLParser({
+      ignoreAttributes: false,
+      isArray: name => name === 'entry' || name === 'link',
+      removeNSPrefix: true,
+    });
     const parsedData = parser.parse(response.data) as AtomFeed;
 
     return this.parseSummary(parsedData);

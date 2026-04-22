@@ -1,6 +1,7 @@
 import './stat-card.scss';
 import { Card } from 'react-bootstrap';
 import { ReactNode } from 'react';
+import { UnitTooltip } from './unit-tooltip';
 
 interface StatCardProps {
   children?: ReactNode
@@ -19,9 +20,9 @@ export function StatCard({ children, subtitle, unit, value, variant = 'default' 
         <div className="stat-card__subtitle">{subtitle}</div>
         <div className="stat-card__value">
           {value}
-          {unit && <span className="stat-card__unit">{unit}</span>}
+          {unit && <UnitTooltip className="stat-card__unit" unit={unit} />}
         </div>
-        {children && <div className="stat-card__footer">{children}</div>}
+        <div className="stat-card__footer">{children}</div>
       </Card.Body>
     </Card>
   );

@@ -17,7 +17,7 @@ const projects = async (fastify: FastifyInstance) => {
     },
   };
 
-  fastify.withTypeProvider<ZodTypeProvider>().get('/', opts, async (request) => {
+  fastify.withTypeProvider<ZodTypeProvider>().get('/projects', opts, async (request) => {
     const { country, type } = request.query;
 
     const result = await patchClient.retrieveProjects({ country, type });

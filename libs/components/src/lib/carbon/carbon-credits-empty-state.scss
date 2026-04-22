@@ -1,37 +1,137 @@
 // ── Carbon credits empty state ─────────────────
 // Centered CTA card when user has no carbon credit orders.
 
-.carbon-empty {
-  text-align: center;
-  padding: 2rem 1rem;
+$carbon-color: #16a34a;
 
-  @media (min-width: 768px) {
-    padding: 3rem 2rem;
+@function alpha($color, $a) {
+  @return rgba(red($color), green($color), blue($color), $a);
+}
+
+.carbon-empty {
+  border: none;
+  overflow: hidden;
+  position: relative;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% -10%, alpha($carbon-color, 0.08), transparent),
+    #fff;
+
+  [data-bs-theme='dark'] & {
+    background:
+      radial-gradient(ellipse 60% 50% at 50% -10%, alpha($carbon-color, 0.14), transparent),
+      var(--bs-body-bg);
   }
 }
 
-.carbon-empty__icon {
+.carbon-empty__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 3rem 1.5rem 2.5rem;
+
+  @media (min-width: 768px) {
+    padding: 4rem 2.5rem 3rem;
+  }
+}
+
+// ── Icon ring ──
+
+.carbon-empty__icon-ring {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  background-color: rgba(var(--bs-success-rgb), 0.12);
-  color: var(--bs-success);
-  font-size: 1.25rem;
-  margin: 0 auto 1.25rem;
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, alpha($carbon-color, 0.15), alpha($carbon-color, 0.06));
+  box-shadow:
+    0 0 0 6px alpha($carbon-color, 0.06),
+    0 0 0 12px alpha($carbon-color, 0.03);
+  animation: carbon-pulse 3s ease-in-out infinite;
 }
 
-.carbon-empty__title {
+@keyframes carbon-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+// ── Heading ──
+
+.carbon-empty__heading {
   font-weight: 700;
-  margin-bottom: 0.75rem;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--bs-body-color) 60%, var(--bs-success));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .carbon-empty__description {
   color: var(--bs-secondary-color);
-  margin-bottom: 1.5rem;
-  max-width: 28rem;
-  margin-left: auto;
-  margin-right: auto;
+  margin-bottom: 2rem;
+  max-width: 26rem;
+  line-height: 1.6;
+}
+
+// ── Features list ──
+
+.carbon-empty__features {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 2rem;
+  width: fit-content;
+}
+
+.carbon-empty__feature {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 1rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: alpha($carbon-color, 0.05);
+
+    [data-bs-theme='dark'] & {
+      background-color: alpha($carbon-color, 0.1);
+    }
+  }
+}
+
+.carbon-empty__feature-icon {
+  font-size: 1.125rem;
+  flex-shrink: 0;
+  width: 1.5rem;
+  text-align: center;
+}
+
+.carbon-empty__feature-label {
+  font-weight: 500;
+  color: var(--bs-body-color);
+}
+
+// ── CTA ──
+
+.carbon-empty__cta.btn {
+  font-weight: 600;
+  padding: 0.625rem 1.75rem;
+  background: linear-gradient(135deg, var(--bs-success), #06b6d4);
+  border: none;
+  box-shadow: 0 2px 8px alpha($carbon-color, 0.25);
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+
+  &:hover {
+    box-shadow: 0 4px 16px alpha($carbon-color, 0.35);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px alpha($carbon-color, 0.25);
+  }
 }

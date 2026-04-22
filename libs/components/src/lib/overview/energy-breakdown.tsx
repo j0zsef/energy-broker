@@ -77,7 +77,14 @@ export function EnergyBreakdown({ energyMix, onSegmentClick }: EnergyBreakdownPr
               title: { color: textColor, display: true, text: 'Energy Breakdown' },
               tooltip: {
                 callbacks: {
-                  label: ctx => ` ${ctx.label}: ${ctx.parsed.toLocaleString()} kWh`,
+                  label: (ctx) => {
+                    const entry = energyMix[ctx.dataIndex];
+                    const kwh = ctx.parsed.toLocaleString();
+                    const cost = entry?.costDollars
+                      ? ` · $${entry.costDollars.toFixed(2)}`
+                      : '';
+                    return ` ${ctx.label}: ${kwh} kWh${cost}`;
+                  },
                 },
               },
             },
