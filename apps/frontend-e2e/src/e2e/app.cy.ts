@@ -1,11 +1,12 @@
 import {
-  getChartCard,
   getConnectionRows,
   getConnectionTable,
+  getCostTrendChart,
   getEmptyState,
   getHeading,
+  getHeroCostCard,
   getLandingHeading,
-  getStatCards,
+  getProviderCards,
 } from '../support/app.po';
 
 const API = 'http://localhost:9400';
@@ -72,7 +73,7 @@ describe('Landing page (unauthenticated)', () => {
     cy.intercept('GET', `${API}/v1/auth/me`, { statusCode: 401 });
     cy.visit('/');
     getLandingHeading().should('be.visible');
-    cy.contains('button', 'Get Started').should('be.visible');
+    cy.contains('button', 'Sign in to get started').should('be.visible');
   });
 });
 
@@ -86,7 +87,7 @@ describe('Overview (authenticated)', () => {
     getEmptyState().should('be.visible');
   });
 
-  it('renders stats cards and charts with data', () => {
+  it('renders hero cost card and provider cards with data', () => {
     cy.mockAuth();
     cy.mockConnections([mockConnection]);
     cy.intercept('GET', `${API}/v1/connections/1/usage`, {
@@ -104,8 +105,9 @@ describe('Overview (authenticated)', () => {
     cy.wait('@usage');
     cy.wait('@summary');
 
-    getStatCards().should('have.length', 3);
-    getChartCard().should('have.length.at.least', 1);
+    getHeroCostCard().should('be.visible');
+    getCostTrendChart().should('have.length.at.least', 1);
+    getProviderCards().should('have.length.at.least', 1);
   });
 });
 
@@ -132,6 +134,6 @@ describe('Connections page', () => {
     cy.wait('@authMe');
     cy.wait('@connections');
 
-    cy.contains('No energy connections found').should('be.visible');
+    cy.contains('No Connections Yet').should('be.visible');
   });
 });
