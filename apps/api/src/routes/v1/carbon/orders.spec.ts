@@ -42,7 +42,7 @@ function buildApp() {
       (request as { user: { sub: string } }).user = { sub: 'user-123' };
     };
   });
-  app.register(ordersRoute, { prefix: '/carbon/orders' });
+  app.register(ordersRoute, { prefix: '/carbon' });
   return app;
 }
 
