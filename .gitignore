@@ -198,3 +198,6 @@ docs/superpowers/
 
 ### Build
 dist
+
+### playwright
+.playwright-mcp

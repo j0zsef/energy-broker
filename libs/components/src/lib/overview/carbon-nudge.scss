@@ -1,0 +1,39 @@
+// ── Carbon offset nudge card ────────────────────
+
+.carbon-nudge {
+  transition: box-shadow 0.15s ease;
+
+  &:hover {
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.08);
+  }
+
+  [data-bs-theme='dark'] & {
+    &:hover {
+      box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.24);
+    }
+  }
+}
+
+.carbon-nudge__icon {
+  width: 44px;
+  height: 44px;
+  background: var(--bs-success-bg-subtle);
+  border-radius: 0.625rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.carbon-nudge__headline {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--bs-emphasis-color);
+}
+
+.carbon-nudge__body {
+  font-size: 0.8rem;
+  color: var(--bs-secondary-color);
+  margin-top: 0.15rem;
+}

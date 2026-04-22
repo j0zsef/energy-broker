@@ -3,6 +3,7 @@ import {
   filterByPeriod,
   filterPreviousPeriod,
   formatMonthLabel,
+  formatPeriodLabel,
   parseSummary,
   pctChange,
 } from './energy-dashboard-utils';
@@ -12,13 +13,15 @@ import {
   EnergyMixEntry,
   LBS_TO_METRIC_TONS,
   MonthlyConsumption,
+  MonthlyCostData,
   MonthlyProviderConsumption,
+  ProviderDetail,
   StatDeltas,
   TimePeriod,
 } from '@energy-broker/shared';
 import { useMemo } from 'react';
 
-export type { DashboardStats, EnergyMixEntry, MonthlyConsumption, MonthlyProviderConsumption, StatDeltas, TimePeriod };
+export type { DashboardStats, EnergyMixEntry, MonthlyConsumption, MonthlyCostData, MonthlyProviderConsumption, ProviderDetail, StatDeltas, TimePeriod };
 
 export interface MeterEntry {
   connectionId: number
@@ -102,6 +105,25 @@ export function useEnergyDashboard(
       ([label, val]) => ({ connectionId: val.connectionId, costDollars: val.costDollars, kWh: val.kWh, label }),
     );
 
+    // Provider details: enriched per-provider data for provider cards
+    const providerDetails: ProviderDetail[] = [...mixMap.entries()].map(([label, val]) => {
+      const meterCount = meterEntries.filter(e => e.connectionLabel === label).length;
+      const prevProviderCost = previous
+        .filter(e => e.connectionLabel === label)
+        .reduce((sum, e) => sum + e.costDollars, 0);
+
+      return {
+        connectionId: val.connectionId,
+        costDeltaPct: previous.length > 0 ? pctChange(val.costDollars, prevProviderCost) : null,
+        costDollars: val.costDollars,
+        emissionsMtCo2: val.kWh * CARBON_LBS_PER_KWH * LBS_TO_METRIC_TONS,
+        kWh: val.kWh,
+        label,
+        meterCount,
+        shareOfSpendPct: totalCost > 0 ? (val.costDollars / totalCost) * 100 : 0,
+      };
+    });
+
     // Monthly consumption per provider (for stacked bar chart)
     const providerLabels = [...mixMap.keys()];
     const monthLabels = [...monthMap.keys()];
@@ -137,6 +159,26 @@ export function useEnergyDashboard(
       labels: monthLabels,
     };
 
-    return { energyMix, monthlyByProvider, monthlyConsumption, stats };
+    // Monthly cost per provider (for cost trend line chart)
+    const monthlyCost: MonthlyCostData = {
+      datasets: providerLabels.map((provider, i) => {
+        const providerEntries = chronological.filter(e => e.connectionLabel === provider);
+        const costByMonth = monthLabels.map(month =>
+          providerEntries
+            .filter(e => formatMonthLabel(e.date) === month)
+            .reduce((sum, e) => sum + e.costDollars, 0),
+        );
+        return {
+          color: PROVIDER_PALETTE[i % PROVIDER_PALETTE.length],
+          data: costByMonth,
+          label: provider,
+        };
+      }),
+      labels: monthLabels,
+    };
+
+    const periodLabel = formatPeriodLabel(filtered, period);
+
+    return { energyMix, monthlyByProvider, monthlyConsumption, monthlyCost, periodLabel, providerDetails, stats };
   }, [meterEntries, period]);
 }

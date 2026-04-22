@@ -31,3 +31,19 @@ export interface MonthlyProviderConsumption {
   datasets: { color: string, costDollars: number[], data: number[], label: string }[]
   labels: string[]
 }
+
+export interface ProviderDetail {
+  connectionId: number
+  costDeltaPct: number | null
+  costDollars: number
+  emissionsMtCo2: number
+  kWh: number
+  label: string
+  meterCount: number
+  shareOfSpendPct: number
+}
+
+export interface MonthlyCostData {
+  datasets: { color: string, data: number[], label: string }[]
+  labels: string[]
+}

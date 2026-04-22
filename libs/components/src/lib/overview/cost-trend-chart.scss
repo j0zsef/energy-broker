@@ -1,0 +1,18 @@
+// ── Cost trend chart card ───────────────────────
+
+.cost-trend-card {
+  margin-bottom: 1rem;
+
+  [data-bs-theme='dark'] & {
+    --bs-card-bg: var(--bs-tertiary-bg);
+  }
+}
+
+.cost-trend-card__title {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--bs-secondary-color);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}

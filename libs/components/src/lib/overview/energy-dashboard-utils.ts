@@ -36,13 +36,18 @@ export function getMonthCount(period: TimePeriod): number {
 
 export function filterByPeriod(entries: ParsedSummary[], period: TimePeriod): ParsedSummary[] {
   const sorted = [...entries].sort((a, b) => b.date.getTime() - a.date.getTime());
-  return sorted.slice(0, getMonthCount(period));
+  const monthCount = getMonthCount(period);
+  const distinctMonths = [...new Set(sorted.map(e => formatMonthLabel(e.date)))];
+  const allowedMonths = new Set(distinctMonths.slice(0, monthCount));
+  return sorted.filter(e => allowedMonths.has(formatMonthLabel(e.date)));
 }
 
 export function filterPreviousPeriod(entries: ParsedSummary[], period: TimePeriod): ParsedSummary[] {
   const sorted = [...entries].sort((a, b) => b.date.getTime() - a.date.getTime());
-  const count = getMonthCount(period);
-  return sorted.slice(count, count * 2);
+  const monthCount = getMonthCount(period);
+  const distinctMonths = [...new Set(sorted.map(e => formatMonthLabel(e.date)))];
+  const prevMonths = new Set(distinctMonths.slice(monthCount, monthCount * 2));
+  return sorted.filter(e => prevMonths.has(formatMonthLabel(e.date)));
 }
 
 export function pctChange(current: number, previous: number): number | null {
@@ -52,4 +57,24 @@ export function pctChange(current: number, previous: number): number | null {
 
 export function formatMonthLabel(date: Date): string {
   return date.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+}
+
+export function formatPeriodLabel(entries: ParsedSummary[], period: TimePeriod): string {
+  if (entries.length === 0) return '';
+
+  const sorted = [...entries].sort((a, b) => a.date.getTime() - b.date.getTime());
+  const first = sorted[0].date;
+  const last = sorted[sorted.length - 1].date;
+
+  if (period === '1m') {
+    return first.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  }
+  if (period === '1y') {
+    return first.getFullYear().toString();
+  }
+  // 3m: "Jan – Mar 2025"
+  const firstMonth = first.toLocaleDateString('en-US', { month: 'short' });
+  const lastMonth = last.toLocaleDateString('en-US', { month: 'short' });
+  const year = last.getFullYear();
+  return `${firstMonth} – ${lastMonth} ${year}`;
 }

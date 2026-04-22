@@ -1,0 +1,84 @@
+// ── Provider breakdown cards ────────────────────
+
+.provider-cards__title {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--bs-secondary-color);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.provider-card {
+  border-radius: 0.625rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &:hover {
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+  }
+
+  [data-bs-theme='dark'] & {
+    &:hover {
+      box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.24);
+    }
+  }
+}
+
+.provider-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.provider-card__name {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--bs-emphasis-color);
+}
+
+.provider-card__type {
+  font-size: 0.7rem;
+  color: var(--bs-secondary-color);
+}
+
+.provider-card__cost {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--bs-emphasis-color);
+  text-align: right;
+}
+
+.provider-card__delta {
+  font-size: 0.7rem;
+  text-align: right;
+}
+
+.provider-card__stats {
+  display: flex;
+  gap: 1.25rem;
+  font-size: 0.75rem;
+  color: var(--bs-secondary-color);
+}
+
+.provider-card__bar-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--bs-tertiary-bg);
+  margin-top: 0.5rem;
+  overflow: hidden;
+}
+
+.provider-card__bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  min-width: 2px;
+  transition: width 0.3s ease;
+}

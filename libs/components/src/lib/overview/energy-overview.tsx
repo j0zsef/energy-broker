@@ -1,27 +1,24 @@
-import { Alert, Col, Row } from 'react-bootstrap';
 import { MeterEntry, TimePeriod, useEnergyDashboard } from './use-energy-dashboard';
 import { fetchEnergySummary, fetchEnergyUsage, useCarbonOrders, useEnergyConnections } from '@energy-broker/api-client';
-import { useCallback, useState } from 'react';
-import { EmissionsStatsCards } from './emissions-stats-cards';
-import { EnergyBreakdown } from './energy-breakdown';
-import { EnergyConsumptionChart } from './energy-consumption-chart';
+import { Alert } from 'react-bootstrap';
+import { CarbonNudge } from './carbon-nudge';
+import { CostTrendChart } from './cost-trend-chart';
 import { EnergyEmptyState } from './energy-empty-state';
 import { EnergyProviderContext } from './energy-provider-context';
-import { EnergyStatsCards } from './energy-stats-cards';
 import { EnergyTimePeriodTabs } from './energy-time-period-tabs';
+import { HeroCostCard } from './hero-cost-card';
 import { PageSpinner } from '../shared/page-spinner';
-import { useNavigate } from '@tanstack/react-router';
+import { ProviderCards } from './provider-cards';
 import { useQueries } from '@tanstack/react-query';
+import { useState } from 'react';
 
 export function EnergyOverview() {
-  const navigate = useNavigate();
   const [selectedPeriod, setSelectedPeriod] = useState<TimePeriod>('3m');
 
   const { data: connections = [], isLoading: connectionsLoading } = useEnergyConnections();
   const { data: carbonSummary } = useCarbonOrders();
   const activeConnections = connections.filter(c => new Date(c.expiresAt) > new Date());
 
-  // Fetch meters for ALL active connections
   const meterQueries = useQueries({
     queries: activeConnections.map(conn => ({
       enabled: !!conn.id,
@@ -32,7 +29,6 @@ export function EnergyOverview() {
 
   const metersLoading = meterQueries.some(q => q.isLoading);
 
-  // Build a flat list of { connectionId, connectionLabel, meterId, meterTitle } for all connections
   const allMeterEntries = activeConnections.flatMap((conn, connIdx) => {
     const meters = meterQueries[connIdx]?.data ?? [];
     return meters
@@ -45,7 +41,6 @@ export function EnergyOverview() {
       }));
   });
 
-  // Fetch summaries for ALL meters across ALL connections
   const summaryQueries = useQueries({
     queries: allMeterEntries.map(entry => ({
       queryFn: () => fetchEnergySummary({ connectionId: entry.connectionId, meterId: entry.meterId }),
@@ -55,7 +50,6 @@ export function EnergyOverview() {
 
   const summariesLoading = summaryQueries.some(q => q.isLoading);
 
-  // Build MeterEntry[] for useEnergyDashboard
   const dashboardEntries: MeterEntry[] = allMeterEntries.map((entry, idx) => ({
     connectionId: entry.connectionId,
     connectionLabel: entry.connectionLabel,
@@ -63,19 +57,9 @@ export function EnergyOverview() {
     summaries: summaryQueries[idx]?.data,
   }));
 
-  const { energyMix, monthlyByProvider, monthlyConsumption, stats } = useEnergyDashboard(
+  const { monthlyCost, periodLabel, providerDetails, stats } = useEnergyDashboard(
     dashboardEntries, selectedPeriod,
   );
-
-  const handleSegmentClick = useCallback((index: number) => {
-    const entry = energyMix[index];
-    if (entry?.connectionId) {
-      navigate({
-        params: { 'energy-connection': String(entry.connectionId) },
-        to: '/connections/$energy-connection',
-      });
-    }
-  }, [energyMix, navigate]);
 
   if (connectionsLoading || metersLoading) {
     return <PageSpinner />;
@@ -99,24 +83,21 @@ export function EnergyOverview() {
 
   return (
     <div>
-      <h2 className="mb-3">Energy Overview</h2>
       <EnergyProviderContext connections={activeConnections} />
+      <HeroCostCard
+        activeProviderCount={providerDetails.length}
+        periodLabel={periodLabel}
+        stats={stats}
+      />
       <EnergyTimePeriodTabs onSelect={setSelectedPeriod} selectedPeriod={selectedPeriod} />
-      <EnergyStatsCards stats={stats} />
-      {carbonSummary && (
-        <EmissionsStatsCards
-          creditsUsedMtCo2={carbonSummary.totalOffsetMtCo2}
-          emissionsMtCo2={stats.emissionsMtCo2}
-        />
+      {monthlyCost.labels.length > 1 && (
+        <CostTrendChart monthlyCost={monthlyCost} providerDetails={providerDetails} />
       )}
-      <Row className="g-3">
-        <Col lg={7}>
-          <EnergyConsumptionChart energyMix={energyMix} monthlyByProvider={monthlyByProvider} monthlyConsumption={monthlyConsumption} />
-        </Col>
-        <Col lg={5}>
-          <EnergyBreakdown energyMix={energyMix} onSegmentClick={handleSegmentClick} />
-        </Col>
-      </Row>
+      <ProviderCards providers={providerDetails} />
+      <CarbonNudge
+        carbonSummary={carbonSummary}
+        emissionsMtCo2={stats.emissionsMtCo2}
+      />
     </div>
   );
 }
