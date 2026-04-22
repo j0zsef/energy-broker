@@ -20,8 +20,8 @@ jest.mock('@energy-broker/patch-client', () => ({
 }));
 
 import { createPatchClient } from '@energy-broker/patch-client';
-import { prismaClient } from '../../../utils/prisma-client.js';
 import ordersRoute from './orders.js';
+import { prismaClient } from '../../../utils/prisma-client.js';
 
 const mockFindMany = prismaClient.carbonCreditOrder.findMany as jest.Mock;
 const mockCreate = prismaClient.carbonCreditOrder.create as jest.Mock;
@@ -29,7 +29,7 @@ const mockUpdate = prismaClient.carbonCreditOrder.update as jest.Mock;
 const mockFindFirst = prismaClient.carbonCreditOrder.findFirst as jest.Mock;
 
 // The route module calls createPatchClient once at import time — grab that instance.
-const mockPatchClientInstance = (createPatchClient as jest.Mock).mock.results[0].value as { createOrder: jest.Mock; placeOrder: jest.Mock };
+const mockPatchClientInstance = (createPatchClient as jest.Mock).mock.results[0].value as { createOrder: jest.Mock, placeOrder: jest.Mock };
 const mockCreateOrder = mockPatchClientInstance.createOrder;
 const mockPlaceOrder = mockPatchClientInstance.placeOrder;
 
