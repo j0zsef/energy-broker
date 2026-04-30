@@ -1,0 +1,96 @@
+// libs/components/src/lib/connection-detail/meter-breakdown.scss
+// ── Meter breakdown cards ───────────────────────
+// Per-meter cards showing cost, usage, and share of provider spend.
+
+.meter-breakdown__title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--bs-emphasis-color);
+  margin-bottom: 0.125rem;
+}
+
+.meter-breakdown__subtitle {
+  font-size: 0.8rem;
+  color: var(--bs-secondary-color);
+  margin-bottom: 1rem;
+}
+
+.meter-breakdown__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.meter-card {
+  border-radius: 0.625rem;
+}
+
+.meter-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.meter-card__name {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--bs-emphasis-color);
+}
+
+.meter-card__share {
+  font-size: 0.7rem;
+  color: var(--bs-secondary-color);
+}
+
+.meter-card__cost {
+  font-weight: 700;
+  font-size: 1.35rem;
+  color: var(--bs-emphasis-color);
+  margin-bottom: 0.75rem;
+}
+
+.meter-card__delta {
+  font-size: 0.7rem;
+  margin-left: 0.5rem;
+}
+
+.meter-card__stats {
+  display: flex;
+  gap: 1.25rem;
+  font-size: 0.75rem;
+  color: var(--bs-secondary-color);
+}
+
+.meter-card__stats-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--bs-secondary-color);
+  opacity: 0.7;
+}
+
+.meter-card__stats-value {
+  color: var(--bs-emphasis-color);
+  font-weight: 500;
+}
+
+.meter-card__bar-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--bs-tertiary-bg);
+  margin-top: 0.75rem;
+  overflow: hidden;
+}
+
+.meter-card__bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: rgba(13, 148, 136, 0.7);
+  min-width: 2px;
+  transition: width 0.3s ease;
+}

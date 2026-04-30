@@ -1,4 +1,5 @@
 import {
+  getConnectionHero,
   getConnectionRows,
   getConnectionTable,
   getCostTrendChart,
@@ -6,6 +7,7 @@ import {
   getHeading,
   getHeroCostCard,
   getLandingHeading,
+  getMeterBreakdown,
   getProviderCards,
 } from '../support/app.po';
 
@@ -135,5 +137,53 @@ describe('Connections page', () => {
     cy.wait('@connections');
 
     cy.contains('No Connections Yet').should('be.visible');
+  });
+});
+
+describe('Connection detail page', () => {
+  beforeEach(() => {
+    cy.mockAuth();
+    cy.mockConnections([mockConnection]);
+    cy.intercept('GET', `${API}/v1/connections/1/usage`, {
+      body: mockUsagePoints,
+      statusCode: 200,
+    }).as('usage');
+    cy.intercept('GET', `${API}/v1/connections/1/summary/meters/1*`, {
+      body: mockSummaries,
+      statusCode: 200,
+    }).as('summary');
+  });
+
+  it('renders the connection hero with provider name and cost', () => {
+    cy.visit('/connections/1');
+    cy.wait('@authMe');
+    cy.wait('@connections');
+    cy.wait('@usage');
+    cy.wait('@summary');
+
+    getConnectionHero().should('be.visible');
+    getConnectionHero().should('contain.text', 'Acme Electric Co');
+    getConnectionHero().should('contain.text', 'Active');
+    getConnectionHero().should('contain.text', '$');
+  });
+
+  it('shows cost trend chart for multi-month view', () => {
+    cy.visit('/connections/1');
+    cy.wait('@authMe');
+    cy.wait('@connections');
+    cy.wait('@usage');
+    cy.wait('@summary');
+
+    getCostTrendChart().should('have.length.at.least', 1);
+  });
+
+  it('does not show meter breakdown for single meter', () => {
+    cy.visit('/connections/1');
+    cy.wait('@authMe');
+    cy.wait('@connections');
+    cy.wait('@usage');
+    cy.wait('@summary');
+
+    getMeterBreakdown().should('not.exist');
   });
 });

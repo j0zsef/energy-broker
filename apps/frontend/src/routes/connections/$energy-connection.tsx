@@ -1,18 +1,24 @@
-import { Alert, Badge, Card, Col, Row } from 'react-bootstrap';
 import {
-  EnergyBreakdown,
-  EnergyConsumptionChart,
-  EnergyStatsCards,
+  CARBON_LBS_PER_KWH,
+  ConnectionHero,
+  CostTrendChart,
   EnergyTimePeriodTabs,
+  MeterBreakdown,
   MeterEntry,
   PageSpinner,
   TimePeriod,
+  filterByPeriod,
+  filterPreviousPeriod,
+  parseSummary,
+  pctChange,
   useEnergyDashboard,
 } from '@energy-broker/components';
+import { LBS_TO_METRIC_TONS, MeterDetail } from '@energy-broker/shared';
 import { Link, createFileRoute, redirect } from '@tanstack/react-router';
 import { fetchEnergySummary, useEnergyConnections, useEnergyUsage } from '@energy-broker/api-client';
+import { useMemo, useState } from 'react';
+import { Alert } from 'react-bootstrap';
 import { useQueries } from '@tanstack/react-query';
-import { useState } from 'react';
 
 export const Route = createFileRoute('/connections/$energy-connection')({
   beforeLoad: ({ context, location }) => {
@@ -61,9 +67,60 @@ function RouteComponent() {
     summaries: summaryQueries[idx]?.data,
   }));
 
-  const { energyMix, monthlyByProvider, monthlyConsumption, stats } = useEnergyDashboard(
+  const { monthlyCost, periodLabel, providerDetails, stats } = useEnergyDashboard(
     meterEntries, selectedPeriod,
   );
+
+  // Per-meter aggregation for MeterBreakdown
+  const meterDetails: MeterDetail[] = useMemo(() => {
+    if (filteredMeters.length === 0) return [];
+
+    const details = filteredMeters.map((meter, idx) => {
+      const summaries = summaryQueries[idx]?.data;
+      if (!summaries) return null;
+
+      const parsed = summaries
+        .map(s => parseSummary(s, meter.title ?? `Meter ${idx + 1}`, connectionId, connectionLabel))
+        .filter((p): p is NonNullable<typeof p> => p !== null);
+
+      const current = filterByPeriod(parsed, selectedPeriod);
+      const previous = filterPreviousPeriod(parsed, selectedPeriod);
+
+      let costDollars = 0;
+      let kWh = 0;
+      for (const entry of current) {
+        costDollars += entry.costDollars;
+        kWh += entry.consumptionKwh;
+      }
+
+      let prevCost = 0;
+      for (const entry of previous) {
+        prevCost += entry.costDollars;
+      }
+
+      const emissionsMtCo2 = kWh * CARBON_LBS_PER_KWH * LBS_TO_METRIC_TONS;
+      const costPerKWh = kWh > 0 ? costDollars / kWh : 0;
+      const costDeltaPct = previous.length > 0 ? pctChange(costDollars, prevCost) : null;
+
+      return {
+        costDeltaPct,
+        costDollars,
+        costPerKWh,
+        emissionsMtCo2,
+        kWh,
+        meterId: meter.meterId as string,
+        meterTitle: meter.title ?? `Meter ${idx + 1}`,
+        shareOfSpendPct: 0, // calculated below
+      };
+    }).filter((d): d is MeterDetail => d !== null);
+
+    const totalCost = details.reduce((sum, d) => sum + d.costDollars, 0);
+    for (const detail of details) {
+      detail.shareOfSpendPct = totalCost > 0 ? (detail.costDollars / totalCost) * 100 : 0;
+    }
+
+    return details;
+  }, [connectionId, connectionLabel, filteredMeters, selectedPeriod, summaryQueries]);
 
   if (connectionsLoading || usageLoading) {
     return <PageSpinner />;
@@ -78,29 +135,17 @@ function RouteComponent() {
     );
   }
 
-  const expired = new Date(connection.expiresAt) < new Date();
-
   return (
     <>
       <Link className="text-decoration-none mb-3 d-inline-block" to="/">
-        {'< Back to Overview'}
+        ← Back to Overview
       </Link>
 
-      <Card className="mb-4">
-        <Card.Body className="d-flex align-items-center justify-content-between flex-wrap gap-2">
-          <div>
-            <h4 className="mb-1">{connection.energyProvider.fullName || connection.energyProvider.name}</h4>
-            <span className="text-body-secondary">
-              {connection.energyProvider.type}
-              {' · Connected '}
-              {new Date(connection.createdAt).toLocaleDateString('en-US')}
-            </span>
-          </div>
-          <Badge bg={expired ? 'danger' : 'success'}>
-            {expired ? 'Expired' : 'Active'}
-          </Badge>
-        </Card.Body>
-      </Card>
+      <ConnectionHero
+        connection={connection}
+        periodLabel={periodLabel}
+        stats={stats}
+      />
 
       {summariesLoading
         ? <PageSpinner label="Loading energy data..." />
@@ -111,15 +156,12 @@ function RouteComponent() {
           : (
               <>
                 <EnergyTimePeriodTabs onSelect={setSelectedPeriod} selectedPeriod={selectedPeriod} />
-                <EnergyStatsCards stats={stats} />
-                <Row className="g-3">
-                  <Col lg={7}>
-                    <EnergyConsumptionChart energyMix={energyMix} monthlyByProvider={monthlyByProvider} monthlyConsumption={monthlyConsumption} />
-                  </Col>
-                  <Col lg={5}>
-                    <EnergyBreakdown energyMix={energyMix} />
-                  </Col>
-                </Row>
+                {monthlyCost.labels.length > 1 && (
+                  <CostTrendChart monthlyCost={monthlyCost} providerDetails={providerDetails} />
+                )}
+                {meterDetails.length > 0 && (
+                  <MeterBreakdown meters={meterDetails} periodLabel={periodLabel} />
+                )}
               </>
             )}
     </>

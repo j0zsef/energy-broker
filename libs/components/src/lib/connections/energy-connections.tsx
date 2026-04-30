@@ -100,7 +100,14 @@ export const EnergyConnections = () => {
                       const expired = isExpired(connection.expiresAt);
                       return (
                         <tr className={expired ? 'energy-connections__row--expired' : ''} key={connection.id}>
-                          <td>{connection.energyProvider.name || 'N/A'}</td>
+                          <td>
+                            <Link
+                              params={{ 'energy-connection': String(connection.id) }}
+                              to="/connections/$energy-connection"
+                            >
+                              {connection.energyProvider.name || 'N/A'}
+                            </Link>
+                          </td>
                           <td>{connection.energyProvider.type}</td>
                           <td>{new Date(connection.createdAt).toLocaleDateString('en-US')}</td>
                           <td>
@@ -145,9 +152,13 @@ export const EnergyConnections = () => {
                       key={connection.id}
                     >
                       <div className="energy-connections__card-header">
-                        <span className="energy-connections__card-name">
+                        <Link
+                          className="energy-connections__card-name"
+                          params={{ 'energy-connection': String(connection.id) }}
+                          to="/connections/$energy-connection"
+                        >
                           {connection.energyProvider.name || 'N/A'}
-                        </span>
+                        </Link>
                         {expired
                           ? <Badge bg="danger">Expired</Badge>
                           : <Badge bg="success">Active</Badge>}

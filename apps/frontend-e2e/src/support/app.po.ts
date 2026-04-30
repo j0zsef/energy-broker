@@ -6,3 +6,5 @@ export const getConnectionTable = () => cy.get('.energy-connections table');
 export const getConnectionRows = () => cy.get('.energy-connections tbody tr');
 export const getHeading = (text: string) => cy.contains('h2', text);
 export const getLandingHeading = () => cy.contains('h3', 'Your energy, at a glance.');
+export const getConnectionHero = () => cy.get('.connection-hero');
+export const getMeterBreakdown = () => cy.get('.meter-breakdown__grid');
