@@ -1,24 +1,21 @@
 import './energy-connections.scss';
 import { Badge, Button, Card, Table } from 'react-bootstrap';
-import { apiClient, useDeleteConnection, useEnergyConnections } from '@energy-broker/api-client';
+import { fetchEnergyProviderOAuthUrl, useDeleteConnection, useEnergyConnections } from '@energy-broker/api-client';
 import { Link } from '@tanstack/react-router';
 import { useCallback } from 'react';
 
-export const EnergyConnections = () => {
+function isConnectionExpired(expiresAt: Date | string): boolean {
+  return new Date(expiresAt) < new Date();
+}
+
+export function EnergyConnections() {
   const { data: energyConnections, error, isLoading } = useEnergyConnections();
   const deleteConnection = useDeleteConnection();
 
-  const isExpired = useCallback((expiresAt: Date | string) => {
-    return new Date(expiresAt) < new Date();
-  }, []);
-
   const handleRefresh = useCallback((energyProviderId: number) => {
-    apiClient<{ url: string }>('v1/energy-providers/authorize', {
-      body: JSON.stringify({ energyProviderId }),
-      method: 'POST',
-    })
-      .then((data) => {
-        window.location.href = data.url;
+    fetchEnergyProviderOAuthUrl(energyProviderId)
+      .then((url) => {
+        window.location.href = url;
       })
       .catch((err) => {
         console.error('Failed to initiate provider OAuth:', err);
@@ -45,29 +42,29 @@ export const EnergyConnections = () => {
 
       {empty
         ? (
-            <Card className="connections-empty">
-              <Card.Body className="connections-empty__body">
-                <div className="connections-empty__icon-ring">🔌</div>
-                <h3 className="connections-empty__heading">No Connections Yet</h3>
-                <p className="connections-empty__description">
+            <Card className="energy-connections-empty">
+              <Card.Body className="energy-connections-empty__body">
+                <div className="energy-connections-empty__icon-ring">🔌</div>
+                <h3 className="energy-connections-empty__heading">No Connections Yet</h3>
+                <p className="energy-connections-empty__description">
                   Link your energy provider to start monitoring usage, tracking costs, and managing your accounts.
                 </p>
-                <div className="connections-empty__features">
-                  <div className="connections-empty__feature">
-                    <span className="connections-empty__feature-icon">⚡</span>
-                    <span className="connections-empty__feature-label">Monitor real-time energy usage</span>
+                <div className="energy-connections-empty__features">
+                  <div className="energy-connections-empty__feature">
+                    <span className="energy-connections-empty__feature-icon">⚡</span>
+                    <span className="energy-connections-empty__feature-label">Monitor real-time energy usage</span>
                   </div>
-                  <div className="connections-empty__feature">
-                    <span className="connections-empty__feature-icon">💰</span>
-                    <span className="connections-empty__feature-label">Track costs across providers</span>
+                  <div className="energy-connections-empty__feature">
+                    <span className="energy-connections-empty__feature-icon">💰</span>
+                    <span className="energy-connections-empty__feature-label">Track costs across providers</span>
                   </div>
-                  <div className="connections-empty__feature">
-                    <span className="connections-empty__feature-icon">🔄</span>
-                    <span className="connections-empty__feature-label">Auto-sync via Green Button Data</span>
+                  <div className="energy-connections-empty__feature">
+                    <span className="energy-connections-empty__feature-icon">🔄</span>
+                    <span className="energy-connections-empty__feature-label">Auto-sync via Green Button Data</span>
                   </div>
                 </div>
                 <Link to="/connections/add">
-                  <Button className="connections-empty__cta" size="lg" variant="primary">
+                  <Button className="energy-connections-empty__cta" size="lg" variant="primary">
                     Add your first connection
                   </Button>
                 </Link>
@@ -97,7 +94,7 @@ export const EnergyConnections = () => {
                   </thead>
                   <tbody>
                     {energyConnections.map((connection) => {
-                      const expired = isExpired(connection.expiresAt);
+                      const expired = isConnectionExpired(connection.expiresAt);
                       return (
                         <tr className={expired ? 'energy-connections__row--expired' : ''} key={connection.id}>
                           <td>
@@ -145,7 +142,7 @@ export const EnergyConnections = () => {
               {/* Mobile: card layout */}
               <div className="energy-connections__cards">
                 {energyConnections.map((connection) => {
-                  const expired = isExpired(connection.expiresAt);
+                  const expired = isConnectionExpired(connection.expiresAt);
                   return (
                     <div
                       className={`energy-connections__card${expired ? ' energy-connections__card--expired' : ''}`}
@@ -194,4 +191,4 @@ export const EnergyConnections = () => {
           )}
     </div>
   );
-};
+}

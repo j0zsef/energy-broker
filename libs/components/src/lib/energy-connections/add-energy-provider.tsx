@@ -1,6 +1,6 @@
 import './add-energy-provider.scss';
 import { Alert, Button, Card, Form } from 'react-bootstrap';
-import { apiClient, useEnergyProviders } from '@energy-broker/api-client';
+import { fetchEnergyProviderOAuthUrl, useEnergyProviders } from '@energy-broker/api-client';
 import { useEffect, useMemo, useState } from 'react';
 import { useForm, useStore } from '@tanstack/react-form';
 import { Link } from '@tanstack/react-router';
@@ -8,7 +8,7 @@ import { Spinner } from '../shared/spinner';
 
 const STEP_COUNT = 3;
 
-export const AddEnergyProvider = () => {
+export function AddEnergyProvider() {
   const { data: energyProviders, isLoading: loadingProviders, error: providersError } = useEnergyProviders();
   const [pendingRedirect, setPendingRedirect] = useState(false);
 
@@ -46,12 +46,9 @@ export const AddEnergyProvider = () => {
   // Redirect when pendingRedirect is true and provider is selected
   useEffect(() => {
     if (pendingRedirect && selectedProvider) {
-      apiClient<{ url: string }>('v1/energy-providers/authorize', {
-        body: JSON.stringify({ energyProviderId: selectedProvider.id }),
-        method: 'POST',
-      })
-        .then((data) => {
-          window.location.href = data.url;
+      fetchEnergyProviderOAuthUrl(selectedProvider.id)
+        .then((url) => {
+          window.location.href = url;
         })
         .catch((error) => {
           console.error('Failed to initiate provider OAuth:', error);
@@ -64,35 +61,35 @@ export const AddEnergyProvider = () => {
   const currentStep = !energyType ? 1 : zipCode.length !== 5 ? 2 : 3;
 
   return (
-    <div className="add-provider">
-      <Card className="add-provider__card">
-        <Card.Body className="add-provider__body">
-          <div className="add-provider__icon-ring">🔌</div>
-          <h3 className="add-provider__heading">Add Energy Source</h3>
-          <p className="add-provider__subheading">
+    <div className="add-energy-provider">
+      <Card className="add-energy-provider__card">
+        <Card.Body className="add-energy-provider__body">
+          <div className="add-energy-provider__icon-ring">🔌</div>
+          <h3 className="add-energy-provider__heading">Add Energy Source</h3>
+          <p className="add-energy-provider__subheading">
             Connect your utility account to start tracking usage and costs.
           </p>
 
           {/* Progress indicator */}
-          <div className="add-provider__progress">
+          <div className="add-energy-provider__progress">
             {Array.from({ length: STEP_COUNT }, (_, i) => (
               <div
-                className={`add-provider__progress-step${i + 1 <= currentStep ? ' add-provider__progress-step--active' : ''}${i + 1 < currentStep ? ' add-provider__progress-step--done' : ''}`}
+                className={`add-energy-provider__progress-step${i + 1 <= currentStep ? ' add-energy-provider__progress-step--active' : ''}${i + 1 < currentStep ? ' add-energy-provider__progress-step--done' : ''}`}
                 key={i}
               >
-                <span className="add-provider__progress-dot">{i + 1 < currentStep ? '✓' : i + 1}</span>
-                <span className="add-provider__progress-label">
+                <span className="add-energy-provider__progress-dot">{i + 1 < currentStep ? '✓' : i + 1}</span>
+                <span className="add-energy-provider__progress-label">
                   {['Energy type', 'Location', 'Provider'][i]}
                 </span>
               </div>
             ))}
             <div
-              className="add-provider__progress-bar"
+              className="add-energy-provider__progress-bar"
               style={{ width: `${((currentStep - 1) / (STEP_COUNT - 1)) * 100}%` }}
             />
           </div>
 
-          <Form className="add-provider__form">
+          <Form className="add-energy-provider__form">
             {/* Loading State */}
             {loadingProviders && (
               <div className="d-flex align-items-center justify-content-center py-3">
@@ -127,8 +124,8 @@ export const AddEnergyProvider = () => {
                 }}
               >
                 {field => (
-                  <Form.Group className="add-provider__field">
-                    <Form.Label className="add-provider__label" htmlFor="energyType">
+                  <Form.Group className="add-energy-provider__field">
+                    <Form.Label className="add-energy-provider__label" htmlFor="energyType">
                       Energy Type
                     </Form.Label>
                     <Form.Select
@@ -173,8 +170,8 @@ export const AddEnergyProvider = () => {
                 }}
               >
                 {field => (
-                  <Form.Group className="add-provider__field">
-                    <Form.Label className="add-provider__label" htmlFor="zipCode">
+                  <Form.Group className="add-energy-provider__field">
+                    <Form.Label className="add-energy-provider__label" htmlFor="zipCode">
                       Zip Code
                     </Form.Label>
                     <Form.Control
@@ -211,8 +208,8 @@ export const AddEnergyProvider = () => {
                 }}
               >
                 {field => (
-                  <Form.Group className="add-provider__field">
-                    <Form.Label className="add-provider__label" htmlFor="provider">
+                  <Form.Group className="add-energy-provider__field">
+                    <Form.Label className="add-energy-provider__label" htmlFor="provider">
                       Provider
                     </Form.Label>
                     <Form.Select
@@ -258,9 +255,9 @@ export const AddEnergyProvider = () => {
               selector={state => [state.canSubmit, state.isSubmitting, state.values.provider]}
             >
               {([canSubmit, isSubmitting, providerVal]) => (
-                <div className="add-provider__actions">
+                <div className="add-energy-provider__actions">
                   <Button
-                    className="add-provider__cta"
+                    className="add-energy-provider__cta"
                     disabled={!canSubmit || !providerVal || pendingRedirect}
                     onClick={(e) => {
                       e.preventDefault();
@@ -282,4 +279,4 @@ export const AddEnergyProvider = () => {
       </Card>
     </div>
   );
-};
+}
