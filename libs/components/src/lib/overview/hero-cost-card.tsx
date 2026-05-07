@@ -1,6 +1,6 @@
 import './hero-cost-card.scss';
 import { Card } from 'react-bootstrap';
-import { DashboardStats } from './use-energy-dashboard';
+import { DashboardStats } from '../shared/use-energy-dashboard';
 import { UnitTooltip } from '../shared/unit-tooltip';
 
 interface HeroCostCardProps {

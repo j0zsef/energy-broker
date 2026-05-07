@@ -20,17 +20,6 @@ export interface DashboardStats {
   totalCostDollars: number
 }
 
-export interface MonthlyConsumption {
-  data: number[]
-  labels: string[]
-}
-
-export interface MonthlyProviderConsumption {
-  /** One dataset per provider, each with values aligned to `labels` */
-  datasets: { color: string, costDollars: number[], data: number[], label: string }[]
-  labels: string[]
-}
-
 export interface ProviderDetail {
   connectionId: number
   costDeltaPct: number | null
@@ -40,9 +29,4 @@ export interface ProviderDetail {
   label: string
   meterCount: number
   shareOfSpendPct: number
-}
-
-export interface MonthlyCostData {
-  datasets: { color: string, data: number[], label: string }[]
-  labels: string[]
 }

@@ -36,6 +36,7 @@ async function sessionAuthPlugin(fastify: FastifyInstance) {
         }
         catch (error) {
           fastify.log.error(error, 'Failed to refresh token');
+          await request.session.destroy();
           return reply.status(401).send({ error: 'Session expired' });
         }
       }

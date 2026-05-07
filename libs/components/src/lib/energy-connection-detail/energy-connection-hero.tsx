@@ -1,7 +1,7 @@
 // libs/components/src/lib/energy-connection-detail/energy-connection-hero.tsx
 import './energy-connection-hero.scss';
 import { Card } from 'react-bootstrap';
-import { DashboardStats } from '../overview/use-energy-dashboard';
+import { DashboardStats } from '../shared/use-energy-dashboard';
 import { EnergyProviderConnectionResponse } from '@energy-broker/shared';
 import { UnitTooltip } from '../shared/unit-tooltip';
 

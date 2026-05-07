@@ -1,4 +1,4 @@
-import { GreenButtonSummary, EnergySummaryRequest } from '@energy-broker/shared';
+import { EnergySummaryRequest, GreenButtonSummary } from '@energy-broker/shared';
 import { apiClient } from '../../api-client';
 
 export const fetchEnergySummary = ({ connectionId, max, meterId, min }: EnergySummaryRequest) => {

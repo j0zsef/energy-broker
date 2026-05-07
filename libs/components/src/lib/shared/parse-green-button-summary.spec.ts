@@ -1,6 +1,6 @@
 import { GreenButtonSummary, ParsedSummary } from '@energy-broker/shared';
-import { parseGreenButtonSummary } from './parse-green-button-summary';
 import { filterByPeriod, filterPreviousPeriod, pctChange } from './use-energy-dashboard';
+import { parseGreenButtonSummary } from './parse-green-button-summary';
 
 describe('parseGreenButtonSummary', () => {
   const baseSummary: GreenButtonSummary = {
@@ -85,7 +85,6 @@ describe('parseGreenButtonSummary', () => {
   });
 });
 
-
 describe('filterByPeriod', () => {
   const entries: ParsedSummary[] = [
     { connectionId: 1, connectionLabel: 'C', consumptionKwh: 100, costDollars: 10, date: new Date('2025-01-01'), meterTitle: 'M' },
@@ -152,4 +151,3 @@ describe('pctChange', () => {
     expect(pctChange(50, 100)).toBe(-50);
   });
 });
-

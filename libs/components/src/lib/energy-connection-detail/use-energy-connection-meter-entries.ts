@@ -1,8 +1,8 @@
 import { fetchEnergySummary, useEnergyUsage } from '@energy-broker/api-client';
-import { MeterEntry } from './use-energy-dashboard';
+import { MeterEntry } from '../shared/use-energy-dashboard';
 import { useQueries } from '@tanstack/react-query';
 
-export function useConnectionMeterEntries(connectionId: number, connectionLabel: string) {
+export function useEnergyConnectionMeterEntries(connectionId: number, connectionLabel: string) {
   const { data: usagePoints = [], isLoading: usageLoading } = useEnergyUsage({
     connectionId,
     enabled: !!connectionId,
@@ -31,7 +31,7 @@ export function useConnectionMeterEntries(connectionId: number, connectionLabel:
     connectionLabel: entry.connectionLabel,
     meterId: entry.meterId,
     meterTitle: entry.meterTitle,
-    summaries: summaryQueries[idx]?.data,
+    summaries: summaryQueries[idx]?.data ?? null,
   }));
 
   return { meterEntries, meterMetadata, summariesLoading, usageLoading };

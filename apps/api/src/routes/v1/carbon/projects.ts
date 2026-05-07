@@ -23,7 +23,8 @@ const projects = async (fastify: FastifyInstance) => {
     try {
       const result = await patchClient.retrieveProjects({ country, type });
       return result;
-    } catch (err: unknown) {
+    }
+    catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Failed to fetch projects';
       const isAuthError = message.toLowerCase().includes('unknown organization')
         || message.toLowerCase().includes('401')

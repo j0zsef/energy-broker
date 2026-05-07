@@ -133,7 +133,7 @@ Mirror the component convention. React's `use` prefix goes first, then the domai
 ```ts
 useEnergyDashboard              ✓   useDashboard           ✗
 useConnectionMeterEntries       ✓   useMeterEntries        ✗
-useAllConnectionsMeterEntries   ✓   useAllMeterEntries     ✗
+useAllEnergyConnectionsMeterEntries   ✓   useAllMeterEntries     ✗
 useEnergyConnections            ✓   useConnections         ✗
 ```
 

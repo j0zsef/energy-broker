@@ -1,18 +1,18 @@
 // libs/components/src/lib/energy-connection-detail/energy-connection-detail.tsx
-import { CostTrendChart } from '../overview/cost-trend-chart';
+import { TimePeriod, useEnergyDashboard } from '../shared/use-energy-dashboard';
+import { Alert } from 'react-bootstrap';
+import { CostTrendChart } from '../shared/cost-trend-chart';
 import { EnergyConnectionHero } from './energy-connection-hero';
 import { EnergyMeterBreakdown } from './energy-meter-breakdown';
-import { EnergyTimePeriodTabs } from '../overview/energy-time-period-tabs';
+import { EnergyTimePeriodTabs } from '../shared/energy-time-period-tabs';
 import { Link } from '@tanstack/react-router';
 import { PageSpinner } from '../shared/page-spinner';
-import { TimePeriod, useEnergyDashboard } from '../overview/use-energy-dashboard';
-import { useConnectionMeterEntries } from '../overview/use-connection-meter-entries';
+import { useEnergyConnectionMeterEntries } from './use-energy-connection-meter-entries';
 import { useEnergyConnections } from '@energy-broker/api-client';
 import { useState } from 'react';
-import { Alert } from 'react-bootstrap';
 
 interface EnergyConnectionDetailProps {
-  connectionId: number;
+  connectionId: number
 }
 
 export function EnergyConnectionDetail({ connectionId }: EnergyConnectionDetailProps) {
@@ -25,11 +25,11 @@ export function EnergyConnectionDetail({ connectionId }: EnergyConnectionDetailP
     ? (connection.energyProvider.fullName || connection.energyProvider.name)
     : '';
 
-  const { meterEntries, meterMetadata, summariesLoading, usageLoading } = useConnectionMeterEntries(
+  const { meterEntries, meterMetadata, summariesLoading, usageLoading } = useEnergyConnectionMeterEntries(
     connectionId, connectionLabel,
   );
 
-  const { meterDetails, monthlyCost, periodLabel, providerDetails, stats } = useEnergyDashboard(
+  const { dashboardStats, filteredMeters, meterDetails, periodLabel } = useEnergyDashboard(
     meterEntries, selectedPeriod,
   );
 
@@ -55,7 +55,7 @@ export function EnergyConnectionDetail({ connectionId }: EnergyConnectionDetailP
       <EnergyConnectionHero
         connection={connection}
         periodLabel={periodLabel}
-        stats={stats}
+        stats={dashboardStats}
       />
 
       {summariesLoading
@@ -67,9 +67,7 @@ export function EnergyConnectionDetail({ connectionId }: EnergyConnectionDetailP
           : (
               <>
                 <EnergyTimePeriodTabs onSelect={setSelectedPeriod} selectedPeriod={selectedPeriod} />
-                {monthlyCost.labels.length > 1 && (
-                  <CostTrendChart monthlyCost={monthlyCost} providerDetails={providerDetails} />
-                )}
+                <CostTrendChart filteredMeters={filteredMeters} />
                 {meterDetails.length > 0 && (
                   <EnergyMeterBreakdown meters={meterDetails} periodLabel={periodLabel} />
                 )}

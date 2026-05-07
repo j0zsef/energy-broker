@@ -96,7 +96,8 @@ const orders = async (fastify: FastifyInstance) => {
       });
 
       return { checkoutUrl: patchOrder.checkoutUrl };
-    } catch (err: unknown) {
+    }
+    catch (err: unknown) {
       // Clean up the draft order if Patch fails
       await prismaClient.carbonCreditOrder.delete({ where: { id: dbOrder.id } });
       const message = err instanceof Error ? err.message : 'Failed to create order';

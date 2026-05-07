@@ -1,5 +1,5 @@
-import { EnergyConnectionDetail } from '@energy-broker/components';
 import { createFileRoute, redirect } from '@tanstack/react-router';
+import { EnergyConnectionDetail } from '@energy-broker/components';
 
 export const Route = createFileRoute('/connections/$energy-connection')({
   beforeLoad: ({ context, location }) => {

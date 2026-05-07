@@ -1,6 +1,6 @@
 import './provider-cards.scss';
 import { Card } from 'react-bootstrap';
-import { ProviderDetail } from './use-energy-dashboard';
+import { ProviderDetail } from '../shared/use-energy-dashboard';
 import { useNavigate } from '@tanstack/react-router';
 
 const PROVIDER_COLORS = [

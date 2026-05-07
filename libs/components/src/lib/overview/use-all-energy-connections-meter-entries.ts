@@ -1,9 +1,9 @@
-import { EnergyProviderConnectionResponse } from '@energy-broker/shared';
 import { fetchEnergySummary, fetchEnergyUsage } from '@energy-broker/api-client';
-import { MeterEntry } from './use-energy-dashboard';
+import { EnergyProviderConnectionResponse } from '@energy-broker/shared';
+import { MeterEntry } from '../shared/use-energy-dashboard';
 import { useQueries } from '@tanstack/react-query';
 
-export function useAllConnectionsMeterEntries(connections: EnergyProviderConnectionResponse[]) {
+export function useAllEnergyConnectionsMeterEntries(connections: EnergyProviderConnectionResponse[]) {
   // Fetch usage points (meter list) for each connection in parallel
   const usagePointQueries = useQueries({
     queries: connections.map(conn => ({
@@ -43,7 +43,7 @@ export function useAllConnectionsMeterEntries(connections: EnergyProviderConnect
     connectionLabel: entry.connectionLabel,
     meterId: entry.meterId,
     meterTitle: entry.meterTitle,
-    summaries: summaryQueries[idx]?.data,
+    summaries: summaryQueries[idx]?.data ?? null,
   }));
 
   return { meterEntries, meterMetadata, summariesLoading, usagePointsLoading };
