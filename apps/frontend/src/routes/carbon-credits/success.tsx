@@ -43,10 +43,6 @@ function RouteComponent() {
     );
   }
 
-  if (placeOrder.isPending) {
-    return <PageSpinner label="Placing your order..." />;
-  }
-
   if (placeOrder.isError) {
     return (
       <Alert variant="danger">
@@ -56,5 +52,9 @@ function RouteComponent() {
     );
   }
 
-  return <CarbonSuccess />;
+  if (placeOrder.isSuccess) {
+    return <CarbonSuccess />;
+  }
+
+  return <PageSpinner label="Placing your order..." />;
 }

@@ -56,13 +56,15 @@ const orders = async (fastify: FastifyInstance) => {
       body: z.object({
         massGrams: z.number().int().positive(),
         projectId: z.string().min(1),
+        projectName: z.string().optional(),
+        projectType: z.string().optional(),
       }),
     },
   };
 
-  fastify.withTypeProvider<ZodTypeProvider>().post('/orders/create', createOpts, async (request) => {
+  fastify.withTypeProvider<ZodTypeProvider>().post('/orders/create', createOpts, async (request, reply) => {
     const userId = request.user.sub;
-    const { massGrams, projectId } = request.body;
+    const { massGrams, projectId, projectName, projectType } = request.body;
 
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:9200';
 
@@ -73,24 +75,33 @@ const orders = async (fastify: FastifyInstance) => {
         patchOrderId: null,
         priceCents: 0,
         projectId,
+        projectName: projectName ?? null,
+        projectType: projectType ?? null,
         state: 'draft',
         userId,
       },
     });
 
-    const returnUrl = `${frontendUrl}/carbon-credits/success?orderId=${dbOrder.id}`;
-    const patchOrder = await patchClient.createOrder(projectId, massGrams, returnUrl);
+    try {
+      const returnUrl = `${frontendUrl}/carbon-credits/success?orderId=${dbOrder.id}`;
+      const patchOrder = await patchClient.createOrder(projectId, massGrams, returnUrl);
 
-    // Write the Patch order id back to the DB record
-    await prismaClient.carbonCreditOrder.update({
-      data: {
-        patchOrderId: patchOrder.id,
-        priceCents: patchOrder.priceCents,
-      },
-      where: { id: dbOrder.id },
-    });
+      // Write the Patch order id back to the DB record
+      await prismaClient.carbonCreditOrder.update({
+        data: {
+          patchOrderId: patchOrder.id,
+          priceCents: patchOrder.priceCents,
+        },
+        where: { id: dbOrder.id },
+      });
 
-    return { checkoutUrl: patchOrder.checkoutUrl };
+      return { checkoutUrl: patchOrder.checkoutUrl };
+    } catch (err: unknown) {
+      // Clean up the draft order if Patch fails
+      await prismaClient.carbonCreditOrder.delete({ where: { id: dbOrder.id } });
+      const message = err instanceof Error ? err.message : 'Failed to create order';
+      return reply.status(502).send({ error: `Carbon offset service error: ${message}` });
+    }
   });
 
   // PATCH /v1/carbon/orders/:id/place — place a draft order after checkout

@@ -98,6 +98,97 @@ The mock server (`apps/mock-green-button-server/src/`) is separated by concern:
 - **Shared components** — reusable UI primitives live in `libs/components/src/lib/shared/` (e.g., `StatCard`, `PageSpinner`, `DeltaBadge`). Extract shared patterns rather than duplicating SCSS across feature components.
 - **SCSS variables** — Bootstrap theme overrides live in `apps/frontend/src/styles/_variables.scss`, imported before Bootstrap in `root.scss`.
 
+## Naming Conventions
+
+Naming must be explicit and domain-qualified throughout. Vague names are not acceptable. When in doubt, be more specific.
+
+### The rule
+Every name must answer: *what domain does this belong to, and what exactly is it?* A name like `ConnectionDetail` is ambiguous in a system that will have energy connections, provider connections, carbon project details, etc. `EnergyConnectionDetail` is unambiguous.
+
+### Directories
+Use the full domain prefix. Never rely on the parent path to provide context — the directory name must stand on its own.
+
+```
+libs/components/src/lib/
+  energy-connection-detail/   ✓   connection-detail/ ✗
+  energy-connections/         ✓   connections/       ✗
+  carbon/                     ✓   (carbon is a domain, no ambiguity)
+  energy-overview/            ✓   overview/          ✗
+```
+
+### React components
+Full domain prefix in PascalCase.
+
+```ts
+EnergyConnectionDetail     ✓   ConnectionDetail   ✗
+EnergyConnectionHero       ✓   ConnectionHero     ✗
+EnergyMeterBreakdown       ✓   MeterBreakdown     ✗
+EnergyOverview             ✓   Overview           ✗
+CarbonCreditsPage          ✓   CreditsPage        ✗
+```
+
+### Hooks
+Mirror the component convention. React's `use` prefix goes first, then the domain.
+
+```ts
+useEnergyDashboard              ✓   useDashboard           ✗
+useConnectionMeterEntries       ✓   useMeterEntries        ✗
+useAllConnectionsMeterEntries   ✓   useAllMeterEntries     ✗
+useEnergyConnections            ✓   useConnections         ✗
+```
+
+### TypeScript types and interfaces
+Domain noun comes first. Abbreviations are banned.
+
+```ts
+EnergyProviderConnectionResponse   ✓   ConnectionResponse   ✗
+GreenButtonSummary                 ✓   Summary              ✗
+GreenButtonUsagePoint              ✓   UsagePoint           ✗
+ParsedSummary                      ✓   Parsed               ✗
+MeterEntry                         ✓   Entry                ✗
+MeterDetail                        ✓   Detail               ✗
+DashboardStats                     ✓   Stats                ✗
+```
+
+### Variables
+Variable names must encode what they hold, not just their type. A variable named `data` is useless; one named `meterEntries` tells you the domain and shape.
+
+```ts
+const activeConnections = ...   ✓   const connections = ...  ✗
+const meterMetadata = ...       ✓   const metadata = ...     ✗
+const connectionLabel = ...     ✓   const label = ...        ✗
+const summariesLoading = ...    ✓   const loading = ...      ✗
+const usagePointsLoading = ...  ✓   const loading2 = ...     ✗
+```
+
+### Files
+File names mirror the component or hook they contain. Use the full domain prefix.
+
+```
+energy-connection-detail.tsx   ✓   connection-detail.tsx   ✗
+energy-connection-hero.tsx     ✓   connection-hero.tsx     ✗
+energy-meter-breakdown.tsx     ✓   meter-breakdown.tsx     ✗
+use-energy-dashboard.ts        ✓   use-dashboard.ts        ✗
+```
+
+### CSS classes (BEM)
+The block name must be the full component name. No abbreviations or stripped prefixes.
+
+```scss
+.energy-connection-hero {}           ✓   .connection-hero {}   ✗
+.energy-connection-hero__cost {}     ✓   .hero__cost {}        ✗
+.energy-meter-breakdown__grid {}     ✓   .meter-grid {}        ✗
+.energy-meter-card {}                ✓   .meter-card {}        ✗
+```
+
+### Constants
+Full domain prefix, SCREAMING_SNAKE_CASE.
+
+```ts
+PERIOD_MONTHS   ✓   MONTHS   ✗
+CARBON_LBS_PER_KWH   ✓   CARBON_FACTOR   ✗
+```
+
 ## Code Style & Linting
 
 - **ESLint flat config** (`eslint.config.mjs`) with `@stylistic` plugin for formatting

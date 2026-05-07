@@ -1,16 +1,9 @@
-import { ElectricalDataSummary, TimePeriod } from '@energy-broker/shared';
-import {
-  ParsedSummary,
-  filterByPeriod,
-  filterPreviousPeriod,
-  formatMonthLabel,
-  getMonthCount,
-  parseSummary,
-  pctChange,
-} from './energy-dashboard-utils';
+import { GreenButtonSummary, ParsedSummary } from '@energy-broker/shared';
+import { parseGreenButtonSummary } from './parse-green-button-summary';
+import { filterByPeriod, filterPreviousPeriod, pctChange } from './use-energy-dashboard';
 
-describe('parseSummary', () => {
-  const baseSummary: ElectricalDataSummary = {
+describe('parseGreenButtonSummary', () => {
+  const baseSummary: GreenButtonSummary = {
     content: {
       ElectricPowerUsageSummary: {
         billLastPeriod: 9245,
@@ -26,30 +19,28 @@ describe('parseSummary', () => {
   };
 
   it('parses a valid summary with all fields', () => {
-    const result = parseSummary(baseSummary, 'Meter A', 1, 'My Connection');
+    const result = parseGreenButtonSummary(baseSummary, 1);
 
     expect(result).toEqual({
       connectionId: 1,
-      connectionLabel: 'My Connection',
       consumptionKwh: 680,
       costDollars: 92.45,
       date: new Date(1735689600 * 1000),
-      meterTitle: 'Meter A',
     });
   });
 
   it('returns null when ElectricPowerUsageSummary is missing', () => {
-    const empty: ElectricalDataSummary = { content: {} };
-    expect(parseSummary(empty, 'Meter', 1, 'Conn')).toBeNull();
+    const empty: GreenButtonSummary = { content: {} };
+    expect(parseGreenButtonSummary(empty, 1)).toBeNull();
   });
 
   it('returns null when content is missing', () => {
-    const noContent: ElectricalDataSummary = {};
-    expect(parseSummary(noContent, 'Meter', 1, 'Conn')).toBeNull();
+    const noContent: GreenButtonSummary = {};
+    expect(parseGreenButtonSummary(noContent, 1)).toBeNull();
   });
 
   it('applies powerOfTenMultiplier correctly', () => {
-    const summary: ElectricalDataSummary = {
+    const summary: GreenButtonSummary = {
       content: {
         ElectricPowerUsageSummary: {
           billLastPeriod: 0,
@@ -61,13 +52,13 @@ describe('parseSummary', () => {
         },
       },
     };
-    const result = parseSummary(summary, 'M', 1, 'C');
+    const result = parseGreenButtonSummary(summary, 1);
     // 680 * 10^3 = 680000 Wh = 680 kWh
     expect(result!.consumptionKwh).toBe(680);
   });
 
   it('falls back to published date when billingPeriod.start is missing', () => {
-    const summary: ElectricalDataSummary = {
+    const summary: GreenButtonSummary = {
       content: {
         ElectricPowerUsageSummary: {
           billLastPeriod: 100,
@@ -76,12 +67,12 @@ describe('parseSummary', () => {
       },
       published: '2025-02-15T00:00:00Z',
     };
-    const result = parseSummary(summary, 'M', 1, 'C');
+    const result = parseGreenButtonSummary(summary, 1);
     expect(result!.date).toEqual(new Date('2025-02-15T00:00:00Z'));
   });
 
   it('defaults cost to 0 when billLastPeriod is missing', () => {
-    const summary: ElectricalDataSummary = {
+    const summary: GreenButtonSummary = {
       content: {
         ElectricPowerUsageSummary: {
           billingPeriod: { start: 1735689600 },
@@ -89,20 +80,11 @@ describe('parseSummary', () => {
         },
       },
     };
-    const result = parseSummary(summary, 'M', 1, 'C');
+    const result = parseGreenButtonSummary(summary, 1);
     expect(result!.costDollars).toBe(0);
   });
 });
 
-describe('getMonthCount', () => {
-  it.each<[TimePeriod, number]>([
-    ['1m', 1],
-    ['3m', 3],
-    ['1y', 12],
-  ])('maps %s to %d', (period, expected) => {
-    expect(getMonthCount(period)).toBe(expected);
-  });
-});
 
 describe('filterByPeriod', () => {
   const entries: ParsedSummary[] = [
@@ -171,16 +153,3 @@ describe('pctChange', () => {
   });
 });
 
-describe('formatMonthLabel', () => {
-  it('formats date as abbreviated month and 2-digit year', () => {
-    const result = formatMonthLabel(new Date('2025-01-15'));
-    expect(result).toMatch(/Jan/);
-    expect(result).toMatch(/25/);
-  });
-
-  it('formats a different month correctly', () => {
-    const result = formatMonthLabel(new Date(2025, 11, 1)); // Dec (month is 0-indexed)
-    expect(result).toMatch(/Dec/);
-    expect(result).toMatch(/25/);
-  });
-});

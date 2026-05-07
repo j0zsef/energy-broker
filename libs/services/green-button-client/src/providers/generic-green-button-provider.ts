@@ -1,7 +1,7 @@
 import {
   AtomFeed,
-  ElectricalDataSummary,
-  ElectricalDataUsagePoint,
+  GreenButtonSummary,
+  GreenButtonUsagePoint,
   GreenButtonSummaryRequest,
   GreenButtonUsageRequest,
 } from '@energy-broker/shared';
@@ -18,7 +18,7 @@ export class GenericGreenButtonProvider implements GreenButtonService {
     this.baseUrl = baseUrl;
   }
 
-  async fetchUsagePoints(token: string, request: GreenButtonUsageRequest): Promise<ElectricalDataUsagePoint[]> {
+  async fetchUsagePoints(token: string, request: GreenButtonUsageRequest): Promise<GreenButtonUsagePoint[]> {
     const url = `${this.baseUrl}/UsagePoint`;
 
     const response = await this.http.get(url, {
@@ -42,7 +42,7 @@ export class GenericGreenButtonProvider implements GreenButtonService {
     return this.parseUsagePoints(parsedData);
   }
 
-  async fetchSummary(token: string, request: GreenButtonSummaryRequest): Promise<ElectricalDataSummary[]> {
+  async fetchSummary(token: string, request: GreenButtonSummaryRequest): Promise<GreenButtonSummary[]> {
     const url = `${this.baseUrl}/UsagePoint/${request.meterId}/ElectricPowerUsageSummary`;
 
     const response = await this.http.get(url, {
@@ -65,10 +65,10 @@ export class GenericGreenButtonProvider implements GreenButtonService {
     return this.parseSummary(parsedData);
   }
 
-  private parseUsagePoints(atomFeed: AtomFeed): ElectricalDataUsagePoint[] {
-    const usagePoints = atomFeed?.feed?.entry as ElectricalDataUsagePoint[];
+  private parseUsagePoints(atomFeed: AtomFeed): GreenButtonUsagePoint[] {
+    const usagePoints = atomFeed?.feed?.entry as GreenButtonUsagePoint[];
 
-    const parsedUsagePoints = usagePoints.map<ElectricalDataUsagePoint>((usagePoint) => {
+    const parsedUsagePoints = usagePoints.map<GreenButtonUsagePoint>((usagePoint) => {
       const usagePointSelfLink = usagePoint?.link?.find(link => link['@_rel'] === 'self');
       usagePoint.meterId = usagePointSelfLink ? usagePointSelfLink['@_href'].split('/').pop() : undefined;
       return usagePoint;
@@ -77,8 +77,8 @@ export class GenericGreenButtonProvider implements GreenButtonService {
     return parsedUsagePoints;
   }
 
-  private parseSummary(atomFeed: AtomFeed): ElectricalDataSummary[] {
-    const summary = atomFeed?.feed?.entry as ElectricalDataSummary[];
+  private parseSummary(atomFeed: AtomFeed): GreenButtonSummary[] {
+    const summary = atomFeed?.feed?.entry as GreenButtonSummary[];
 
     return summary;
   }

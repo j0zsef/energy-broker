@@ -1,4 +1,4 @@
-import { ElectricalDataUsagePoint, EnergyUsageRequest } from '@energy-broker/shared';
+import { GreenButtonUsagePoint, EnergyUsageRequest } from '@energy-broker/shared';
 import { apiClient } from '../../api-client';
 import { useQuery } from '@tanstack/react-query';
 
@@ -8,7 +8,7 @@ export const fetchEnergyUsage = ({ connectionId, max, min }: EnergyUsageRequest)
   if (max !== undefined) queryString.append('max', String(max));
   const endpoint = `v1/connections/${connectionId}/usage${queryString.toString() ? `?${queryString}` : ''}`;
 
-  return apiClient<ElectricalDataUsagePoint[]>(endpoint);
+  return apiClient<GreenButtonUsagePoint[]>(endpoint);
 };
 
 export const useEnergyUsage = ({ connectionId, enabled = true, max, min }: EnergyUsageRequest & { enabled?: boolean }) => {

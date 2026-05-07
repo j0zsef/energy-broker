@@ -1,5 +1,11 @@
 export type TimePeriod = '1m' | '3m' | '1y';
 
+export const PERIOD_MONTHS: Record<TimePeriod, number> = {
+  '1m': 1,
+  '1y': 12,
+  '3m': 3,
+};
+
 export interface StatDeltas {
   carbonPct: number | null
   consumptionPct: number | null
@@ -17,13 +23,6 @@ export interface DashboardStats {
 export interface MonthlyConsumption {
   data: number[]
   labels: string[]
-}
-
-export interface EnergyMixEntry {
-  connectionId: number
-  costDollars: number
-  kWh: number
-  label: string
 }
 
 export interface MonthlyProviderConsumption {

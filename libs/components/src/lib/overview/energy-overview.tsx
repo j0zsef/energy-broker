@@ -1,5 +1,6 @@
-import { MeterEntry, TimePeriod, useEnergyDashboard } from './use-energy-dashboard';
-import { fetchEnergySummary, fetchEnergyUsage, useCarbonOrders, useEnergyConnections } from '@energy-broker/api-client';
+import { TimePeriod, useEnergyDashboard } from './use-energy-dashboard';
+import { useAllConnectionsMeterEntries } from './use-all-connections-meter-entries';
+import { useCarbonOrders, useEnergyConnections } from '@energy-broker/api-client';
 import { Alert } from 'react-bootstrap';
 import { CarbonNudge } from './carbon-nudge';
 import { CostTrendChart } from './cost-trend-chart';
@@ -9,59 +10,31 @@ import { EnergyTimePeriodTabs } from './energy-time-period-tabs';
 import { HeroCostCard } from './hero-cost-card';
 import { PageSpinner } from '../shared/page-spinner';
 import { ProviderCards } from './provider-cards';
-import { useQueries } from '@tanstack/react-query';
 import { useState } from 'react';
 
+// EnergyOverview data pipeline:
+// 1. Fetch connections & carbon orders
+// 2. Fetch meter entries across all active connections (useAllConnectionsMeterEntries)
+// 3. Derive stats, charts, and provider breakdowns (useEnergyDashboard)
 export function EnergyOverview() {
   const [selectedPeriod, setSelectedPeriod] = useState<TimePeriod>('3m');
 
+  // 1. Connections & orders
   const { data: connections = [], isLoading: connectionsLoading } = useEnergyConnections();
   const { data: carbonSummary } = useCarbonOrders();
   const activeConnections = connections.filter(c => new Date(c.expiresAt) > new Date());
 
-  const meterQueries = useQueries({
-    queries: activeConnections.map(conn => ({
-      enabled: !!conn.id,
-      queryFn: () => fetchEnergyUsage({ connectionId: conn.id }),
-      queryKey: ['electricalMeters', conn.id],
-    })),
-  });
-
-  const metersLoading = meterQueries.some(q => q.isLoading);
-
-  const allMeterEntries = activeConnections.flatMap((conn, connIdx) => {
-    const meters = meterQueries[connIdx]?.data ?? [];
-    return meters
-      .filter(meter => !!meter.meterId)
-      .map(meter => ({
-        connectionId: conn.id,
-        connectionLabel: conn.energyProvider.fullName || conn.energyProvider.name,
-        meterId: meter.meterId as string,
-        meterTitle: meter.title ?? 'Unknown Meter',
-      }));
-  });
-
-  const summaryQueries = useQueries({
-    queries: allMeterEntries.map(entry => ({
-      queryFn: () => fetchEnergySummary({ connectionId: entry.connectionId, meterId: entry.meterId }),
-      queryKey: ['electricalSummary', entry.connectionId, entry.meterId],
-    })),
-  });
-
-  const summariesLoading = summaryQueries.some(q => q.isLoading);
-
-  const dashboardEntries: MeterEntry[] = allMeterEntries.map((entry, idx) => ({
-    connectionId: entry.connectionId,
-    connectionLabel: entry.connectionLabel,
-    meterTitle: entry.meterTitle,
-    summaries: summaryQueries[idx]?.data,
-  }));
-
-  const { monthlyCost, periodLabel, providerDetails, stats } = useEnergyDashboard(
-    dashboardEntries, selectedPeriod,
+  // 2. Meter entries across all active connections
+  const { meterEntries, meterMetadata, summariesLoading, usagePointsLoading } = useAllConnectionsMeterEntries(
+    activeConnections,
   );
 
-  if (connectionsLoading || metersLoading) {
+  // 3. Derived dashboard data
+  const { monthlyCost, periodLabel, providerDetails, stats } = useEnergyDashboard(
+    meterEntries, selectedPeriod,
+  );
+
+  if (connectionsLoading || usagePointsLoading) {
     return <PageSpinner />;
   }
 
@@ -69,7 +42,7 @@ export function EnergyOverview() {
     return <EnergyEmptyState />;
   }
 
-  if (allMeterEntries.length === 0) {
+  if (meterMetadata.length === 0) {
     return (
       <Alert variant="warning">
         No energy usage data available for your connected providers.

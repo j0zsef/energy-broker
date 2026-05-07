@@ -1,4 +1,13 @@
-export interface ElectricalDataSummary {
+export interface ParsedSummary {
+  connectionId: number
+  connectionLabel: string
+  consumptionKwh: number
+  costDollars: number
+  date: Date
+  meterTitle: string
+}
+
+export interface GreenButtonSummary {
   id?: string
   content?: {
     ElectricPowerUsageSummary?: {
@@ -42,7 +51,7 @@ export interface GreenButtonUsageRequest {
   min?: string
 }
 
-export interface ElectricalDataUsagePoint {
+export interface GreenButtonUsagePoint {
   id?: string
   content?: {
     UsagePoint?: {
@@ -65,7 +74,7 @@ export interface ElectricalDataUsagePoint {
 
 export interface AtomFeed {
   feed?: {
-    entry?: (ElectricalDataSummary | ElectricalDataUsagePoint)[]
+    entry?: (GreenButtonSummary | GreenButtonUsagePoint)[]
   }
 }
 

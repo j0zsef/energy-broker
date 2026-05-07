@@ -33,6 +33,8 @@ export interface CarbonOrdersSummary {
 export interface CreateOrderRequest {
   massGrams: number
   projectId: string
+  projectName?: string
+  projectType?: string
 }
 
 export interface CheckoutResponse {

@@ -1,8 +1,8 @@
-// libs/components/src/lib/connection-detail/connection-hero.scss
-// ── Connection hero card ────────────────────────
+// libs/components/src/lib/energy-connection-detail/energy-connection-hero.scss
+// ── Energy connection hero card ────────────────────────
 // Provider-specific hero card with metadata, cost, and secondary stats.
 
-.connection-hero {
+.energy-connection-hero {
   background: linear-gradient(135deg, #0d9488 0%, #065f5b 100%);
   border: none;
   border-radius: 0.75rem;
@@ -14,19 +14,19 @@
   }
 }
 
-.connection-hero__title-row {
+.energy-connection-hero__title-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 0.125rem;
 }
 
-.connection-hero__name {
+.energy-connection-hero__name {
   font-size: 1.25rem;
   font-weight: 600;
 }
 
-.connection-hero__badge {
+.energy-connection-hero__badge {
   font-size: 0.75rem;
   font-weight: 600;
   padding: 0.25rem 0.75rem;
@@ -43,20 +43,20 @@
   }
 }
 
-.connection-hero__subtitle {
+.energy-connection-hero__subtitle {
   font-size: 0.8rem;
   opacity: 0.7;
   margin-bottom: 1.25rem;
 }
 
-.connection-hero__cost {
+.energy-connection-hero__cost {
   font-size: 2.75rem;
   font-weight: 700;
   line-height: 1.1;
   margin-bottom: 0.25rem;
 }
 
-.connection-hero__delta {
+.energy-connection-hero__delta {
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
@@ -68,19 +68,19 @@
   margin-bottom: 0.25rem;
 }
 
-.connection-hero__delta-value--down {
+.energy-connection-hero__delta-value--down {
   color: #86efac;
 }
 
-.connection-hero__delta-value--up {
+.energy-connection-hero__delta-value--up {
   color: #fca5a5;
 }
 
-.connection-hero__delta-value--neutral {
+.energy-connection-hero__delta-value--neutral {
   opacity: 0.7;
 }
 
-.connection-hero__secondary {
+.energy-connection-hero__secondary {
   display: flex;
   gap: 2rem;
   margin-top: 1.25rem;
@@ -90,13 +90,13 @@
   flex-wrap: wrap;
 }
 
-.connection-hero__secondary-label {
+.energy-connection-hero__secondary-label {
   opacity: 0.6;
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
-.connection-hero__secondary-value {
+.energy-connection-hero__secondary-value {
   font-weight: 600;
 }

@@ -17,10 +17,10 @@ export function OffsetCarbon() {
   const massGrams = Math.round(parseFloat(massMetricTons || '0') * GRAMS_PER_METRIC_TON);
 
   const handleCheckout = () => {
-    if (!selectedProjectId || massGrams <= 0) return;
+    if (!selectedProject || massGrams <= 0) return;
 
     createOrder.mutate(
-      { massGrams, projectId: selectedProjectId },
+      { massGrams, projectId: selectedProject.id, projectName: selectedProject.name, projectType: selectedProject.type },
       {
         onSuccess: (data) => {
           window.location.href = data.checkoutUrl;
