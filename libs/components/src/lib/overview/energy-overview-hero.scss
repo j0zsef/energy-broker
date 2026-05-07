@@ -1,7 +1,7 @@
-// ── Hero cost card ──────────────────────────────
+// ── Energy overview hero ──────────────────────────────
 // Gradient hero card showing total energy spend with secondary stats.
 
-.hero-cost-card {
+.energy-overview-hero {
   background: linear-gradient(135deg, #0d9488 0%, #065f5b 100%);
   border: none;
   border-radius: 0.75rem;
@@ -14,26 +14,26 @@
   }
 }
 
-.hero-cost-card__label {
+.energy-overview-hero__label {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   opacity: 0.8;
 }
 
-.hero-cost-card__value {
+.energy-overview-hero__value {
   font-size: 2.75rem;
   font-weight: 700;
   line-height: 1.1;
   margin: 0.25rem 0;
 }
 
-.hero-cost-card__period {
+.energy-overview-hero__period {
   font-size: 0.85rem;
   opacity: 0.75;
 }
 
-.hero-cost-card__delta {
+.energy-overview-hero__delta {
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
@@ -44,19 +44,19 @@
   margin-top: 0.6rem;
 }
 
-.hero-cost-card__delta-value--down {
+.energy-overview-hero__delta--down {
   color: #86efac;
 }
 
-.hero-cost-card__delta-value--up {
+.energy-overview-hero__delta--up {
   color: #fca5a5;
 }
 
-.hero-cost-card__delta-value--neutral {
+.energy-overview-hero__delta--neutral {
   opacity: 0.7;
 }
 
-.hero-cost-card__secondary {
+.energy-overview-hero__secondary {
   display: flex;
   justify-content: center;
   gap: 2rem;
@@ -66,10 +66,10 @@
   font-size: 0.8rem;
 }
 
-.hero-cost-card__secondary-label {
+.energy-overview-hero__secondary-label {
   opacity: 0.6;
 }
 
-.hero-cost-card__secondary-value {
+.energy-overview-hero__secondary-value {
   font-weight: 600;
 }

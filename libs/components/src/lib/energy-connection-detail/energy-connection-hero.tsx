@@ -2,6 +2,7 @@
 import './energy-connection-hero.scss';
 import { Card } from 'react-bootstrap';
 import { DashboardStats } from '../shared/use-energy-dashboard';
+import { DeltaBadge } from '../shared/delta-badge';
 import { EnergyProviderConnectionResponse } from '@energy-broker/shared';
 import { UnitTooltip } from '../shared/unit-tooltip';
 
@@ -20,15 +21,11 @@ export function EnergyConnectionHero({ connection, periodLabel, stats }: EnergyC
     : 0;
 
   const deltaPct = stats.deltas.costPct;
-  const deltaLabel = deltaPct !== null
-    ? `${deltaPct > 0 ? '▲' : '▼'} ${Math.abs(deltaPct).toFixed(1)}%`
-    : null;
-
-  const deltaClass = deltaPct === null || deltaPct === 0
-    ? 'energy-connection-hero__delta-value--neutral'
+  const deltaColorClass = deltaPct === null || deltaPct === 0
+    ? 'energy-connection-hero__delta--neutral'
     : deltaPct < 0
-      ? 'energy-connection-hero__delta-value--down'
-      : 'energy-connection-hero__delta-value--up';
+      ? 'energy-connection-hero__delta--down'
+      : 'energy-connection-hero__delta--up';
 
   return (
     <Card className="energy-connection-hero">
@@ -47,9 +44,9 @@ export function EnergyConnectionHero({ connection, periodLabel, stats }: EnergyC
         <div className="energy-connection-hero__cost">
           {`$${stats.totalCostDollars.toFixed(2)}`}
         </div>
-        {deltaLabel && (
+        {deltaPct !== null && (
           <div className="energy-connection-hero__delta">
-            <span className={deltaClass}>{deltaLabel}</span>
+            <DeltaBadge colorClassName={deltaColorClass} value={deltaPct} />
             {' vs prior period'}
           </div>
         )}

@@ -1,9 +1,11 @@
 interface DeltaBadgeProps {
+  // Overrides the default Bootstrap color class — use when rendering on non-standard backgrounds
+  colorClassName?: string
   invertColor?: boolean
   value: number | null
 }
 
-export function DeltaBadge({ invertColor, value }: DeltaBadgeProps) {
+export function DeltaBadge({ colorClassName, invertColor, value }: DeltaBadgeProps) {
   if (value === null) return null;
 
   const isUp = value > 0;
@@ -11,10 +13,10 @@ export function DeltaBadge({ invertColor, value }: DeltaBadgeProps) {
   // For cost/carbon: down is good (green), up is bad (red)
   // invertColor flips this for metrics where up = good
   const isPositive = invertColor ? isUp : !isUp;
-  const colorClass = value === 0 ? 'text-body-secondary' : isPositive ? 'text-success' : 'text-danger';
+  const defaultColorClass = value === 0 ? 'text-body-secondary' : isPositive ? 'text-success' : 'text-danger';
 
   return (
-    <small className={`stat-delta ${colorClass}`}>
+    <small className={`stat-delta ${colorClassName ?? defaultColorClass}`}>
       {arrow}
       {' '}
       {Math.abs(value).toFixed(1)}

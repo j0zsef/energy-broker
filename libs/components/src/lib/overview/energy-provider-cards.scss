@@ -1,6 +1,6 @@
-// ── Provider breakdown cards ────────────────────
+// ── Energy provider breakdown cards ────────────────────
 
-.provider-cards__title {
+.energy-provider-cards__title {
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -9,7 +9,7 @@
   margin-bottom: 0.75rem;
 }
 
-.provider-card {
+.energy-provider-card {
   border-radius: 0.625rem;
   margin-bottom: 0.5rem;
   cursor: pointer;
@@ -31,44 +31,44 @@
   }
 }
 
-.provider-card__header {
+.energy-provider-card__header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.5rem;
 }
 
-.provider-card__name {
+.energy-provider-card__name {
   font-weight: 600;
   font-size: 0.875rem;
   color: var(--bs-emphasis-color);
 }
 
-.provider-card__type {
+.energy-provider-card__type {
   font-size: 0.7rem;
   color: var(--bs-secondary-color);
 }
 
-.provider-card__cost {
+.energy-provider-card__cost {
   font-weight: 700;
   font-size: 1.1rem;
   color: var(--bs-emphasis-color);
   text-align: right;
 }
 
-.provider-card__delta {
+.energy-provider-card__delta {
   font-size: 0.7rem;
   text-align: right;
 }
 
-.provider-card__stats {
+.energy-provider-card__stats {
   display: flex;
   gap: 1.25rem;
   font-size: 0.75rem;
   color: var(--bs-secondary-color);
 }
 
-.provider-card__bar-track {
+.energy-provider-card__bar-track {
   height: 4px;
   border-radius: 2px;
   background: var(--bs-tertiary-bg);
@@ -76,7 +76,7 @@
   overflow: hidden;
 }
 
-.provider-card__bar-fill {
+.energy-provider-card__bar-fill {
   height: 100%;
   border-radius: 2px;
   min-width: 2px;

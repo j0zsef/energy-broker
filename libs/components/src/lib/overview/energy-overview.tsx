@@ -4,11 +4,11 @@ import { Alert } from 'react-bootstrap';
 import { CarbonNudge } from './carbon-nudge';
 import { CostTrendChart } from '../shared/cost-trend-chart';
 import { EnergyEmptyState } from './energy-empty-state';
+import { EnergyOverviewHero } from './energy-overview-hero';
+import { EnergyProviderCards } from './energy-provider-cards';
 import { EnergyProviderContext } from './energy-provider-context';
 import { EnergyTimePeriodTabs } from '../shared/energy-time-period-tabs';
-import { HeroCostCard } from './hero-cost-card';
 import { PageSpinner } from '../shared/page-spinner';
-import { ProviderCards } from './provider-cards';
 import { useAllEnergyConnectionsMeterEntries } from './use-all-energy-connections-meter-entries';
 import { useState } from 'react';
 
@@ -57,14 +57,14 @@ export function EnergyOverview() {
   return (
     <div>
       <EnergyProviderContext connections={activeConnections} />
-      <HeroCostCard
+      <EnergyOverviewHero
         activeProviderCount={providerDetails.length}
         periodLabel={periodLabel}
         stats={dashboardStats}
       />
       <EnergyTimePeriodTabs onSelect={setSelectedPeriod} selectedPeriod={selectedPeriod} />
       <CostTrendChart filteredMeters={filteredMeters} />
-      <ProviderCards providers={providerDetails} />
+      <EnergyProviderCards providers={providerDetails} />
       <CarbonNudge
         carbonSummary={carbonSummary}
         emissionsMtCo2={dashboardStats.emissionsMtCo2}
